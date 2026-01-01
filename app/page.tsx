@@ -3,9 +3,7 @@ import Link from 'next/link'
 export default function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-8">
-      <h1 className="font-yatra text-6xl text-delo-maroon mb-4">
-        Delo Coffee
-      </h1>
+      <h1 className="font-yatra text-6xl text-delo-maroon mb-4">Delo Coffee</h1>
       <p className="font-roboto-mono text-delo-navy/70 mb-12">
         Where Every Cup Brings People Together
       </p>

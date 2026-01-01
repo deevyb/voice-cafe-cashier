@@ -9,18 +9,21 @@ A minimal iPad ordering system for Delo Coffee pop-up events. Customers place si
 ## Features
 
 ### Customer Ordering (`/order`)
+
 - Browse menu as a visual grid
 - Select milk type and temperature (where applicable)
 - Enter name and submit order
 - Confirmation with order details
 
 ### Kitchen Display (`/kitchen`)
+
 - Real-time order queue (no refresh needed)
 - One-tap to mark orders ready or cancel
 - Order counts and time tracking
 - Separate sections for placed vs. ready orders
 
 ### Admin Panel (`/admin`)
+
 - Passcode-protected access
 - Toggle menu items on/off
 - Manage modifier options (milk types, temperatures)
@@ -30,14 +33,14 @@ A minimal iPad ordering system for Delo Coffee pop-up events. Customers place si
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Framework | Next.js 14 (App Router) |
-| Styling | Tailwind CSS |
-| Animations | Framer Motion |
-| Database | Supabase (PostgreSQL) |
-| Real-time | Supabase Realtime |
-| Hosting | Vercel |
+| Layer      | Technology              |
+| ---------- | ----------------------- |
+| Framework  | Next.js 14 (App Router) |
+| Styling    | Tailwind CSS            |
+| Animations | Framer Motion           |
+| Database   | Supabase (PostgreSQL)   |
+| Real-time  | Supabase Realtime       |
+| Hosting    | Vercel                  |
 
 ---
 
@@ -64,6 +67,7 @@ delo-kiosk/
 ## Local Development
 
 ### Prerequisites
+
 - Node.js 18+
 - npm
 - A Supabase project (or use the existing one)
@@ -71,17 +75,20 @@ delo-kiosk/
 ### Setup
 
 1. Clone the repo:
+
    ```bash
    git clone https://github.com/deevyb/delo-kiosk.git
    cd delo-kiosk
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Create `.env.local` with your Supabase credentials:
+
    ```env
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
@@ -89,6 +96,7 @@ delo-kiosk/
    ```
 
 4. Run the development server:
+
    ```bash
    npm run dev
    ```
@@ -117,7 +125,7 @@ The app auto-deploys to Vercel when you push to `main`. Environment variables ar
 
 ## Design
 
-Delo Coffee's brand is inspired by the *delo* — a traditional Indian courtyard where strangers become friends. The app uses:
+Delo Coffee's brand is inspired by the _delo_ — a traditional Indian courtyard where strangers become friends. The app uses:
 
 - **Colors:** Maroon (#921C12), Cream (#F9F6EE), Navy (#000024)
 - **Typography:** Yatra One, Bricolage Grotesque, Roboto Mono

@@ -5,28 +5,36 @@
 ## Stack Decisions
 
 ### Frontend: Next.js 14+ (App Router)
+
 **Why:**
+
 - Industry standard, excellent documentation, large community
 - App Router provides modern React patterns (Server Components, Streaming)
 - Built-in routing matches our 3-route architecture perfectly
 - Vercel deployment is seamless
 
 ### Styling: Tailwind CSS
+
 **Why:**
+
 - Utility-first approach speeds up development
 - Easy to implement custom color palette (Delo brand colors)
 - Excellent responsive design primitives
 - No CSS file management overhead
 
 ### Animations: Framer Motion
+
 **Why:**
+
 - Owner explicitly requested "silky smooth" animations
 - Gold standard for React animations
 - Declarative API, easy to maintain
 - Handles gesture interactions well (important for iPad touch)
 
 ### Database: Supabase (PostgreSQL)
+
 **Why:**
+
 - Built-in Realtime subscriptions (critical for kitchen display)
 - PostgreSQL reliability
 - Simple REST API + generated TypeScript types
@@ -34,7 +42,9 @@
 - Generous free tier for MVP
 
 ### Hosting: Vercel
+
 **Why:**
+
 - Zero-config Next.js deployment
 - Edge functions for low latency
 - Excellent reliability (critical given crash concerns)
@@ -119,17 +129,16 @@ CREATE INDEX idx_menu_items_active ON menu_items(is_active) WHERE is_active = tr
 ## Realtime Strategy
 
 ### Kitchen Display Subscription
+
 ```typescript
 supabase
   .channel('orders')
-  .on('postgres_changes',
-    { event: '*', schema: 'public', table: 'orders' },
-    handleOrderChange
-  )
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, handleOrderChange)
   .subscribe()
 ```
 
 ### Fallback Strategy
+
 - If WebSocket disconnects, show "Reconnecting..." banner
 - Fall back to polling every 5 seconds
 - Auto-reconnect when connection restored
@@ -140,12 +149,14 @@ supabase
 ## Authentication
 
 ### Admin Passcode
+
 - Simple client-side passcode check for MVP
 - Passcode stored in environment variable: `ADMIN_PASSCODE`
 - No session management — passcode checked on each admin page load
 - Stored in localStorage after successful entry (clears on browser close)
 
 ### Future Considerations
+
 - Could upgrade to Supabase Auth if multi-user admin needed
 - Row Level Security already possible with current schema
 
@@ -154,17 +165,20 @@ supabase
 ## Error Handling
 
 ### Customer-Facing Errors
+
 - Never show technical errors
 - Friendly messages only: "Something went wrong. Please try again."
 - Automatic retry for transient failures
 - Always allow fallback to paper if needed
 
 ### Kitchen Display Errors
+
 - "Offline — reconnecting..." banner (non-blocking)
 - Orders persist locally until connection restored
 - Manual refresh always available
 
 ### Admin Errors
+
 - More detailed errors acceptable (wrong passcode, export failed, etc.)
 - Still human-readable, not technical
 
@@ -175,16 +189,19 @@ supabase
 Using Framer Motion throughout for consistency:
 
 ### Micro-interactions
+
 - Button press: subtle scale (0.98) + background shift
 - Card appear: fade in + slide up (200-300ms)
 - Card remove: fade out + slide (200ms)
 - Modal: backdrop fade + content scale from 0.95
 
 ### Page Transitions
+
 - Cross-fade between states (300ms)
 - No jarring jumps
 
 ### Performance
+
 - Use `layout` prop for smooth layout shifts
 - Avoid animating expensive properties (width, height when possible)
 - Use `transform` and `opacity` primarily
@@ -194,21 +211,25 @@ Using Framer Motion throughout for consistency:
 ## Testing Strategy
 
 ### Unit Tests (Vitest)
+
 - Utility functions
 - Data transformations
 - Validation logic
 
 ### Integration Tests
+
 - API routes
 - Database operations
 - Realtime subscriptions (mocked)
 
 ### E2E Tests (Playwright)
+
 - Complete customer order flow
 - Kitchen status updates
 - Admin menu management
 
 ### Manual Testing Checklist
+
 - [ ] Full order flow on actual iPad
 - [ ] Multiple concurrent orders
 - [ ] WiFi disconnect/reconnect
@@ -249,22 +270,26 @@ NEXT_PUBLIC_APP_URL=https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
 ## Deployment
 
 ### Current Production
+
 - **Vercel:** https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
 - **GitHub:** https://github.com/deevyb/delo-kiosk
 - **Supabase:** Project `wryykcdqojftbqgtxpgu` (us-west-2)
 
 ### Vercel Setup ✅ Complete
+
 1. ~~Connect GitHub repository~~ — Connected to `deevyb/delo-kiosk`
 2. ~~Set environment variables~~ — SUPABASE_URL, ANON_KEY, ADMIN_PASSCODE
 3. ~~Deploy~~ — Auto-deploys on push to main
 
 ### Supabase Setup ✅ Complete
+
 1. ~~Create project~~ — `delo-kiosk` in us-west-2
 2. ~~Run migrations~~ — 4 migrations applied (tables + realtime)
 3. ~~Enable Realtime on `orders` table~~ — Enabled via migration
 4. ~~Copy connection credentials to Vercel~~ — Done
 
 ### Pre-Launch Checklist
+
 - [x] All env vars set in Vercel
 - [x] Supabase Realtime enabled
 - [x] Menu items seeded (7 drinks)
@@ -297,4 +322,4 @@ NEXT_PUBLIC_APP_URL=https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
 
 ---
 
-*Last updated: December 31, 2024 — Infrastructure complete, screens pending*
+_Last updated: December 31, 2024 — Infrastructure complete, screens pending_

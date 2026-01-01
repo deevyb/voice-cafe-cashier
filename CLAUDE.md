@@ -5,6 +5,7 @@
 **Owner:** Non-technical founder who knows exactly what they want — and wants to understand what's being built. They don't need to make technical decisions, but they want to be an informed partner who learns along the way.
 
 **Communication Rules:**
+
 - Explain technical concepts in plain, accessible language — like talking to a smart friend who doesn't work in tech
 - Use judgment on what's worth explaining — focus on meaningful learning moments, not every tiny choice
 - When a decision has real trade-offs, share the options, implications, and my recommendation
@@ -18,24 +19,30 @@
 This project uses documentation as persistent memory across Claude Code sessions. Auto-compaction and session breaks can lose context, so **these docs are the source of truth**.
 
 ### At Session Start
+
 1. Read this entire file (CLAUDE.md)
 2. Check the **Current Status** section (bottom of this file) for what's done and what's next
 3. If needed, read TECHNICAL.md for implementation details
 
 ### At Meaningful Milestones — Update Docs Before Stopping
+
 **What counts as a milestone:**
+
 - Completing a major feature or screen
 - Finishing setup/infrastructure work
 - Making significant architectural decisions
 - Any stopping point where context would be lost
 
 **What to update:**
+
 1. **CLAUDE.md → Current Status section** — Update route statuses, what's done, what's next
 2. **TECHNICAL.md** — If any technical details changed (schema, deployment, etc.)
 3. **Commit and push** — So updates survive and are visible on GitHub
 
 ### Quick Status Update Template
+
 When updating the Current Status section, include:
+
 - Which routes/features are complete vs. in-progress vs. pending
 - Any blockers or decisions that need user input
 - What the next session should pick up on
@@ -54,24 +61,27 @@ When updating the Current Status section, include:
 
 ## The Brand
 
-Delo Coffee is inspired by the *delo* — a traditional Indian courtyard where strangers become friends and everyone belongs. The brand is:
+Delo Coffee is inspired by the _delo_ — a traditional Indian courtyard where strangers become friends and everyone belongs. The brand is:
 
 - **Warm & cozy** — like being welcomed into someone's home
 - **Playful** — not stuffy or pretentious
 - **Heritage-rooted** — honors tradition without being dated
 
 **Colors:**
+
 - Maroon: `#921C12` (primary accent)
 - Cream: `#F9F6EE` (backgrounds)
 - Dark Navy: `#000024` (text)
 - Terracotta: `#C85A2E` (supporting warmth)
 
 **Typography:**
+
 - Yatra One — bold headers, brand name
 - Bricolage Grotesque — drink names, buttons
 - Roboto Mono — descriptions, details
 
 **Design Principles:**
+
 - Generous white space (like the open courtyard)
 - Large tap targets (60x60pt minimum)
 - Natural, warm aesthetic
@@ -83,15 +93,15 @@ Delo Coffee is inspired by the *delo* — a traditional Indian courtyard where s
 
 **Current drinks (editable from admin):**
 
-| Drink | Milk Options | Temperature Options |
-|-------|-------------|---------------------|
-| Elaichi Latte | Regular, Oat | Hot, Iced |
-| Ginger Slap Latte | Regular, Oat | Hot, Iced |
-| Tubo Latte | Regular, Oat | Hot, Iced |
-| Latte | Regular, Oat | Hot, Iced |
-| Cortado | Regular, Oat | — |
-| Macchiato | — | — |
-| Espresso | — | — |
+| Drink             | Milk Options | Temperature Options |
+| ----------------- | ------------ | ------------------- |
+| Elaichi Latte     | Regular, Oat | Hot, Iced           |
+| Ginger Slap Latte | Regular, Oat | Hot, Iced           |
+| Tubo Latte        | Regular, Oat | Hot, Iced           |
+| Latte             | Regular, Oat | Hot, Iced           |
+| Cortado           | Regular, Oat | —                   |
+| Macchiato         | —            | —                   |
+| Espresso          | —            | —                   |
 
 **Milk options:** Regular, Oat (binary choice)
 **Temperature options:** Hot, Iced (binary choice)
@@ -101,6 +111,7 @@ Delo Coffee is inspired by the *delo* — a traditional Indian courtyard where s
 ## The Experience
 
 ### Customer Flow (`/order`)
+
 1. See all drinks as a clean grid (no photos for now — elegant text cards)
 2. Tap a drink → see applicable modifier options
 3. Select modifiers (pre-selected defaults)
@@ -110,6 +121,7 @@ Delo Coffee is inspired by the *delo* — a traditional Indian courtyard where s
 7. Screen auto-resets after 3 seconds
 
 ### Kitchen Flow (`/kitchen`)
+
 1. Orders appear in real-time, oldest first
 2. Each card shows: customer name, drink, modifiers, time since ordered
 3. Show counts: "Placed: 5 | Ready: 12"
@@ -117,6 +129,7 @@ Delo Coffee is inspired by the *delo* — a traditional Indian courtyard where s
 5. Ready orders accumulate in separate section (no need to clear)
 
 ### Admin Flow (`/admin`)
+
 1. Enter passcode (owner chooses their own)
 2. Three sections:
    - **Menu Items:** Toggle drinks on/off, edit modifiers per item
@@ -128,6 +141,7 @@ Delo Coffee is inspired by the *delo* — a traditional Indian courtyard where s
 ## Critical Requirements
 
 ### Must-Haves
+
 - **Stability above all** — biggest fear is crashes/freezes during rush
 - **Beautiful, silky animations** — Framer Motion-style polish throughout
 - **Real-time sync** — orders appear instantly on kitchen display
@@ -136,11 +150,13 @@ Delo Coffee is inspired by the *delo* — a traditional Indian courtyard where s
 - **Offline resilience** — graceful handling if WiFi hiccups
 
 ### Nice-to-Haves (Later)
+
 - Search/filter on kitchen display
 - Drink photos
 - More modifier categories
 
 ### Out of Scope
+
 - Payments, prices, or totals
 - Order numbers or verbal callouts
 - Multi-item orders or carts
@@ -154,6 +170,7 @@ Delo Coffee is inspired by the *delo* — a traditional Indian courtyard where s
 **Deadline:** Less than 2 weeks for upcoming pop-up event
 
 **Setup:**
+
 - One iPad for customer ordering
 - One iPad/display for kitchen
 - 2-person team (owner + helper)
@@ -164,17 +181,20 @@ Delo Coffee is inspired by the *delo* — a traditional Indian courtyard where s
 ## When to Involve the Owner
 
 **Explain and educate when:**
+
 - Making a meaningful technical choice that has real trade-offs worth understanding
 - The decision affects what they'll see, feel, or experience
 - It's a good learning moment that helps them understand how the app works
 - They'd benefit from knowing why something is built a certain way
 
 **Just handle it when:**
+
 - It's a routine technical choice with an obvious right answer
 - The decision is purely implementation detail with no user-facing impact
 - Explaining it would add complexity without adding understanding
 
 **When presenting decisions:**
+
 - Explain in plain language what each option means
 - Make the real-world implications clear
 - Give a clear recommendation with reasoning
@@ -185,6 +205,7 @@ Delo Coffee is inspired by the *delo* — a traditional Indian courtyard where s
 ## Success Criteria
 
 The owner will know this project succeeded when:
+
 1. They get through their next pop-up with zero lost orders
 2. The app never crashes or freezes during the rush
 3. Customers find it intuitive (no explanation needed)
@@ -201,14 +222,15 @@ The owner will know this project succeeded when:
 
 **Live App:** https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
 
-| Route | Status | Description |
-|-------|--------|-------------|
-| `/` | ✅ Deployed | Landing page with navigation |
-| `/order` | 🚧 Placeholder | Customer ordering screen — **next to build** |
-| `/kitchen` | 🚧 Placeholder | Kitchen display (after /order) |
-| `/admin` | 🚧 Placeholder | Admin panel (after /kitchen) |
+| Route      | Status         | Description                                  |
+| ---------- | -------------- | -------------------------------------------- |
+| `/`        | ✅ Deployed    | Landing page with navigation                 |
+| `/order`   | 🚧 Placeholder | Customer ordering screen — **next to build** |
+| `/kitchen` | 🚧 Placeholder | Kitchen display (after /order)               |
+| `/admin`   | 🚧 Placeholder | Admin panel (after /kitchen)                 |
 
 **Infrastructure:** All complete
+
 - GitHub: [deevyb/delo-kiosk](https://github.com/deevyb/delo-kiosk)
 - Vercel: Auto-deploys on push to main
 - Supabase: Database ready, menu seeded (7 drinks), realtime enabled
@@ -226,4 +248,4 @@ The owner will know this project succeeded when:
 
 ---
 
-*This file guides all work on this project. Detailed technical decisions are documented in TECHNICAL.md — written for future developers, but you're welcome to peek if you're curious!*
+_This file guides all work on this project. Detailed technical decisions are documented in TECHNICAL.md — written for future developers, but you're welcome to peek if you're curious!_

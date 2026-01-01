@@ -6,11 +6,11 @@
 
 **I. BRAND STORY**
 
-**The Concept: From *Delo* to Daily Ritual**
+**The Concept: From _Delo_ to Daily Ritual**
 
-In the heart of traditional Indian homes lies a sacred space—the *delo* (Gujarati), *chowk* (Hindi), or *nalukettu* (Malayalam). It is not a room, but a philosophy. An open-to-sky courtyard where sunlight pools on terracotta floors, where the seasons shift overhead, where strangers become friends over shared meals and stories.
+In the heart of traditional Indian homes lies a sacred space—the _delo_ (Gujarati), _chowk_ (Hindi), or _nalukettu_ (Malayalam). It is not a room, but a philosophy. An open-to-sky courtyard where sunlight pools on terracotta floors, where the seasons shift overhead, where strangers become friends over shared meals and stories.
 
-The *delo* is the great equalizer. It is where the merchant sits beside the scholar, where children run freely alongside elders, where wealth and status dissolve in the warmth of togetherness. It is the social nucleus—the venue for everything from Tuesday dinners to weddings, from morning coffee to midnight conversations. In its simplest form, the *delo* represents **tranquility, heritage, harmony, and conviviality**.
+The _delo_ is the great equalizer. It is where the merchant sits beside the scholar, where children run freely alongside elders, where wealth and status dissolve in the warmth of togetherness. It is the social nucleus—the venue for everything from Tuesday dinners to weddings, from morning coffee to midnight conversations. In its simplest form, the _delo_ represents **tranquility, heritage, harmony, and conviviality**.
 
 **Delo Coffee** brings this timeless courtyard into the contemporary café. We are not just serving espresso and milk; we are creating a gathering place rooted in genuine connection. Where every person—regardless of background, circumstance, or status—feels they belong. Where coffee is an excuse to linger, to listen, to be together.
 
@@ -22,7 +22,7 @@ This is a space that honors tradition while embracing the present. It is about *
 
 **Core Principles**
 
-**Warm but not saccharine.** We speak as a thoughtful host, not a salesperson. We acknowledge the cultural depth of the *delo* without making it feel like an academic exercise.
+**Warm but not saccharine.** We speak as a thoughtful host, not a salesperson. We acknowledge the cultural depth of the _delo_ without making it feel like an academic exercise.
 
 **Accessible yet distinctive.** We explain our concept clearly to those unfamiliar with it, while honoring those who recognize themselves in our story.
 
@@ -32,13 +32,13 @@ This is a space that honors tradition while embracing the present. It is about *
 
 **Voice Characteristics**
 
-* **Conversational wisdom**: We share our ideas as one might share a story over coffee—informative but intimate
+- **Conversational wisdom**: We share our ideas as one might share a story over coffee—informative but intimate
 
-* **Cultural pride**: We speak with pride about Indian design, tradition, and values
+- **Cultural pride**: We speak with pride about Indian design, tradition, and values
 
-* **Poetic but practical**: We appreciate beauty and meaning, but we're always rooted in real human experience
+- **Poetic but practical**: We appreciate beauty and meaning, but we're always rooted in real human experience
 
-* **Generous and inclusive**: We make space for others. Our language is never exclusive or gatekeeping
+- **Generous and inclusive**: We make space for others. Our language is never exclusive or gatekeeping
 
 **Tone Examples**
 
@@ -57,33 +57,33 @@ This is a space that honors tradition while embracing the present. It is about *
 
 **Primary Palette**
 
-| Color Name | Hex Code | Usage | Emotion |
-| :---- | :---- | :---- | :---- |
-| **Maroon** | \#921C12 | Primary accent, headers, key UI elements, structural lines | Warmth, heritage, earth |
-| **Cream** | \#F9F6EE | Background, light surfaces, breathing room | Calm, approachability, tradition |
-| **Dark Navy** | \#000024 | Body text, fine details, grounding | Trust, depth, contrast |
+| Color Name    | Hex Code | Usage                                                      | Emotion                          |
+| :------------ | :------- | :--------------------------------------------------------- | :------------------------------- |
+| **Maroon**    | \#921C12 | Primary accent, headers, key UI elements, structural lines | Warmth, heritage, earth          |
+| **Cream**     | \#F9F6EE | Background, light surfaces, breathing room                 | Calm, approachability, tradition |
+| **Dark Navy** | \#000024 | Body text, fine details, grounding                         | Trust, depth, contrast           |
 
 **Secondary Palette (Optional Expansion)**
 
-| Color Name | Hex Code | Usage | Emotion |
-| :---- | :---- | :---- | :---- |
+| Color Name     | Hex Code | Usage                                     | Emotion                          |
+| :------------- | :------- | :---------------------------------------- | :------------------------------- |
 | **Terracotta** | \#C85A2E | Supporting accents, illustrations, warmth | Clay, earth, sun-baked tradition |
-| **Sage Green** | \#8B9E8B | Botanical elements, natural touches | Growth, nature, harmony |
-| **Soft Gold** | \#D4A574 | Luxury touches, illumination, light | Hospitality, richness, glow |
+| **Sage Green** | \#8B9E8B | Botanical elements, natural touches       | Growth, nature, harmony          |
+| **Soft Gold**  | \#D4A574 | Luxury touches, illumination, light       | Hospitality, richness, glow      |
 
 **Color Application**
 
-* **Maroon & Cream** form the iconic duo—appearing together in all touchpoints for immediate brand recognition
+- **Maroon & Cream** form the iconic duo—appearing together in all touchpoints for immediate brand recognition
 
-* **Dark Navy** provides contrast and readability, ensuring professionalism
+- **Dark Navy** provides contrast and readability, ensuring professionalism
 
-* **Terracotta** emerges in imagery and supplementary design (think courtyard floor tiles, pottery, architectural details)
+- **Terracotta** emerges in imagery and supplementary design (think courtyard floor tiles, pottery, architectural details)
 
-* **Sage & Gold** used sparingly for special seasonal campaigns or premium offerings
+- **Sage & Gold** used sparingly for special seasonal campaigns or premium offerings
 
 **Why These Colors**
 
-These colors evoke the *delo* itself: the rich, warm earth tones of traditional courtyards, the cream-colored walls that catch morning light, the deep shadows that provide cooling respite. Together, they communicate heritage without feeling dated, warmth without being garish, and accessibility without sacrificing sophistication.
+These colors evoke the _delo_ itself: the rich, warm earth tones of traditional courtyards, the cream-colored walls that catch morning light, the deep shadows that provide cooling respite. Together, they communicate heritage without feeling dated, warmth without being garish, and accessibility without sacrificing sophistication.
 
 ---
 
@@ -111,8 +111,7 @@ These colors evoke the *delo* itself: the rich, warm earth tones of traditional 
 
 **Usage**: Supporting text, quotes, heritage messaging, fine print
 
-**Why**: Serif fonts carry tradition and formality. Occasional use of Cooper Black MT in quotes or heritage-focused copy reinforces the *delo's* historical depth.
-
+**Why**: Serif fonts carry tradition and formality. Occasional use of Cooper Black MT in quotes or heritage-focused copy reinforces the _delo's_ historical depth.
 
 **Font Hierarchy Example**
 
@@ -130,71 +129,71 @@ Cardamom, Saffron \[Roboto Mono, 400\]
 
 **Logo Concept: The Courtyard Frame**
 
-**Primary Logo**: A simplified, overhead view of a *delo* courtyard—four walls (suggested by thin maroon lines) creating an open square, with a subtle coffee leaf or steam rising from the center. Clean, geometric, icon-like.
+**Primary Logo**: A simplified, overhead view of a _delo_ courtyard—four walls (suggested by thin maroon lines) creating an open square, with a subtle coffee leaf or steam rising from the center. Clean, geometric, icon-like.
 
 **Characteristics**:
 
-* Minimal yet meaningful
+- Minimal yet meaningful
 
-* Works at any scale (embossed on a cup, printed on signage)
+- Works at any scale (embossed on a cup, printed on signage)
 
-* Symmetric and balanced—reflecting the harmony of the courtyard
+- Symmetric and balanced—reflecting the harmony of the courtyard
 
-* Suggests both architecture and the warmth of a gathered community
+- Suggests both architecture and the warmth of a gathered community
 
 **Logo Variations**:
 
-* **Full logo**: "Delo Coffee" in Yatra One with the courtyard icon to the left
+- **Full logo**: "Delo Coffee" in Yatra One with the courtyard icon to the left
 
-* **Icon only**: The courtyard frame alone, for small applications (favicon, app icon)
+- **Icon only**: The courtyard frame alone, for small applications (favicon, app icon)
 
-* **Wordmark**: "Delo Coffee" without the icon, for menus and body text
+- **Wordmark**: "Delo Coffee" without the icon, for menus and body text
 
 **Logo Color**
 
-* **Primary**: Maroon (\#921C12) on cream background
+- **Primary**: Maroon (\#921C12) on cream background
 
-* **Inverse**: Cream logo on maroon background (for branded cups, signage)
+- **Inverse**: Cream logo on maroon background (for branded cups, signage)
 
-* **Monochrome**: Dark Navy for print materials requiring single-color reproduction
+- **Monochrome**: Dark Navy for print materials requiring single-color reproduction
 
 **Imagery Style: Authentic, Documented, Inviting**
 
 **Photography Aesthetic**:
 
-* Natural light, often golden hour or diffused daylight
+- Natural light, often golden hour or diffused daylight
 
-* Real people interacting (not staged), showing genuine connection
+- Real people interacting (not staged), showing genuine connection
 
-* Details: hands holding cups, coffee being poured, conversations mid-way
+- Details: hands holding cups, coffee being poured, conversations mid-way
 
-* Settings: Your physical courtyard space, with authentic architectural elements
+- Settings: Your physical courtyard space, with authentic architectural elements
 
-* Color grading: Warm, slightly desaturated, emphasizing cream and maroon tones
+- Color grading: Warm, slightly desaturated, emphasizing cream and maroon tones
 
-* Composition: Often overhead or wide-angle, capturing the "gathered" feeling
+- Composition: Often overhead or wide-angle, capturing the "gathered" feeling
 
 **Illustration Aesthetic** (for menu design, social media, secondary materials):
 
-* Hand-drawn line work, minimalist
+- Hand-drawn line work, minimalist
 
-* Architectural details: doorways, columns, tile patterns from traditional courtyards
+- Architectural details: doorways, columns, tile patterns from traditional courtyards
 
-* Botanical elements: coffee plants, cardamom pods, jasmine flowers, etc.
+- Botanical elements: coffee plants, cardamom pods, jasmine flowers, etc.
 
-* Style: Etched, slightly vintage, honoring the heritage without feeling dated
+- Style: Etched, slightly vintage, honoring the heritage without feeling dated
 
-* Color palette: Monochrome maroon or terracotta on cream
+- Color palette: Monochrome maroon or terracotta on cream
 
 **Forbidden Imagery**:
 
-* Generic café stock photos (avoid at all costs)
+- Generic café stock photos (avoid at all costs)
 
-* Over-saturated colors or artificial lighting
+- Over-saturated colors or artificial lighting
 
-* Imagery that exoticizes or tokenizes Indian culture
+- Imagery that exoticizes or tokenizes Indian culture
 
-* Hyper-polished, corporate aesthetics
+- Hyper-polished, corporate aesthetics
 
 ---
 
@@ -204,7 +203,7 @@ Cardamom, Saffron \[Roboto Mono, 400\]
 
 **"Where Every Cup Brings People Together"**
 
-*Speaks to both the product (the cup) and the purpose (gathering). Accessible, warm, and immediately understandable.*
+_Speaks to both the product (the cup) and the purpose (gathering). Accessible, warm, and immediately understandable._
 
 **Secondary Taglines**
 
@@ -222,23 +221,23 @@ Cardamom, Saffron \[Roboto Mono, 400\]
 
 **Seasonal/Campaign Taglines**
 
-* **Spring**: "New Season, Timeless Gatherings"
+- **Spring**: "New Season, Timeless Gatherings"
 
-* **Summer**: "Cool Shade, Warm Connections"
+- **Summer**: "Cool Shade, Warm Connections"
 
-* **Fall**: "Heritage Meets Harvest"
+- **Fall**: "Heritage Meets Harvest"
 
-* **Winter**: "Gather Around Warmth"
+- **Winter**: "Gather Around Warmth"
 
 **Social Media Micro-Copy**
 
-* "Coffee tastes better with company"
+- "Coffee tastes better with company"
 
-* "The best meetings happen here"
+- "The best meetings happen here"
 
-* "Every visit is an invitation"
+- "Every visit is an invitation"
 
-* "Strangers become friends over coffee"
+- "Strangers become friends over coffee"
 
 ---
 
@@ -246,75 +245,75 @@ Cardamom, Saffron \[Roboto Mono, 400\]
 
 **Aesthetic Keywords**
 
-* **Warm minimalism**: Clean, uncluttered spaces with warm color accents
+- **Warm minimalism**: Clean, uncluttered spaces with warm color accents
 
-* **Rustic luxury**: High-end materials (good coffee, quality milk) presented without pretense
+- **Rustic luxury**: High-end materials (good coffee, quality milk) presented without pretense
 
-* **Architectural storytelling**: Exposed brick, wooden beams, geometric tile patterns
+- **Architectural storytelling**: Exposed brick, wooden beams, geometric tile patterns
 
-* **Gathered humanity**: Real people, genuine moments, no performance
+- **Gathered humanity**: Real people, genuine moments, no performance
 
-* **Earthy authenticity**: Natural materials—terracotta, wood, stone, cream plaster
+- **Earthy authenticity**: Natural materials—terracotta, wood, stone, cream plaster
 
-* **Lighting as design**: Golden light, shadow play, intentional illumination
+- **Lighting as design**: Golden light, shadow play, intentional illumination
 
-* **Heritage craftsmanship**: Handmade elements, artisanal details, visible care
+- **Heritage craftsmanship**: Handmade elements, artisanal details, visible care
 
-* **Open-air sensibility**: Even indoors, a feeling of openness, sky, and connection
+- **Open-air sensibility**: Even indoors, a feeling of openness, sky, and connection
 
 **Visual References**
 
 **Architecture**:
 
-* Traditional Indian courtyards with pillars and geometric tile work
+- Traditional Indian courtyards with pillars and geometric tile work
 
-* Mediterranean patios (shared gathering aesthetic)
+- Mediterranean patios (shared gathering aesthetic)
 
-* Minimalist Scandinavian design (clean lines, natural materials)
+- Minimalist Scandinavian design (clean lines, natural materials)
 
-* Japanese minimalism (respect for empty space, natural light)
+- Japanese minimalism (respect for empty space, natural light)
 
 **Design/Art**:
 
-* Matisse's organic shapes and warm color fields
+- Matisse's organic shapes and warm color fields
 
-* Mid-century modern geometric patterns
+- Mid-century modern geometric patterns
 
-* Handprinted Indian textiles (not as wallpaper, but as inspiration for color/pattern)
+- Handprinted Indian textiles (not as wallpaper, but as inspiration for color/pattern)
 
-* Architectural photography emphasizing light and shadow
+- Architectural photography emphasizing light and shadow
 
 **Lifestyle/Mood**:
 
-* Morning light streaming into a quiet space
+- Morning light streaming into a quiet space
 
-* People leaning in to listen during conversation
+- People leaning in to listen during conversation
 
-* Hands cradling a warm cup
+- Hands cradling a warm cup
 
-* The moment before sipping—anticipation, pause, mindfulness
+- The moment before sipping—anticipation, pause, mindfulness
 
-* Seasons changing visible through an open courtyard
+- Seasons changing visible through an open courtyard
 
-* Seasonal flowers in minimal vases
+- Seasonal flowers in minimal vases
 
 **Interior Design Elements**
 
-* **Flooring**: Terracotta tiles, polished concrete, or natural stone in warm tones
+- **Flooring**: Terracotta tiles, polished concrete, or natural stone in warm tones
 
-* **Walls**: Cream plaster or warm white, occasional exposed brick
+- **Walls**: Cream plaster or warm white, occasional exposed brick
 
-* **Structural elements**: Wooden beams, pillars (echoing courtyard architecture)
+- **Structural elements**: Wooden beams, pillars (echoing courtyard architecture)
 
-* **Seating**: A mix—community tables (wooden, substantial), intimate chairs, window seating
+- **Seating**: A mix—community tables (wooden, substantial), intimate chairs, window seating
 
-* **Lighting**: Pendant lights with warm bulbs, natural light prioritized, layered illumination
+- **Lighting**: Pendant lights with warm bulbs, natural light prioritized, layered illumination
 
-* **Plants**: Minimalist greenery (potted plants, not overwhelming), herbs visible in the space
+- **Plants**: Minimalist greenery (potted plants, not overwhelming), herbs visible in the space
 
-* **Furnishings**: Quality over quantity; vintage-inspired or locally made pieces
+- **Furnishings**: Quality over quantity; vintage-inspired or locally made pieces
 
-* **Tactile details**: Ceramic cups, wood, natural textiles
+- **Tactile details**: Ceramic cups, wood, natural textiles
 
 **Sensory Brand Experience**
 
@@ -350,19 +349,19 @@ Cardamom, Saffron \[Roboto Mono, 400\]
 
 **Brand Consistency Checklist**
 
-* \[ \] All materials use the Maroon (\#921C12) / Cream (\#F9F6EE) / Navy (\#000024) palette
+- \[ \] All materials use the Maroon (\#921C12) / Cream (\#F9F6EE) / Navy (\#000024) palette
 
-* \[ \] Headers use Bricolage Grotesque; body text uses Roboto Mono or sans-serif
+- \[ \] Headers use Bricolage Grotesque; body text uses Roboto Mono or sans-serif
 
-* \[ \] Imagery is authentic (real people, natural light, warm tones)
+- \[ \] Imagery is authentic (real people, natural light, warm tones)
 
-* \[ \] Tone is warm, inclusive, and grounded in authenticity
+- \[ \] Tone is warm, inclusive, and grounded in authenticity
 
-* \[ \] The *delo* concept is present but never overdone (one strong visual or mention per design)
+- \[ \] The _delo_ concept is present but never overdone (one strong visual or mention per design)
 
-* \[ \] No generic café aesthetic; every choice reflects the brand story
+- \[ \] No generic café aesthetic; every choice reflects the brand story
 
-* \[ \] Spacing is generous (negative space is valued, like the open courtyard)
+- \[ \] Spacing is generous (negative space is valued, like the open courtyard)
 
 ---
 
@@ -372,15 +371,15 @@ Cardamom, Saffron \[Roboto Mono, 400\]
 
 Most café brands compete on coffee quality, aesthetic, or convenience. Delo Coffee competes on **purpose and belonging**.
 
-| Aspect | Generic Café | Third-Place Café | Delo Coffee |
-| :---- | :---- | :---- | :---- |
-| **Core Offering** | Coffee \+ pastry | Workspace \+ WiFi | Connection \+ ceremony |
-| **Target Experience** | Quick transaction | Solo productivity | Shared gathering |
-| **Design Language** | Trendy/Instagram-able | Corporate minimalist | Heritage-rooted, warm |
-| **Brand Story** | Usually product-focused | Often founder-focused | Culturally-centered, community-focused |
-| **Emotional Promise** | Caffeine boost | Professional sanctuary | Belonging and togetherness |
+| Aspect                | Generic Café            | Third-Place Café       | Delo Coffee                            |
+| :-------------------- | :---------------------- | :--------------------- | :------------------------------------- |
+| **Core Offering**     | Coffee \+ pastry        | Workspace \+ WiFi      | Connection \+ ceremony                 |
+| **Target Experience** | Quick transaction       | Solo productivity      | Shared gathering                       |
+| **Design Language**   | Trendy/Instagram-able   | Corporate minimalist   | Heritage-rooted, warm                  |
+| **Brand Story**       | Usually product-focused | Often founder-focused  | Culturally-centered, community-focused |
+| **Emotional Promise** | Caffeine boost          | Professional sanctuary | Belonging and togetherness             |
 
-Delo Coffee's differentiation is emotional and cultural—it offers something deeper than coffee. It offers the *delo* itself.
+Delo Coffee's differentiation is emotional and cultural—it offers something deeper than coffee. It offers the _delo_ itself.
 
 ---
 
@@ -388,7 +387,7 @@ Delo Coffee's differentiation is emotional and cultural—it offers something de
 
 **Where Delo Goes**
 
-**Year 1-2**: Establish the physical space and local reputation. Build a loyal community that understands and embodies the *delo* ethos.
+**Year 1-2**: Establish the physical space and local reputation. Build a loyal community that understands and embodies the _delo_ ethos.
 
 **Year 3+**: Potential for expansion with strict brand adherence. Each Delo location should feel like a sibling to the original, not a franchise. Growth would mean spreading the philosophy, not diluting it.
 
@@ -396,15 +395,15 @@ Delo Coffee's differentiation is emotional and cultural—it offers something de
 
 **Protected Elements**
 
-* The courtyard concept (non-negotiable)
+- The courtyard concept (non-negotiable)
 
-* The Maroon/Cream/Navy palette
+- The Maroon/Cream/Navy palette
 
-* The voice and tone (warm, inclusive, heritage-rooted)
+- The voice and tone (warm, inclusive, heritage-rooted)
 
-* The focus on gathering over transaction
+- The focus on gathering over transaction
 
-* The authenticity in imagery and design
+- The authenticity in imagery and design
 
 ---
 
@@ -412,7 +411,7 @@ Delo Coffee's differentiation is emotional and cultural—it offers something de
 
 Delo Coffee is not just a rebrand—it's a mission. Your brand identity should communicate that every interaction, from the first social media post to the final sip of coffee, is part of a larger philosophy of connection and belonging.
 
-The *delo* has existed for centuries. Your coffee shop is simply the contemporary expression of an ancient human need: **to gather, to be seen, and to belong**.
+The _delo_ has existed for centuries. Your coffee shop is simply the contemporary expression of an ancient human need: **to gather, to be seen, and to belong**.
 
 Every brand choice should reinforce this truth.
 
