@@ -234,6 +234,7 @@ The owner will know this project succeeded when:
 - GitHub: [deevyb/delo-kiosk](https://github.com/deevyb/delo-kiosk)
 - Vercel: Auto-deploys on push to main
 - Supabase: Database ready, menu seeded (7 drinks), realtime enabled
+- Code Quality: Prettier formatting, ESLint, Error Boundary for crash prevention
 
 **Blockers:** None
 
