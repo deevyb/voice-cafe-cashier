@@ -216,16 +216,16 @@ The owner will know this project succeeded when:
 
 ## Current Status
 
-> **Last Updated:** January 1, 2025
+> **Last Updated:** January 2, 2025
 >
-> **Next Up:** Convert DrinkCustomizer from full-page to floating modal (Phase 3 continuation)
+> **Next Up:** Phase 4 - Add customer name input to customization modal
 
 **Live App:** https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
 
 | Route      | Status         | Description                                    |
 | ---------- | -------------- | ---------------------------------------------- |
 | `/`        | ✅ Deployed    | Landing page with navigation                   |
-| `/order`   | 🚧 In Progress | Menu grid done, customization modal next       |
+| `/order`   | 🚧 In Progress | Menu grid + customization modal done, name input next |
 | `/kitchen` | 🚧 Placeholder | Kitchen display (after /order complete)        |
 | `/admin`   | 🚧 Placeholder | Admin panel (after /kitchen)                   |
 
@@ -244,13 +244,11 @@ The owner will know this project succeeded when:
 |-------|--------|-------------|
 | 1. Menu Grid | ✅ Done | Drink cards in 3-column grid, fetches from Supabase |
 | 2. Animations | ✅ Done | Entrance animations, press-in effect, selection state |
-| 3. Customization | 🚧 In Progress | **NEXT: Convert to floating modal (like Square)** |
+| 3. Customization | ✅ Done | Floating modal with blur backdrop, X button, Square-style slide-up |
 | 4. Name Input | ⏳ Pending | Customer name field |
 | 5. Submit Order | ⏳ Pending | API route, database write |
 | 6. Confirmation | ⏳ Pending | Success screen with order summary |
 | 7. Auto-Reset | ⏳ Pending | 3-second reset, error handling |
-
-**Detailed plan:** See `/Users/deevyb/.claude/plans/goofy-meandering-peach.md`
 
 ---
 
@@ -270,10 +268,11 @@ The owner will know this project succeeded when:
 - Shadow reduces on press
 - Spring physics: stiffness 400, damping 30 (minimal bounce)
 
-**Customization Screen (Changed from full-page to modal):**
-- **Layout:** Floating modal panel over dimmed menu grid (like Square)
-- **Transition:** Netflix/iOS folder style - card expands into modal using `layoutId`
+**Customization Screen (Square-style modal):**
+- **Layout:** Floating modal panel over dimmed menu grid
+- **Transition:** Slide-up + fade-in with blur backdrop (Square approach, not Netflix layoutId)
 - **Close:** Both X button in corner AND backdrop tap to close
+- **Animation:** Spring physics (stiffness 400, damping 30) for snappy, minimal-bounce feel
 
 ### Files with Important Comments
 
@@ -283,15 +282,14 @@ The owner will know this project succeeded when:
 
 ## What To Do Next Session
 
-1. Read this file and the plan file at `/Users/deevyb/.claude/plans/goofy-meandering-peach.md`
-2. **Continue Phase 3:** Convert `DrinkCustomizer.tsx` from full-page to floating modal
-   - Add dimmed backdrop overlay
-   - Change from full-screen to centered modal card
-   - Add X close button
-   - Keep the Netflix-style `layoutId` transition for drink name
-   - Menu grid should stay visible but dimmed behind modal
-3. Test the modal interaction
-4. Then continue to Phase 4 (Name Input)
+1. Read this file (CLAUDE.md)
+2. **Start Phase 4:** Add customer name input to customization modal
+   - Create `NameInput` component (large, clear text field)
+   - Add to `DrinkCustomizer` below modifiers
+   - Make it a required field with validation
+   - Show error message if empty on submit attempt
+3. Test the name input interaction
+4. Then continue to Phase 5 (Submit Order)
 
 **Blockers:** None
 

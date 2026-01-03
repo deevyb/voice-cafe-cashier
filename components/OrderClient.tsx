@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import { MenuItem, Modifier } from '@/lib/supabase'
 import DrinkCard from './DrinkCard'
 import DrinkCustomizer from './DrinkCustomizer'
@@ -21,8 +21,10 @@ type Screen = 'menu' | 'customize' | 'confirmed'
  *
  * Screen flow:
  * 1. Menu grid (select a drink)
- * 2. Customization screen (choose modifiers)
+ * 2. Customization modal overlays the menu (choose modifiers)
  * 3. Confirmation screen (after submit) - Phase 6
+ *
+ * When a drink is tapped, a modal slides up with a blur backdrop.
  */
 export default function OrderClient({ menuItems, modifiers }: OrderClientProps) {
   // Current screen in the flow
@@ -47,7 +49,7 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
       temperature: drink.default_modifiers?.temperature ?? undefined,
     })
 
-    // Transition to customize screen
+    // Show the customization modal
     setScreen('customize')
   }
 
@@ -65,62 +67,56 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
   }
 
   /**
-   * Go back to menu from customization screen
+   * Close the customization modal
    */
-  const handleBack = () => {
+  const handleCloseModal = () => {
     setScreen('menu')
-    // Keep the drink selected so the card stays highlighted briefly
-    // Clear it after a short delay for visual continuity
+    // Keep the drink selected briefly for visual continuity during close animation
     setTimeout(() => setSelectedDrink(null), 300)
   }
 
+  // Whether the modal is open (for dimming effect)
+  const isModalOpen = screen === 'customize' && selectedDrink !== null
+
   return (
-    <LayoutGroup>
-      <AnimatePresence mode="wait">
-        {screen === 'menu' && (
-          <motion.div
-            key="menu"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="min-h-screen bg-delo-cream p-8"
-          >
-            {/* Header */}
-            <header className="text-center mb-8">
-              <h1 className="font-yatra text-4xl text-delo-maroon">
-                What are you having?
-              </h1>
-            </header>
+    <>
+      {/* Menu grid - always visible behind modal */}
+      <div className="min-h-screen bg-delo-cream p-8">
+        {/* Header */}
+        <header className="text-center mb-8">
+          <h1 className="font-yatra text-4xl text-delo-maroon">
+            What are you having?
+          </h1>
+        </header>
 
-            {/* Menu Grid */}
-            <div className="grid grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {menuItems.map((drink, index) => (
-                <DrinkCard
-                  key={drink.id}
-                  drink={drink}
-                  index={index}
-                  isSelected={selectedDrink?.id === drink.id}
-                  onSelect={handleSelectDrink}
-                />
-              ))}
-            </div>
-          </motion.div>
-        )}
+        {/* Menu Grid */}
+        <div className="grid grid-cols-3 gap-6 max-w-4xl mx-auto">
+          {menuItems.map((drink, index) => (
+            <DrinkCard
+              key={drink.id}
+              drink={drink}
+              index={index}
+              isSelected={selectedDrink?.id === drink.id}
+              onSelect={handleSelectDrink}
+            />
+          ))}
+        </div>
+      </div>
 
-        {screen === 'customize' && selectedDrink && (
+      {/* Customization modal - slides up with blur backdrop */}
+      <AnimatePresence>
+        {isModalOpen && (
           <DrinkCustomizer
-            key="customize"
             drink={selectedDrink}
             modifiers={modifiers}
             selectedModifiers={selectedModifiers}
             onModifierChange={handleModifierChange}
-            onBack={handleBack}
+            onClose={handleCloseModal}
           />
         )}
-
-        {/* Phase 6 will add the confirmation screen here */}
       </AnimatePresence>
-    </LayoutGroup>
+
+      {/* Phase 6 will add the confirmation screen here */}
+    </>
   )
 }
