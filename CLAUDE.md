@@ -209,9 +209,11 @@ Delo Coffee is inspired by the _delo_ — a traditional Indian courtyard where s
 Two plugins are installed that can help with certain tasks. **Proactively suggest these when they'd add value, and explain why.**
 
 ### `/frontend-design`
+
 **What it does:** Generates polished, creative UI components with high design quality.
 
 **When to suggest it:**
+
 - Building a new screen or component from scratch where visual creativity matters
 - When the owner wants to see multiple design directions
 - For UI that needs extra polish beyond the established patterns
@@ -219,9 +221,11 @@ Two plugins are installed that can help with certain tasks. **Proactively sugges
 **When NOT to use it:** For incremental changes to existing components, or when following established design patterns.
 
 ### `/feature-dev`
+
 **What it does:** Deep codebase analysis before implementation — maps architecture, traces dependencies, plans multi-file changes.
 
 **When to suggest it:**
+
 - Starting a major new route (`/kitchen`, `/admin`)
 - Features that touch many files or require understanding the whole system
 - Complex features where architectural planning prevents mistakes
@@ -246,16 +250,16 @@ The owner will know this project succeeded when:
 
 > **Last Updated:** January 3, 2025
 >
-> **Next Up:** `/kitchen` route — Kitchen display
+> **Next Up:** `/admin` route — Admin panel
 
 **Live App:** https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
 
-| Route      | Status         | Description                                    |
-| ---------- | -------------- | ---------------------------------------------- |
-| `/`        | ✅ Deployed    | Landing page with navigation                   |
-| `/order`   | ✅ Complete    | Full ordering flow with confirmation & auto-reset |
-| `/kitchen` | 🚧 Placeholder | Kitchen display (next up)                      |
-| `/admin`   | 🚧 Placeholder | Admin panel (after /kitchen)                   |
+| Route      | Status         | Description                                             |
+| ---------- | -------------- | ------------------------------------------------------- |
+| `/`        | ✅ Deployed    | Landing page with navigation                            |
+| `/order`   | ✅ Complete    | Full ordering flow with confirmation & auto-reset       |
+| `/kitchen` | ✅ Complete    | Real-time kitchen display with tabs (Placed/Ready)      |
+| `/admin`   | 🚧 Placeholder | Admin panel (next up)                                   |
 
 **Infrastructure:** All complete
 
@@ -268,15 +272,30 @@ The owner will know this project succeeded when:
 
 ## /order Build Progress (7 Phases)
 
-| Phase | Status | Description |
-|-------|--------|-------------|
-| 1. Menu Grid | ✅ Done | Drink cards in 3-column grid, fetches from Supabase |
-| 2. Animations | ✅ Done | Entrance animations, press-in effect, selection state |
+| Phase            | Status  | Description                                                         |
+| ---------------- | ------- | ------------------------------------------------------------------- |
+| 1. Menu Grid     | ✅ Done | Drink cards in 3-column grid, fetches from Supabase                 |
+| 2. Animations    | ✅ Done | Entrance animations, press-in effect, selection state               |
 | 3. Customization | ✅ Done | Floating modal, soft dim backdrop, X button, click-outside-to-close |
-| 4. Name Input | ✅ Done | Customer name field in modal, required for submit |
-| 5. Submit Order | ✅ Done | API route `/api/orders`, loading state, saves to database |
-| 6. Confirmation | ✅ Done | Success screen with checkmark, "On it!", name, drink, modifiers |
-| 7. Auto-Reset | ✅ Done | 3-second auto-reset, inline error handling in modal |
+| 4. Name Input    | ✅ Done | Customer name field in modal, required for submit                   |
+| 5. Submit Order  | ✅ Done | API route `/api/orders`, loading state, saves to database           |
+| 6. Confirmation  | ✅ Done | Success screen with checkmark, "On it!", name, drink, modifiers     |
+| 7. Auto-Reset    | ✅ Done | 3-second auto-reset, inline error handling in modal                 |
+
+---
+
+## /kitchen Build Progress (8 Phases)
+
+| Phase                | Status  | Description                                                       |
+| -------------------- | ------- | ----------------------------------------------------------------- |
+| 1. API Endpoint      | ✅ Done | PATCH `/api/orders/[id]` for status updates (ready/canceled)      |
+| 2. Basic Layout      | ✅ Done | Server component fetches orders, client displays with counters    |
+| 3. Order Cards       | ✅ Done | Name, drink, modifiers, time badge, Mark Ready/Cancel buttons     |
+| 4. Tabs UI           | ✅ Done | Animated tab switcher (Placed/Ready) with live counts             |
+| 5. Realtime          | ✅ Done | Supabase subscription for instant order updates                   |
+| 6. Animations        | ✅ Done | Card enter/exit, tab switch, press effects (spring 400/30)        |
+| 7. Error Handling    | ✅ Done | Offline banner, cancel confirmation modal, API error display      |
+| 8. Testing & Docs    | ✅ Done | Build verified, documentation updated                             |
 
 ---
 
@@ -285,18 +304,21 @@ The owner will know this project succeeded when:
 ### Animation Style (Reference: Superpower.com, Netflix iOS, landonorris.com)
 
 **Entrance Animation (Option B - Coordinated Fade-Slide):**
+
 - Custom easing curve: `[0.65, 0.05, 0, 1]` (smooth deceleration)
 - Cards slide up 40px while fading in
 - 70ms stagger between cards
 - Duration: 0.5s
 
 **Press Effect (Option B - Press-In):**
+
 - Scale to 0.97
 - Move down 2px (pressing "into" screen)
 - Shadow reduces on press
 - Spring physics: stiffness 400, damping 30 (minimal bounce)
 
 **Customization Screen (Square-style modal):**
+
 - **Layout:** Floating modal panel over softly dimmed menu grid (no blur)
 - **Transition:** Slide-up + fade-in
 - **Close:** Both X button in corner AND backdrop tap to close
@@ -305,15 +327,15 @@ The owner will know this project succeeded when:
 
 ### Typography System (Updated January 2, 2025)
 
-| Element | Font | Weight | Size |
-|---------|------|--------|------|
-| Page title "Delo Coffee" | Yatra One | 400 | 48px (text-5xl) |
-| Category headers | Bricolage | SemiBold | 16px (text-base) |
-| Drink names (cards) | Bricolage | SemiBold | 24px (text-2xl) |
-| Drink name (modal) | Bricolage | Bold | 36px (text-4xl) |
-| Modifier labels | Cooper | Medium | 14px (text-sm) |
-| Modifier buttons | Manrope | SemiBold | 18px (text-lg) |
-| Descriptions | Roboto Mono | Regular | 16px (text-base) |
+| Element                  | Font        | Weight   | Size             |
+| ------------------------ | ----------- | -------- | ---------------- |
+| Page title "Delo Coffee" | Yatra One   | 400      | 48px (text-5xl)  |
+| Category headers         | Bricolage   | SemiBold | 16px (text-base) |
+| Drink names (cards)      | Bricolage   | SemiBold | 24px (text-2xl)  |
+| Drink name (modal)       | Bricolage   | Bold     | 36px (text-4xl)  |
+| Modifier labels          | Cooper      | Medium   | 14px (text-sm)   |
+| Modifier buttons         | Manrope     | SemiBold | 18px (text-lg)   |
+| Descriptions             | Roboto Mono | Regular  | 16px (text-base) |
 
 ### Menu Categories
 
@@ -324,6 +346,7 @@ The owner will know this project succeeded when:
 ### Shared CSS Classes (in globals.css)
 
 To prevent styling inconsistencies, common patterns are defined once:
+
 - `.label-modifier` — Modifier labels (Milk, Temperature, Your Name)
 - `.text-modifier-option` — Text inside modifier buttons and name input (Manrope SemiBold 18px)
 - `.text-description` — Small descriptive text
@@ -338,12 +361,11 @@ To prevent styling inconsistencies, common patterns are defined once:
 ## What To Do Next Session
 
 1. Read this file (CLAUDE.md)
-2. **Build `/kitchen` route** — Kitchen display for barista
-   - Real-time order feed (Supabase realtime subscription)
-   - Show orders with status `placed`, oldest first
-   - Each card: customer name, drink, modifiers, time since ordered
-   - Tap to mark as "Ready" or "Cancel"
-   - Counters: "Placed: X | Ready: Y"
+2. **Build `/admin` route** — Admin panel for owner
+   - Passcode protection (owner sets their own)
+   - Menu Items: Toggle drinks on/off, edit modifiers per item
+   - Modifiers: Add/edit/delete milk and temperature options
+   - Export: Download CSV of orders by date range
 3. Reference the spec in `Delo Coffee Ordering App – MVP Spec.md` for full requirements
 
 **Blockers:** None

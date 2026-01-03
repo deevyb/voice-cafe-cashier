@@ -8,17 +8,11 @@ export async function POST(request: Request) {
 
     // Validate required fields
     if (!customer_name || typeof customer_name !== 'string' || !customer_name.trim()) {
-      return NextResponse.json(
-        { error: 'Customer name is required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Customer name is required' }, { status: 400 })
     }
 
     if (!item || typeof item !== 'string' || !item.trim()) {
-      return NextResponse.json(
-        { error: 'Item is required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Item is required' }, { status: 400 })
     }
 
     // Insert order into database
@@ -35,18 +29,12 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error('Database error:', error)
-      return NextResponse.json(
-        { error: 'Failed to create order' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Failed to create order' }, { status: 500 })
     }
 
     return NextResponse.json(data, { status: 201 })
   } catch {
     console.error('Request error')
-    return NextResponse.json(
-      { error: 'Invalid request' },
-      { status: 400 }
-    )
+    return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
 }

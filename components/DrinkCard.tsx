@@ -47,19 +47,9 @@ const entranceVariants = {
  * Current: stiffness 400, damping 30 = responsive with minimal bounce
  */
 
-export default function DrinkCard({
-  drink,
-  index,
-  isSelected,
-  onSelect,
-}: DrinkCardProps) {
+export default function DrinkCard({ drink, index, isSelected, onSelect }: DrinkCardProps) {
   return (
-    <motion.div
-      variants={entranceVariants}
-      initial="hidden"
-      animate="visible"
-      custom={index}
-    >
+    <motion.div variants={entranceVariants} initial="hidden" animate="visible" custom={index}>
       <motion.button
         onClick={() => onSelect(drink)}
         whileTap={{

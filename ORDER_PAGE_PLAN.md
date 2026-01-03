@@ -15,6 +15,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 **Goal:** Show all drinks as beautiful cards in a grid.
 
 **Build:**
+
 - `DrinkCard` component - displays drink name with warm Delo styling
 - Update `/app/order/page.tsx` to fetch menu items from Supabase
 - Responsive grid layout (3 columns on iPad landscape)
@@ -23,6 +24,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 **Test:** Open `/order` → see all 7 drinks as cards in a grid
 
 **Files:**
+
 - `app/order/page.tsx` (modify)
 - `components/DrinkCard.tsx` (create)
 - `components/OrderClient.tsx` (create - client component for interactivity)
@@ -34,6 +36,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 **Goal:** Tapping a drink gives satisfying visual feedback.
 
 **Build:**
+
 - Framer Motion animations: press (scale 0.98), selection border
 - Track selected drink in state
 - Staggered entrance animation for cards on page load
@@ -41,6 +44,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 **Test:** Tap drinks → cards respond with press animation, selected drink shows maroon border
 
 **Files:**
+
 - `components/DrinkCard.tsx` (modify)
 - `components/OrderClient.tsx` (modify)
 
@@ -51,11 +55,13 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 **Goal:** Floating modal for customizing the selected drink (like Square's approach).
 
 **Design Decisions:**
+
 - **Layout:** Floating modal panel over dimmed menu grid (not full-screen)
 - **Transition:** Netflix/iOS folder style - card expands into centered modal using Framer Motion's `layoutId`
 - **Close behavior:** Both X button in corner AND backdrop tap to close
 
 **Build:**
+
 - `DrinkCustomizer` component - floating modal showing:
   - X close button in top-right corner
   - Selected drink name prominently displayed
@@ -67,6 +73,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 - Menu grid stays visible but dimmed in background
 
 **Test:**
+
 - Tap "Elaichi Latte" → card expands into floating modal, menu dims behind
 - "Regular" and "Hot" are pre-selected
 - Tap X or backdrop → modal closes, card animates back
@@ -74,6 +81,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 - Tap "Cortado" → only Milk options appear
 
 **Files:**
+
 - `components/DrinkCustomizer.tsx` (modify - convert to modal)
 - `components/ModifierSelector.tsx` (already created)
 - `components/OrderClient.tsx` (modify - add backdrop, change layout)
@@ -86,6 +94,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 **Goal:** Add name input to the customization screen.
 
 **Build:**
+
 - `NameInput` component - large, clear text field
 - Add to `DrinkCustomizer` below modifiers
 - Required field validation
@@ -94,6 +103,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 **Test:** On customization screen, type name → text appears clearly, field is easy to use
 
 **Files:**
+
 - `components/NameInput.tsx` (create)
 - `components/DrinkCustomizer.tsx` (modify)
 
@@ -104,6 +114,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 **Goal:** Tapping "Send" creates an order in the database.
 
 **Build:**
+
 - `SendButton` component - large maroon button
 - API route `app/api/orders/route.ts` to create order in Supabase
 - Loading state during submission
@@ -112,6 +123,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 **Test:** Complete order → check Supabase dashboard for new order
 
 **Files:**
+
 - `components/SendButton.tsx` (create)
 - `app/api/orders/route.ts` (create)
 - `components/OrderClient.tsx` (modify)
@@ -123,6 +135,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 **Goal:** Show satisfying confirmation after order submits.
 
 **Build:**
+
 - `OrderConfirmation` component - full screen with order summary
 - Shows: "Sarah: Elaichi Latte, Oat Milk, Iced"
 - Smooth fade transition from menu to confirmation
@@ -130,6 +143,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 **Test:** Submit order → confirmation appears with your name and order details
 
 **Files:**
+
 - `components/OrderConfirmation.tsx` (create)
 - `components/OrderClient.tsx` (modify)
 
@@ -140,17 +154,20 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 **Goal:** Screen resets for next customer, everything feels polished.
 
 **Build:**
+
 - Auto-reset after 3 seconds on confirmation
 - Reset all state (drink, modifiers, name)
 - Network error handling with friendly message
 - Double-tap protection on Send button
 
 **Test:**
+
 - Wait 3 seconds after confirmation → screen resets to menu
 - Complete 5+ orders in a row → smooth every time
 - Turn off wifi → friendly error message appears
 
 **Files:**
+
 - `components/OrderClient.tsx` (modify)
 
 ---
@@ -170,6 +187,7 @@ Build the customer ordering screen in **7 testable phases**. Each phase ends wit
 ```
 
 **Screen Flow:**
+
 1. `OrderClient` shows menu grid with `DrinkCard` components
 2. Tap drink → transitions to `DrinkCustomizer` (full screen)
 3. `DrinkCustomizer` contains `ModifierSelector`, `NameInput`, `SendButton`
@@ -193,11 +211,11 @@ error: string | null                         // Error message if any
 
 ## Animation Timing
 
-| Animation | Duration |
-|-----------|----------|
-| Card entrance | 300ms (staggered 50ms) |
-| Card press | 150ms |
-| Selection border | 200ms |
-| Panel slide in | 250ms |
-| Confirmation fade | 300ms |
-| Reset transition | 300ms |
+| Animation         | Duration               |
+| ----------------- | ---------------------- |
+| Card entrance     | 300ms (staggered 50ms) |
+| Card press        | 150ms                  |
+| Selection border  | 200ms                  |
+| Panel slide in    | 250ms                  |
+| Confirmation fade | 300ms                  |
+| Reset transition  | 300ms                  |

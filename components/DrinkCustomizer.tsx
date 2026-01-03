@@ -87,9 +87,7 @@ export default function DrinkCustomizer({
           </motion.button>
 
           {/* Drink name and description */}
-          <h1 className="font-bricolage font-bold text-4xl text-delo-maroon pr-12">
-            {drink.name}
-          </h1>
+          <h1 className="font-bricolage font-bold text-4xl text-delo-maroon pr-12">{drink.name}</h1>
           {drink.description && (
             <p className="text-description mt-2 mb-8 pr-12">{drink.description}</p>
           )}
@@ -143,9 +141,7 @@ export default function DrinkCustomizer({
           </motion.button>
 
           {/* Error message */}
-          {error && (
-            <p className="text-red-600 text-sm mt-3 text-center">{error}</p>
-          )}
+          {error && <p className="text-red-600 text-sm mt-3 text-center">{error}</p>}
         </div>
       </motion.div>
     </>

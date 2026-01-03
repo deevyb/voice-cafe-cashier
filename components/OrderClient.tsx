@@ -80,10 +80,7 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
   /**
    * Update a modifier selection
    */
-  const handleModifierChange = (
-    category: 'milk' | 'temperature',
-    value: string
-  ) => {
+  const handleModifierChange = (category: 'milk' | 'temperature', value: string) => {
     setSelectedModifiers((prev) => ({
       ...prev,
       [category]: value,
@@ -170,9 +167,7 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
       <div className="min-h-screen bg-delo-cream p-8">
         {/* Header */}
         <header className="text-center mb-8">
-          <h1 className="font-yatra text-5xl text-delo-maroon">
-            Delo Coffee
-          </h1>
+          <h1 className="font-yatra text-5xl text-delo-maroon">Delo Coffee</h1>
         </header>
 
         {/* Menu by Category */}
@@ -246,17 +241,11 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
                   stroke="currentColor"
                   strokeWidth={2.5}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M5 13l4 4L19 7"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
 
-              <p className="text-description text-delo-navy/60 mb-6">
-                On it!
-              </p>
+              <p className="text-description text-delo-navy/60 mb-6">On it!</p>
 
               <h1 className="font-bricolage font-bold text-4xl text-delo-navy mb-4">
                 {submittedOrder.customer_name}
@@ -267,13 +256,9 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
               </p>
 
               {/* Modifiers line - only show if there are modifiers */}
-              {(submittedOrder.modifiers?.milk ||
-                submittedOrder.modifiers?.temperature) && (
+              {(submittedOrder.modifiers?.milk || submittedOrder.modifiers?.temperature) && (
                 <p className="text-modifier-option text-delo-navy/80 mt-2">
-                  {[
-                    submittedOrder.modifiers?.milk,
-                    submittedOrder.modifiers?.temperature,
-                  ]
+                  {[submittedOrder.modifiers?.milk, submittedOrder.modifiers?.temperature]
                     .filter(Boolean)
                     .join(', ')}
                 </p>
