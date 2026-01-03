@@ -11,6 +11,7 @@ export type OrderStatus = 'placed' | 'ready' | 'canceled'
 export interface MenuItem {
   id: string
   name: string
+  description: string | null
   image_url: string | null
   is_active: boolean
   display_order: number

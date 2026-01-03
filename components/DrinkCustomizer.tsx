@@ -58,6 +58,7 @@ export default function DrinkCustomizer({
           stiffness: 400,
           damping: 30,
         }}
+        onClick={onClose}
         className="fixed inset-0 z-50 flex items-center justify-center p-4"
       >
         <div
@@ -75,10 +76,16 @@ export default function DrinkCustomizer({
             <span className="text-delo-navy/60 text-xl leading-none">×</span>
           </motion.button>
 
-          {/* Drink name */}
-          <h1 className="font-yatra text-4xl text-delo-maroon mb-8 pr-12">
+          {/* Drink name and description */}
+          <h1 className="font-yatra text-4xl text-delo-maroon pr-12">
             {drink.name}
           </h1>
+          {drink.description && (
+            <p className="font-roboto-mono text-delo-navy/60 mt-2 mb-8 pr-12">
+              {drink.description}
+            </p>
+          )}
+          {!drink.description && <div className="mb-8" />}
 
           {/* Modifier selectors */}
           {hasAnyModifiers ? (
