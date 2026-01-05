@@ -84,6 +84,71 @@ html {
   @apply opacity-50;
 }
 
+/* ============================================
+   Modal & Form Shared Styles
+   Ensures consistency across all modal forms
+   ============================================ */
+
+/* Modal title (h2) */
+.modal-title {
+  @apply font-bricolage font-bold text-2xl text-delo-maroon pr-12 mb-2;
+}
+
+/* Modal description text */
+.modal-description {
+  @apply text-description text-sm mb-6;
+}
+
+/* Standard form input */
+.input-form {
+  @apply w-full h-16 px-6 text-modifier-option text-delo-navy bg-white rounded-xl;
+  @apply border border-delo-navy/10 focus:border-delo-maroon focus:outline-none transition-colors;
+}
+
+/* Form select dropdown */
+.select-form {
+  @apply w-full h-16 px-6 pr-12 text-modifier-option text-delo-navy bg-white rounded-xl;
+  @apply border border-delo-navy/10 focus:border-delo-maroon focus:outline-none transition-colors;
+  @apply appearance-none cursor-pointer;
+}
+
+/* Secondary button (Cancel, etc.) */
+.btn-secondary {
+  @apply h-12 rounded-xl font-manrope font-semibold;
+  @apply text-delo-navy/60 bg-delo-navy/5 hover:bg-delo-navy/10 transition-colors;
+}
+
+/* Modal action button (Save, Create - smaller than btn-primary) */
+.btn-modal-action {
+  @apply h-12 rounded-xl font-manrope font-semibold;
+  @apply text-delo-cream bg-delo-maroon hover:bg-delo-maroon/90 transition-colors;
+}
+
+.btn-modal-action:disabled {
+  @apply bg-delo-navy/20 text-delo-navy/40 cursor-not-allowed;
+}
+
+/* Error banner */
+.error-banner {
+  @apply bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm;
+}
+
+/* Checkbox styling */
+.checkbox-form {
+  @apply w-[18px] h-[18px] rounded border-2 border-delo-navy/20;
+  @apply text-delo-maroon focus:ring-delo-maroon focus:ring-offset-0 cursor-pointer;
+}
+
+/* Checkbox label row */
+.checkbox-label {
+  @apply flex items-center gap-3 cursor-pointer;
+}
+
+.checkbox-label span {
+  @apply font-manrope font-semibold text-base text-delo-navy;
+  @apply group-hover:text-delo-maroon transition-colors;
+}
+
 /* Date input styling - override webkit default blue color */
 .date-input {
   color: #000024; /* delo-navy */

@@ -251,7 +251,7 @@ The owner will know this project succeeded when:
 
 > **Last Updated:** January 4, 2026
 >
-> **Next Up:** Polish Phase — Dashboard stats, then Visual Personality with /frontend-design
+> **Next Up:** Dashboard stats API + UI, then Visual Personality with /frontend-design
 
 **Live App:** https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
 
@@ -364,11 +364,46 @@ The owner will know this project succeeded when:
 
 To prevent styling inconsistencies, common patterns are defined once:
 
+**Text & Labels:**
 - `.label-modifier` — Modifier labels (Milk, Temperature, Your Name)
 - `.text-modifier-option` — Text inside modifier buttons and name input (Manrope SemiBold 18px)
 - `.text-description` — Small descriptive text
-- `.btn-primary` — Maroon submit buttons (with disabled state)
+
+**Buttons:**
+- `.btn-primary` — Maroon submit buttons, h-16 (with disabled state)
+- `.btn-secondary` — Cancel buttons, h-12, gray background
+- `.btn-modal-action` — Modal save/create buttons, h-12, maroon
+
+**Form Elements:**
+- `.input-form` — Standard form input (h-16, rounded-xl, consistent border)
+- `.select-form` — Dropdown select with same styling
+- `.checkbox-form` — Checkbox input styling
+- `.checkbox-label` — Checkbox row wrapper with hover effect
+
+**Modal Elements:**
+- `.modal-title` — Modal header (h2, text-2xl, maroon)
+- `.modal-description` — Subtitle text below title
+- `.error-banner` — Error message display
+
+**State:**
 - `.item-unavailable` — 50% opacity for sold-out/inactive items
+
+### Shared Modal Component (Added January 4, 2026)
+
+All form modals now use a shared `Modal.tsx` component that provides:
+- Consistent backdrop (bg-delo-navy/40, click-to-close)
+- Panel styling (bg-delo-cream, rounded-xl, shadow-2xl, p-8)
+- X close button with hover animation
+- Framer Motion spring animations (stiffness 400, damping 30)
+- Configurable size prop (sm, md, lg)
+
+Modals using this component:
+- `DrinkCustomizer` (customer order page)
+- `NewMenuItemForm` (admin create menu item)
+- `ModifierForm` (admin add/edit modifier)
+- `MenuItemEditor` (admin edit item modifiers)
+
+The cancel confirmation modal in KitchenClient intentionally stays distinct (different styling for different context).
 
 ### Sold-Out Item Display (Added January 4, 2025)
 
@@ -401,34 +436,41 @@ This follows UX best practice: disable rather than hide, so customers see what's
 ## What To Do Next Session
 
 1. Read this file (CLAUDE.md)
-2. **Continue Polish Phase:**
-   - Add Dashboard stats (today + all-time order counts, popular items)
+2. **Continue with Dashboard Stats:**
+   - Create `/api/admin/stats` endpoint (SQL aggregations for counts, popular drinks, modifier preferences)
+   - Update `DashboardSection.tsx` to fetch and display stats
+   - Stats: Today's orders, All-time orders, Top 20 drinks (scrollable), Modifier preferences (dynamic bars)
+3. **Then Visual Design:**
    - Run `/frontend-design` for visual personality on order page
    - iPad testing when ready
 
+**Plan file:** `/Users/deevyb/.claude/plans/scalable-giggling-teacup.md` has detailed implementation plan for stats.
+
 **New Features Added This Session:**
 
-- **NavMenu component** — Dots/grid icon with dropdown (Home, Kitchen, Admin)
-  - Added to `/kitchen` and `/admin` pages
-  - Admin includes logout option in dropdown
-- **Create Menu Item** — Full CRUD for menu items
-  - "Add Item" button in Admin > Menu Items
-  - Form with name, description, category, modifier config
-  - POST `/api/admin/menu-items` endpoint
+- **Shared Modal Component** — `Modal.tsx` wrapper for consistent modal styling
+  - All form modals now use this component
+  - Handles backdrop, panel, close button, animations
+- **Shared CSS Classes** — Added to globals.css for form consistency
+  - `.input-form`, `.select-form`, `.btn-secondary`, `.btn-modal-action`
+  - `.modal-title`, `.modal-description`, `.error-banner`
+  - `.checkbox-form`, `.checkbox-label`
 
 **Files Changed:**
 
-- `components/NavMenu.tsx` — NEW: Navigation dropdown component
-- `components/NewMenuItemForm.tsx` — NEW: Create menu item modal
-- `components/KitchenClient.tsx` — Added NavMenu, removed duplicate counts from header
-- `components/AdminClient.tsx` — NavMenu replaces logout button, added onAdd handler
-- `components/MenuItemsSection.tsx` — Added "Add Item" button, NewMenuItemForm integration
-- `app/api/admin/menu-items/route.ts` — Added POST handler for creating items
+- `components/Modal.tsx` — NEW: Shared modal wrapper component
+- `app/globals.css` — Added shared form/modal CSS classes
+- `components/DrinkCustomizer.tsx` — Refactored to use Modal + shared classes
+- `components/NewMenuItemForm.tsx` — Refactored to use Modal + shared classes
+- `components/ModifierForm.tsx` — Refactored to use Modal + shared classes
+- `components/MenuItemEditor.tsx` — Refactored to use Modal + shared classes
+- `components/MenuItemsSection.tsx` — Removed AnimatePresence wrappers
+- `components/ModifiersSection.tsx` — Removed AnimatePresence wrapper
+- `components/OrderClient.tsx` — Removed AnimatePresence wrapper
 
 **Known Issues:**
 
 - CSV filename cosmetic bug (still present)
-- NewMenuItemForm typography being refined (in progress)
 
 **Blockers:** None
 

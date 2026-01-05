@@ -178,21 +178,18 @@ export default function ModifiersSection({ modifiers, onUpdate, onAdd }: Modifie
         categories.map((cat) => renderCategory(cat, modifiersByCategory[cat]))
       )}
 
-      {/* Add/Edit modal */}
-      <AnimatePresence>
-        {(isAdding || editingModifier) && (
-          <ModifierForm
-            modifier={editingModifier || undefined}
-            categories={categories}
-            existingModifiers={modifiers}
-            onSave={handleSaveModifier}
-            onClose={() => {
-              setIsAdding(false)
-              setEditingModifier(null)
-            }}
-          />
-        )}
-      </AnimatePresence>
+      {/* Add/Edit modal - uses shared Modal component */}
+      <ModifierForm
+        modifier={editingModifier || undefined}
+        categories={categories}
+        existingModifiers={modifiers}
+        onSave={handleSaveModifier}
+        onClose={() => {
+          setIsAdding(false)
+          setEditingModifier(null)
+        }}
+        isOpen={isAdding || !!editingModifier}
+      />
     </div>
   )
 }

@@ -143,32 +143,28 @@ export default function MenuItemsSection({
       {renderCategory('Signature', signatureItems)}
       {renderCategory('Classics', classicItems)}
 
-      {/* Edit modal */}
-      <AnimatePresence>
-        {editingItem && (
-          <MenuItemEditor
-            item={editingItem}
-            categories={modifierCategories}
-            onSave={(config) => handleSaveModifiers(editingItem, config)}
-            onClose={() => setEditingItem(null)}
-          />
-        )}
-      </AnimatePresence>
+      {/* Edit modal - uses shared Modal component */}
+      {editingItem && (
+        <MenuItemEditor
+          item={editingItem}
+          categories={modifierCategories}
+          onSave={(config) => handleSaveModifiers(editingItem, config)}
+          onClose={() => setEditingItem(null)}
+          isOpen={!!editingItem}
+        />
+      )}
 
-      {/* New item modal */}
-      <AnimatePresence>
-        {showNewForm && (
-          <NewMenuItemForm
-            categories={modifierCategories}
-            existingCategories={['Signature', 'Classics']}
-            onSave={(newItem) => {
-              onAdd(newItem)
-              setShowNewForm(false)
-            }}
-            onClose={() => setShowNewForm(false)}
-          />
-        )}
-      </AnimatePresence>
+      {/* New item modal - uses shared Modal component */}
+      <NewMenuItemForm
+        categories={modifierCategories}
+        existingCategories={['Signature', 'Classics']}
+        onSave={(newItem) => {
+          onAdd(newItem)
+          setShowNewForm(false)
+        }}
+        onClose={() => setShowNewForm(false)}
+        isOpen={showNewForm}
+      />
     </div>
   )
 }

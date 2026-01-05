@@ -229,23 +229,22 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
         </div>
       </div>
 
-      {/* Customization modal - slides up with blur backdrop */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <DrinkCustomizer
-            drink={selectedDrink}
-            modifiers={modifiers}
-            selectedModifiers={selectedModifiers}
-            onModifierChange={handleModifierChange}
-            customerName={customerName}
-            onNameChange={handleNameChange}
-            onSubmit={handleSubmit}
-            onClose={handleCloseModal}
-            isSubmitting={isSubmitting}
-            error={error}
-          />
-        )}
-      </AnimatePresence>
+      {/* Customization modal - uses shared Modal component */}
+      {selectedDrink && (
+        <DrinkCustomizer
+          drink={selectedDrink}
+          modifiers={modifiers}
+          selectedModifiers={selectedModifiers}
+          onModifierChange={handleModifierChange}
+          customerName={customerName}
+          onNameChange={handleNameChange}
+          onSubmit={handleSubmit}
+          onClose={handleCloseModal}
+          isSubmitting={isSubmitting}
+          error={error}
+          isOpen={isModalOpen}
+        />
+      )}
 
       {/* Confirmation screen - shows after successful order submission */}
       <AnimatePresence>
