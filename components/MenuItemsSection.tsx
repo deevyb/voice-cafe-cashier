@@ -5,11 +5,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { MenuItem, Modifier } from '@/lib/supabase'
 import MenuItemCard from './MenuItemCard'
 import MenuItemEditor from './MenuItemEditor'
+import NewMenuItemForm from './NewMenuItemForm'
 
 interface MenuItemsSectionProps {
   menuItems: MenuItem[]
   modifiers: Modifier[]
   onUpdate: (updatedItem: MenuItem) => void
+  onAdd: (newItem: MenuItem) => void
 }
 
 /**
@@ -21,8 +23,10 @@ export default function MenuItemsSection({
   menuItems,
   modifiers,
   onUpdate,
+  onAdd,
 }: MenuItemsSectionProps) {
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null)
+  const [showNewForm, setShowNewForm] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   // Get unique modifier categories from the database
@@ -121,10 +125,19 @@ export default function MenuItemsSection({
         )}
       </AnimatePresence>
 
-      {/* Intro text */}
-      <p className="text-description text-sm mb-6">
-        Toggle drinks on or off. Tap Edit to change which modifiers apply.
-      </p>
+      {/* Header with Add button */}
+      <div className="flex justify-between items-start mb-6">
+        <p className="text-description text-sm">
+          Toggle drinks on or off. Tap Edit to change which modifiers apply.
+        </p>
+        <motion.button
+          onClick={() => setShowNewForm(true)}
+          whileTap={{ scale: 0.97 }}
+          className="px-4 py-2 rounded-lg font-manrope font-semibold text-sm text-delo-cream bg-delo-maroon hover:bg-delo-maroon/90 transition-colors whitespace-nowrap ml-4"
+        >
+          + Add Item
+        </motion.button>
+      </div>
 
       {/* Categories */}
       {renderCategory('Signature', signatureItems)}
@@ -138,6 +151,21 @@ export default function MenuItemsSection({
             categories={modifierCategories}
             onSave={(config) => handleSaveModifiers(editingItem, config)}
             onClose={() => setEditingItem(null)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* New item modal */}
+      <AnimatePresence>
+        {showNewForm && (
+          <NewMenuItemForm
+            categories={modifierCategories}
+            existingCategories={['Signature', 'Classics']}
+            onSave={(newItem) => {
+              onAdd(newItem)
+              setShowNewForm(false)
+            }}
+            onClose={() => setShowNewForm(false)}
           />
         )}
       </AnimatePresence>

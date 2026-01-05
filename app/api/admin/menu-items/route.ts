@@ -19,6 +19,53 @@ export async function GET() {
 }
 
 /**
+ * POST /api/admin/menu-items
+ * Create a new menu item
+ */
+export async function POST(request: Request) {
+  try {
+    const body = await request.json()
+    const { name, description, category, modifier_config } = body
+
+    if (!name || typeof name !== 'string' || !name.trim()) {
+      return NextResponse.json({ error: 'Name is required' }, { status: 400 })
+    }
+
+    // Get max display_order to append new item at end
+    const { data: existingItems } = await supabase
+      .from('menu_items')
+      .select('display_order')
+      .order('display_order', { ascending: false })
+      .limit(1)
+
+    const maxOrder = existingItems?.[0]?.display_order ?? 0
+    const newDisplayOrder = maxOrder + 1
+
+    // Create the new item
+    const { data, error } = await supabase
+      .from('menu_items')
+      .insert({
+        name: name.trim(),
+        description: description || null,
+        category: category || 'Signature',
+        modifier_config: modifier_config || {},
+        default_modifiers: {},
+        is_active: true,
+        display_order: newDisplayOrder,
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+
+    return NextResponse.json(data, { status: 201 })
+  } catch (error) {
+    console.error('Error creating menu item:', error)
+    return NextResponse.json({ error: 'Failed to create menu item' }, { status: 500 })
+  }
+}
+
+/**
  * PATCH /api/admin/menu-items
  * Update a menu item (toggle active, change modifier config)
  */

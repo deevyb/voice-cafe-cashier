@@ -6,6 +6,7 @@ import AdminTabs, { AdminTab } from './AdminTabs'
 import MenuItemsSection from './MenuItemsSection'
 import ModifiersSection from './ModifiersSection'
 import DashboardSection from './DashboardSection'
+import NavMenu from './NavMenu'
 import { MenuItem, Modifier } from '@/lib/supabase'
 
 interface AdminClientProps {
@@ -45,6 +46,11 @@ export default function AdminClient({
     setModifiers((prev) => [...prev, newModifier])
   }
 
+  // Add a new menu item to local state (called after API success)
+  const handleMenuItemAdd = (newItem: MenuItem) => {
+    setMenuItems((prev) => [...prev, newItem])
+  }
+
   return (
     <main className="min-h-screen p-8 bg-delo-cream">
       <div className="max-w-4xl mx-auto">
@@ -54,12 +60,7 @@ export default function AdminClient({
             <h1 className="font-yatra text-4xl text-delo-maroon mb-1">Delo Coffee Admin</h1>
             <p className="text-description">Manage your menu and view orders</p>
           </div>
-          <button
-            onClick={onLogout}
-            className="text-delo-navy/50 hover:text-delo-maroon text-sm transition-colors"
-          >
-            Log out
-          </button>
+          <NavMenu onLogout={onLogout} />
         </div>
 
         {/* Tabs */}
@@ -80,6 +81,7 @@ export default function AdminClient({
                   menuItems={menuItems}
                   modifiers={modifiers}
                   onUpdate={handleMenuItemUpdate}
+                  onAdd={handleMenuItemAdd}
                 />
               )}
 

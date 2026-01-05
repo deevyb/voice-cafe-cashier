@@ -249,9 +249,9 @@ The owner will know this project succeeded when:
 
 ## Current Status
 
-> **Last Updated:** January 5, 2025
+> **Last Updated:** January 4, 2026
 >
-> **Next Up:** `/admin` route — Phase 6: Polish + Testing + Health Audit
+> **Next Up:** Polish Phase — Dashboard stats, then Visual Personality with /frontend-design
 
 **Live App:** https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
 
@@ -259,8 +259,8 @@ The owner will know this project succeeded when:
 | ---------- | -------------- | ----------------------------------------------------------------- |
 | `/`        | ✅ Deployed    | Landing page with navigation                                      |
 | `/order`   | ✅ Complete    | Full ordering flow with confirmation & auto-reset                 |
-| `/kitchen` | ✅ Complete    | Real-time barista display with 2-col grid, optimized typography   |
-| `/admin`   | ✅ Complete    | Passcode + tabs + menu items + modifiers + dashboard (export)     |
+| `/kitchen` | ✅ Complete    | Real-time barista display + NavMenu for navigation                |
+| `/admin`   | ✅ Complete    | Passcode + tabs + menu items + modifiers + dashboard + NavMenu    |
 
 **Infrastructure:** All complete
 
@@ -401,22 +401,34 @@ This follows UX best practice: disable rather than hide, so customers see what's
 ## What To Do Next Session
 
 1. Read this file (CLAUDE.md)
-2. **Phase 6: Polish + Testing + Health Audit**
-   - Test all flows on actual iPad
-   - Review animations, error states
-   - Codebase health audit (code quality, cleanup, simplification)
-   - CLAUDE.md best practices review
-   - Final polish pass
+2. **Continue Polish Phase:**
+   - Add Dashboard stats (today + all-time order counts, popular items)
+   - Run `/frontend-design` for visual personality on order page
+   - iPad testing when ready
 
-**Key Files for Dashboard:**
+**New Features Added This Session:**
 
-- `components/DashboardSection.tsx` — Export UI with date inputs
-- `app/api/admin/orders/route.ts` — Orders API (GET with date filtering)
+- **NavMenu component** — Dots/grid icon with dropdown (Home, Kitchen, Admin)
+  - Added to `/kitchen` and `/admin` pages
+  - Admin includes logout option in dropdown
+- **Create Menu Item** — Full CRUD for menu items
+  - "Add Item" button in Admin > Menu Items
+  - Form with name, description, category, modifier config
+  - POST `/api/admin/menu-items` endpoint
 
-**Known Issues to Fix:**
+**Files Changed:**
 
-- CSV filename doesn't capture full date range (cosmetic bug)
-- Future: Add orders table and analytics to Dashboard tab
+- `components/NavMenu.tsx` — NEW: Navigation dropdown component
+- `components/NewMenuItemForm.tsx` — NEW: Create menu item modal
+- `components/KitchenClient.tsx` — Added NavMenu, removed duplicate counts from header
+- `components/AdminClient.tsx` — NavMenu replaces logout button, added onAdd handler
+- `components/MenuItemsSection.tsx` — Added "Add Item" button, NewMenuItemForm integration
+- `app/api/admin/menu-items/route.ts` — Added POST handler for creating items
+
+**Known Issues:**
+
+- CSV filename cosmetic bug (still present)
+- NewMenuItemForm typography being refined (in progress)
 
 **Blockers:** None
 

@@ -6,6 +6,7 @@ import { Order, supabase } from '@/lib/supabase'
 import OrderCard from './OrderCard'
 import KitchenTabs from './KitchenTabs'
 import ConnectionStatus from './ConnectionStatus'
+import NavMenu from './NavMenu'
 
 interface KitchenClientProps {
   initialOrders: Order[]
@@ -166,9 +167,7 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
       <header className="px-8 pt-8 pb-4">
         <div className="flex items-center justify-between max-w-4xl mx-auto">
           <h1 className="font-yatra text-4xl text-delo-maroon">Delo Barista Bar</h1>
-          <div className="font-roboto-mono text-sm text-delo-navy/60">
-            Placed: {placedCount} | Ready: {readyCount}
-          </div>
+          <NavMenu />
         </div>
       </header>
 
