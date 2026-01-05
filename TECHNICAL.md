@@ -60,7 +60,13 @@
   /kitchen        # Real-time kitchen display
   /admin          # Passcode-protected admin panel
   /api
-    /orders       # POST: Create new order
+    /orders       # POST: Create order, PATCH: Update status
+    /admin
+      /stats      # GET: Dashboard statistics
+      /menu-items # GET/POST/PATCH: Menu management
+      /modifiers  # GET/POST/PATCH: Modifier management
+      /orders     # GET: Export orders (CSV)
+      /verify     # POST: Passcode verification
 /components       # Shared UI components
 /lib              # Utilities, Supabase client, types
 /hooks            # Custom React hooks (useOrders, useRealtime, etc.)
@@ -126,6 +132,43 @@ CREATE INDEX idx_menu_items_active ON menu_items(is_active) WHERE is_active = tr
 - `modifiers` JSONB on orders stores selected choices: `{"milk": "Oat", "temperature": "Iced"}`
 - Denormalized item name in orders for simplicity and historical accuracy
 - Status enum is strict: only `placed`, `ready`, `canceled`
+
+---
+
+## API Endpoints
+
+### GET /api/admin/stats
+
+Returns aggregated dashboard statistics:
+
+```typescript
+interface DashboardStats {
+  today: OrderCounts      // Orders from today
+  allTime: OrderCounts    // All orders ever
+  popularDrinks: DrinkCount[]  // Top 20 drinks by count
+  modifierBreakdown: Record<string, ModifierOption[]>  // e.g., { milk: [...], temperature: [...] }
+}
+
+interface OrderCounts {
+  total: number
+  placed: number
+  ready: number
+  canceled: number
+}
+
+interface DrinkCount {
+  name: string
+  count: number
+}
+
+interface ModifierOption {
+  option: string      // e.g., "Oat"
+  count: number       // raw count
+  percentage: number  // 0-100
+}
+```
+
+Uses `force-dynamic` for fresh data on every request.
 
 ---
 
@@ -325,4 +368,4 @@ NEXT_PUBLIC_APP_URL=https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
 
 ---
 
-_Last updated: January 3, 2025 — Phase 5 complete, order submission API working_
+_Last updated: January 4, 2026 — Health check complete, stats API documented_

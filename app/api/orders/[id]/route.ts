@@ -36,8 +36,8 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     }
 
     return NextResponse.json(data)
-  } catch {
-    console.error('Request error')
+  } catch (error) {
+    console.error('Request error:', error)
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
 }

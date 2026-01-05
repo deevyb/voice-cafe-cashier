@@ -15,7 +15,8 @@ export async function POST(request: Request) {
     const valid = passcode === process.env.ADMIN_PASSCODE
 
     return NextResponse.json({ valid })
-  } catch {
+  } catch (error) {
+    console.error('Verify error:', error)
     return NextResponse.json({ valid: false, error: 'Invalid request' }, { status: 400 })
   }
 }

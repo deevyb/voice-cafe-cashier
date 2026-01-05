@@ -134,9 +134,10 @@ Delo Coffee is inspired by the _delo_ — a traditional Indian courtyard where s
 ### Admin Flow (`/admin`)
 
 1. Enter passcode (owner chooses their own)
-2. Three sections:
+2. Four tabs:
    - **Menu Items:** Toggle drinks on/off, edit modifiers per item
    - **Modifiers:** Add/edit/delete milk and temperature options
+   - **Dashboard:** Order stats and analytics
    - **Export:** Download CSV of orders by date range
 
 ---
@@ -249,9 +250,9 @@ The owner will know this project succeeded when:
 
 ## Current Status
 
-> **Last Updated:** January 5, 2026
+> **Last Updated:** January 4, 2026
 >
-> **Next Up:** Visual Personality with /frontend-design, then iPad testing
+> **Next Up:** iPad testing, then Visual Personality with /frontend-design
 
 **Live App:** https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
 
@@ -310,9 +311,7 @@ The owner will know this project succeeded when:
 | 3. Menu Items       | ✅ Done    | Toggle drinks on/off, edit modifier config per item      |
 | 4. Modifiers        | ✅ Done    | Add/edit/toggle milk and temperature options             |
 | 5. Dashboard        | ✅ Done    | Stats + CSV export with date range                       |
-| 6. Polish + Testing | 🚧 Pending | iPad testing, animation review, codebase health audit    |
-
-**Known Issue:** CSV filename doesn't always include full date range. Functional but cosmetic bug to fix later.
+| 6. Polish + Testing | 🚧 Partial | Codebase health audit ✅, iPad testing pending           |
 
 ---
 
@@ -342,7 +341,7 @@ The owner will know this project succeeded when:
 - **Animation:** Spring physics (stiffness 400, damping 30) for snappy, minimal-bounce feel
 - **Corner radius:** `rounded-xl` (matches drink cards)
 
-### Typography System (Updated January 2, 2025)
+### Typography System (Updated January 4, 2026)
 
 | Element                  | Font        | Weight   | Size             |
 | ------------------------ | ----------- | -------- | ---------------- |
@@ -436,14 +435,23 @@ This follows UX best practice: disable rather than hide, so customers see what's
 ## What To Do Next Session
 
 1. Read this file (CLAUDE.md)
-2. **Visual Personality:**
-   - Run `/frontend-design` for visual polish on order page
-   - Consider drink card enhancements, page transitions
-3. **iPad Testing:**
+2. **iPad Testing:**
    - Test on actual iPad in landscape mode
    - Verify touch targets, animations, responsiveness
+3. **Visual Personality:**
+   - Run `/frontend-design` for visual polish on order page
+   - Consider drink card enhancements, page transitions
 
-**New Features Added This Session (January 5, 2026):**
+**Health Check Completed (January 4, 2026):**
+
+- Fixed documentation dates and accuracy
+- Added `.env.example` for easier onboarding
+- Added stats API documentation to TECHNICAL.md
+- Fixed README doc paths
+- Standardized API error handling
+- Removed outdated Known Issues (CSV bug was already fixed)
+
+**New Features Added Previously (January 5, 2026):**
 
 - **Dashboard Stats UI** — Full statistics display in admin Dashboard tab
   - Today + All-Time order counts with status breakdown (placed/ready/canceled)
@@ -464,10 +472,6 @@ This follows UX best practice: disable rather than hide, so customers see what's
 - `app/api/orders/route.ts` — Added server-side modifier defaults
 - `components/DashboardSection.tsx` — Full rewrite with stats UI + modular subcomponents
 - `lib/supabase.ts` — Added DashboardStats, OrderCounts, DrinkCount, ModifierOption types
-
-**Known Issues:**
-
-- CSV filename cosmetic bug (still present)
 
 **Blockers:** None
 

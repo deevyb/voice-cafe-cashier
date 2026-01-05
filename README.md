@@ -57,9 +57,8 @@ delo-kiosk/
 ├── lib/
 │   └── supabase.ts   # Database client + types
 ├── components/       # Shared UI components
-└── docs/
-    ├── CLAUDE.md     # Project guide (for AI assistants)
-    └── TECHNICAL.md  # Technical documentation
+├── CLAUDE.md         # Project guide (for AI assistants)
+└── TECHNICAL.md      # Technical documentation
 ```
 
 ---
