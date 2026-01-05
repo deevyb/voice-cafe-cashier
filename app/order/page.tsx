@@ -19,11 +19,10 @@ async function getMenuData() {
     throw new Error('Failed to load menu')
   }
 
-  // Fetch active modifiers, sorted by category and display order
+  // Fetch all modifiers (including inactive for "sold out" display), sorted by category and display order
   const { data: modifiers, error: modifierError } = await supabase
     .from('modifiers')
     .select('*')
-    .eq('is_active', true)
     .order('category')
     .order('display_order')
 

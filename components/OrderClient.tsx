@@ -62,15 +62,45 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
   }, [screen])
 
   /**
+   * Helper to get the first available option in a category, or undefined if none available
+   */
+  const getFirstAvailableOption = (category: string): string | undefined => {
+    const available = modifiers.find((m) => m.category === category && m.is_active)
+    return available?.option
+  }
+
+  /**
+   * Helper to check if a specific modifier option is available
+   */
+  const isModifierAvailable = (category: string, option: string): boolean => {
+    return modifiers.some((m) => m.category === category && m.option === option && m.is_active)
+  }
+
+  /**
    * When a drink is tapped, select it and initialize modifiers with defaults
+   * If a default modifier is unavailable, auto-select the first available one
    */
   const handleSelectDrink = (drink: MenuItem) => {
     setSelectedDrink(drink)
 
-    // Initialize modifiers with the drink's defaults
+    // Get the drink's default modifiers
+    const defaultMilk = drink.default_modifiers?.milk
+    const defaultTemp = drink.default_modifiers?.temperature
+
+    // Use defaults if available, otherwise fall back to first available option
+    const selectedMilk =
+      defaultMilk && isModifierAvailable('milk', defaultMilk)
+        ? defaultMilk
+        : getFirstAvailableOption('milk')
+
+    const selectedTemp =
+      defaultTemp && isModifierAvailable('temperature', defaultTemp)
+        ? defaultTemp
+        : getFirstAvailableOption('temperature')
+
     setSelectedModifiers({
-      milk: drink.default_modifiers?.milk ?? undefined,
-      temperature: drink.default_modifiers?.temperature ?? undefined,
+      milk: selectedMilk,
+      temperature: selectedTemp,
     })
 
     // Show the customization modal

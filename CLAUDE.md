@@ -10,6 +10,7 @@
 - Use judgment on what's worth explaining — focus on meaningful learning moments, not every tiny choice
 - When a decision has real trade-offs, share the options, implications, and my recommendation
 - Make real-world implications clear: "This means the app will load faster" not "This reduces bundle size"
+- **Always pause for manual testing before committing** — ask owner to test, wait for confirmation
 - The goal is education and transparency, not overwhelm
 
 ---
@@ -248,7 +249,7 @@ The owner will know this project succeeded when:
 
 ## Current Status
 
-> **Last Updated:** January 4, 2025 (night)
+> **Last Updated:** January 5, 2025
 >
 > **Next Up:** `/admin` route — Export section (Phase 5)
 
@@ -378,6 +379,17 @@ When items are toggled OFF in admin, they now appear on `/order` with:
 
 This keeps items visible so customers know what's normally available.
 
+### Unavailable Modifier Display (Added January 5, 2025)
+
+When modifier options are toggled OFF in admin, they appear in the customizer modal:
+
+- Faded button with dashed border
+- "Sold Out" label below button (maroon, semibold)
+- Auto-selects first available option if default is unavailable
+- If ALL options in a category are unavailable, customer can still submit (no selection required)
+
+This follows UX best practice: disable rather than hide, so customers see what's normally available.
+
 ### Files with Important Comments
 
 - `components/DrinkCard.tsx` - ANIMATION CONFIGURATION guide and SPRING PHYSICS GUIDE
@@ -387,22 +399,25 @@ This keeps items visible so customers know what's normally available.
 ## What To Do Next Session
 
 1. Read this file (CLAUDE.md)
-2. **Test Modifiers section** (if not already done)
-   - Open `/admin` → Modifiers tab
-   - Add a new modifier (e.g., "Almond" milk)
-   - Edit an existing modifier name
-   - Toggle a modifier OFF → verify hidden on /order
-3. **Continue `/admin` route — Phase 5: Export Section**
+2. **Continue `/admin` route — Phase 5: Export Section**
    - Create `/api/admin/export` route (generates CSV)
-   - Build ExportSection component (date pickers + download button)
-4. **Finally Phase 6: Polish + iPad Testing**
+   - Build ExportSection component (date range picker + download button)
+   - Filter orders by date range, format as CSV
+3. **Then Phase 6: Polish + iPad Testing**
+   - Test all flows on actual iPad
+   - Review animations, error states
+   - Final polish pass
 
 **Key Files for Admin:**
 
 - `components/AdminClient.tsx` — Main wrapper, manages state
 - `components/ModifiersSection.tsx` — Modifiers tab implementation
-- `components/ModifierForm.tsx` — Add/edit modifier modal
 - `app/api/admin/modifiers/route.ts` — Modifiers API (GET, POST, PATCH)
+
+**Key Files for Order (unavailable modifiers):**
+
+- `components/ModifierSelector.tsx` — Shows sold-out modifiers with label
+- `components/OrderClient.tsx` — Auto-selects first available option
 
 **Blockers:** None
 

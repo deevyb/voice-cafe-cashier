@@ -15,10 +15,11 @@ interface ModifierSelectorProps {
  *
  * Displays a row of buttons where only one can be selected at a time.
  * The selected option gets the maroon background, others are white.
+ * Unavailable options are shown faded with "Sold Out" text.
  *
  * Props:
  * - category: 'milk' or 'temperature' (determines the label shown)
- * - options: Array of modifier options from the database
+ * - options: Array of modifier options from the database (includes inactive)
  * - selected: Currently selected option string (e.g., "Oat" or "Iced")
  * - onSelect: Callback when user taps an option
  */
@@ -40,25 +41,35 @@ export default function ModifierSelector({
       <div className="flex gap-3">
         {options.map((option) => {
           const isSelected = selected === option.option
+          const isUnavailable = !option.is_active
 
           return (
-            <motion.button
-              key={option.id}
-              onClick={() => onSelect(option.option)}
-              whileTap={{ scale: 0.97 }}
-              className={`
-                px-8 py-4 rounded-xl text-modifier-option
-                transition-colors duration-200
-                min-w-[120px]
-                ${
-                  isSelected
-                    ? 'bg-delo-maroon text-delo-cream'
-                    : 'bg-white text-delo-navy border border-delo-navy/10 hover:border-delo-maroon/30'
-                }
-              `}
-            >
-              {option.option}
-            </motion.button>
+            <div key={option.id} className="flex flex-col items-center">
+              <motion.button
+                onClick={() => !isUnavailable && onSelect(option.option)}
+                whileTap={isUnavailable ? undefined : { scale: 0.97 }}
+                disabled={isUnavailable}
+                className={`
+                  px-8 py-4 rounded-xl text-modifier-option
+                  transition-colors duration-200
+                  min-w-[120px]
+                  ${
+                    isUnavailable
+                      ? 'bg-white/50 text-delo-navy/30 border border-dashed border-delo-navy/15 cursor-not-allowed'
+                      : isSelected
+                        ? 'bg-delo-maroon text-delo-cream'
+                        : 'bg-white text-delo-navy border border-delo-navy/10 hover:border-delo-maroon/30'
+                  }
+                `}
+              >
+                {option.option}
+              </motion.button>
+              {isUnavailable && (
+                <span className="text-sm font-manrope font-semibold text-delo-maroon/60 mt-1.5">
+                  Sold Out
+                </span>
+              )}
+            </div>
           )
         })}
       </div>
