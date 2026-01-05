@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 
-export type AdminTab = 'menu' | 'modifiers' | 'export'
+export type AdminTab = 'menu' | 'modifiers' | 'dashboard'
 
 interface AdminTabsProps {
   activeTab: AdminTab
@@ -18,7 +18,7 @@ export default function AdminTabs({ activeTab, onTabChange }: AdminTabsProps) {
   const tabs: { id: AdminTab; label: string }[] = [
     { id: 'menu', label: 'Menu Items' },
     { id: 'modifiers', label: 'Modifiers' },
-    { id: 'export', label: 'Export' },
+    { id: 'dashboard', label: 'Dashboard' },
   ]
 
   return (

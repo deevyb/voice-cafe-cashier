@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import AdminTabs, { AdminTab } from './AdminTabs'
 import MenuItemsSection from './MenuItemsSection'
 import ModifiersSection from './ModifiersSection'
+import DashboardSection from './DashboardSection'
 import { MenuItem, Modifier } from '@/lib/supabase'
 
 interface AdminClientProps {
@@ -90,16 +91,7 @@ export default function AdminClient({
                 />
               )}
 
-              {activeTab === 'export' && (
-                <div className="bg-white rounded-xl p-8 border border-delo-navy/10">
-                  <h2 className="font-bricolage font-semibold text-xl text-delo-navy mb-4">
-                    Export Orders
-                  </h2>
-                  <p className="text-delo-navy/60">
-                    Download order data as CSV. Coming in Phase 5...
-                  </p>
-                </div>
-              )}
+              {activeTab === 'dashboard' && <DashboardSection />}
             </motion.div>
           </AnimatePresence>
         </div>

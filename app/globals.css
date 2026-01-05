@@ -83,3 +83,28 @@ html {
 .item-unavailable {
   @apply opacity-50;
 }
+
+/* Date input styling - override webkit default blue color */
+.date-input {
+  color: #000024; /* delo-navy */
+  -webkit-text-fill-color: #000024;
+}
+
+.date-input::-webkit-datetime-edit,
+.date-input::-webkit-datetime-edit-fields-wrapper,
+.date-input::-webkit-datetime-edit-month-field,
+.date-input::-webkit-datetime-edit-day-field,
+.date-input::-webkit-datetime-edit-year-field {
+  color: #000024;
+  -webkit-text-fill-color: #000024;
+}
+
+/* Calendar picker icon - match brand color */
+.date-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.date-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}

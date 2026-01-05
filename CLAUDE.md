@@ -251,7 +251,7 @@ The owner will know this project succeeded when:
 
 > **Last Updated:** January 5, 2025
 >
-> **Next Up:** `/admin` route — Export section (Phase 5)
+> **Next Up:** `/admin` route — Phase 6: Polish + Testing + Health Audit
 
 **Live App:** https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
 
@@ -260,7 +260,7 @@ The owner will know this project succeeded when:
 | `/`        | ✅ Deployed    | Landing page with navigation                                      |
 | `/order`   | ✅ Complete    | Full ordering flow with confirmation & auto-reset                 |
 | `/kitchen` | ✅ Complete    | Real-time barista display with 2-col grid, optimized typography   |
-| `/admin`   | 🚧 In Progress | Passcode + tabs + menu items + modifiers done; export pending     |
+| `/admin`   | ✅ Complete    | Passcode + tabs + menu items + modifiers + dashboard (export)     |
 
 **Infrastructure:** All complete
 
@@ -309,8 +309,10 @@ The owner will know this project succeeded when:
 | 2. Layout + Tabs    | ✅ Done    | AdminClient + AdminTabs with animated pill indicator     |
 | 3. Menu Items       | ✅ Done    | Toggle drinks on/off, edit modifier config per item      |
 | 4. Modifiers        | ✅ Done    | Add/edit/toggle milk and temperature options             |
-| 5. Export           | 🚧 Pending | Download CSV of orders by date range                     |
-| 6. Polish + Testing | 🚧 Pending | iPad testing, animation review, error states             |
+| 5. Dashboard        | ✅ Done    | CSV export with date range, ISO format for analytics     |
+| 6. Polish + Testing | 🚧 Pending | iPad testing, animation review, codebase health audit    |
+
+**Known Issue (Phase 5):** CSV filename doesn't always include full date range. Functional but cosmetic bug to fix later.
 
 ---
 
@@ -399,25 +401,22 @@ This follows UX best practice: disable rather than hide, so customers see what's
 ## What To Do Next Session
 
 1. Read this file (CLAUDE.md)
-2. **Continue `/admin` route — Phase 5: Export Section**
-   - Create `/api/admin/export` route (generates CSV)
-   - Build ExportSection component (date range picker + download button)
-   - Filter orders by date range, format as CSV
-3. **Then Phase 6: Polish + iPad Testing**
+2. **Phase 6: Polish + Testing + Health Audit**
    - Test all flows on actual iPad
    - Review animations, error states
+   - Codebase health audit (code quality, cleanup, simplification)
+   - CLAUDE.md best practices review
    - Final polish pass
 
-**Key Files for Admin:**
+**Key Files for Dashboard:**
 
-- `components/AdminClient.tsx` — Main wrapper, manages state
-- `components/ModifiersSection.tsx` — Modifiers tab implementation
-- `app/api/admin/modifiers/route.ts` — Modifiers API (GET, POST, PATCH)
+- `components/DashboardSection.tsx` — Export UI with date inputs
+- `app/api/admin/orders/route.ts` — Orders API (GET with date filtering)
 
-**Key Files for Order (unavailable modifiers):**
+**Known Issues to Fix:**
 
-- `components/ModifierSelector.tsx` — Shows sold-out modifiers with label
-- `components/OrderClient.tsx` — Auto-selects first available option
+- CSV filename doesn't capture full date range (cosmetic bug)
+- Future: Add orders table and analytics to Dashboard tab
 
 **Blockers:** None
 
