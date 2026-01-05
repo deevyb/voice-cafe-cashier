@@ -252,7 +252,7 @@ The owner will know this project succeeded when:
 
 > **Last Updated:** January 4, 2026
 >
-> **Next Up:** iPad testing, then Visual Personality with /frontend-design
+> **Next Up:** Visual Personality — pick a direction from 3 options explored
 
 **Live App:** https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
 
@@ -311,7 +311,7 @@ The owner will know this project succeeded when:
 | 3. Menu Items       | ✅ Done    | Toggle drinks on/off, edit modifier config per item      |
 | 4. Modifiers        | ✅ Done    | Add/edit/toggle milk and temperature options             |
 | 5. Dashboard        | ✅ Done    | Stats + CSV export with date range                       |
-| 6. Polish + Testing | 🚧 Partial | Codebase health audit ✅, iPad testing pending           |
+| 6. Polish + Testing | ✅ Done    | Codebase health audit complete                           |
 
 ---
 
@@ -435,12 +435,24 @@ This follows UX best practice: disable rather than hide, so customers see what's
 ## What To Do Next Session
 
 1. Read this file (CLAUDE.md)
-2. **iPad Testing:**
-   - Test on actual iPad in landscape mode
-   - Verify touch targets, animations, responsiveness
-3. **Visual Personality:**
-   - Run `/frontend-design` for visual polish on order page
-   - Consider drink card enhancements, page transitions
+2. **Visual Personality — Pick a Direction:**
+   - Three layout options were explored (see below)
+   - Owner needs to pick one (or mix elements)
+   - Then implement the chosen direction
+
+**Visual Direction Options (Explored January 4, 2026):**
+
+| Option | Name | Feel | Key Features |
+|--------|------|------|--------------|
+| A | The Courtyard | Warm, structured | Category "zones" with borders, corner ribbons on cards, framed confirmation |
+| B | Playful Pop | Fun, delightful | Drink icons (cardamom, ginger, etc.), floating sections, confetti confirmation |
+| C | Editorial Elegance | Refined, confident | Left-aligned header, vertical category labels, typography-focused, asymmetric |
+
+**All options keep:** Brand colors (maroon, cream, navy, terracotta), fonts (Yatra, Bricolage, Cooper, Manrope), existing animations.
+
+**Decision needed:** Which direction resonates most? Or mix elements from different options?
+
+---
 
 **Health Check Completed (January 4, 2026):**
 
