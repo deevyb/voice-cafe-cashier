@@ -250,7 +250,7 @@ The owner will know this project succeeded when:
 
 ## Current Status
 
-> **Last Updated:** January 4, 2026
+> **Last Updated:** January 11, 2026
 >
 > **Next Up:** Visual Personality — pick a direction from 3 options explored
 
@@ -361,7 +361,7 @@ The owner will know this project succeeded when:
 
 ### Shared CSS Classes (in globals.css)
 
-To prevent styling inconsistencies, common patterns are defined once:
+To prevent styling inconsistencies, common patterns are defined once. **Before writing inline button/form styles, always check globals.css for existing shared classes.**
 
 **Text & Labels:**
 - `.label-modifier` — Modifier labels (Milk, Temperature, Your Name)
@@ -462,6 +462,13 @@ This follows UX best practice: disable rather than hide, so customers see what's
 - Fixed README doc paths
 - Standardized API error handling
 - Removed outdated Known Issues (CSV bug was already fixed)
+
+**Admin Button Consistency (January 11, 2026):**
+
+- Standardized "+ Add Item" and "+ Add Modifier" buttons across admin tabs
+- Created shared `.btn-admin-add` class in globals.css
+- Both buttons now have identical styling and press animation
+- Added best practice note: check globals.css before writing inline button styles
 
 **New Features Added Previously (January 5, 2026):**
 

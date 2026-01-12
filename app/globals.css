@@ -128,6 +128,14 @@ html {
   @apply bg-delo-navy/20 text-delo-navy/40 cursor-not-allowed;
 }
 
+/* Admin section inline add button (smaller, used in headers) */
+.btn-admin-add {
+  @apply px-4 py-2 min-h-[44px] rounded-lg;
+  @apply font-manrope font-semibold text-sm;
+  @apply text-delo-cream bg-delo-maroon hover:bg-delo-maroon/90;
+  @apply transition-colors whitespace-nowrap shrink-0;
+}
+
 /* Error banner */
 .error-banner {
   @apply bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm;

@@ -133,7 +133,7 @@ export default function MenuItemsSection({
         <motion.button
           onClick={() => setShowNewForm(true)}
           whileTap={{ scale: 0.97 }}
-          className="px-4 py-2 rounded-lg font-manrope font-semibold text-sm text-delo-cream bg-delo-maroon hover:bg-delo-maroon/90 transition-colors whitespace-nowrap ml-4"
+          className="btn-admin-add ml-4"
         >
           + Add Item
         </motion.button>

@@ -161,12 +161,13 @@ export default function ModifiersSection({ modifiers, onUpdate, onAdd }: Modifie
         <p className="text-description text-sm">
           Add or edit milk and temperature options. Toggle to show or hide on the order screen.
         </p>
-        <button
+        <motion.button
           onClick={() => setIsAdding(true)}
-          className="shrink-0 ml-4 px-4 py-2 min-h-[44px] text-sm font-manrope font-semibold text-delo-cream bg-delo-maroon hover:bg-delo-maroon/90 rounded-lg transition-colors"
+          whileTap={{ scale: 0.97 }}
+          className="btn-admin-add ml-4"
         >
-          + Add
-        </button>
+          + Add Modifier
+        </motion.button>
       </div>
 
       {/* Categories */}
