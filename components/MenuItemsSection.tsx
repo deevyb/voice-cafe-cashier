@@ -27,14 +27,19 @@ export default function MenuItemsSection({
 }: MenuItemsSectionProps) {
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null)
   const [showNewForm, setShowNewForm] = useState(false)
+  const [showArchived, setShowArchived] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   // Get unique modifier categories from the database
   const modifierCategories = Array.from(new Set(modifiers.map((m) => m.category)))
 
-  // Group items by category
-  const signatureItems = menuItems.filter((item) => item.category === 'Signature')
-  const classicItems = menuItems.filter((item) => item.category === 'Classics')
+  // Split into active and archived
+  const activeItems = menuItems.filter((item) => !item.is_archived)
+  const archivedItems = menuItems.filter((item) => item.is_archived)
+
+  // Group active items by category
+  const signatureItems = activeItems.filter((item) => item.category === 'Signature')
+  const classicItems = activeItems.filter((item) => item.category === 'Classics')
 
   const handleToggle = async (item: MenuItem) => {
     setError(null)
@@ -83,6 +88,41 @@ export default function MenuItemsSection({
       setEditingItem(null)
     } catch {
       setError('Failed to save. Please try again.')
+      setTimeout(() => setError(null), 4000)
+    }
+  }
+
+  const handleRemove = async (item: MenuItem) => {
+    setError(null)
+    try {
+      const response = await fetch('/api/admin/menu-items', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: item.id, is_archived: true }),
+      })
+      if (!response.ok) throw new Error('Failed to remove')
+      const updatedItem = await response.json()
+      onUpdate(updatedItem)
+      setEditingItem(null)
+    } catch {
+      setError('Failed to remove item. Please try again.')
+      setTimeout(() => setError(null), 4000)
+    }
+  }
+
+  const handleRestore = async (item: MenuItem) => {
+    setError(null)
+    try {
+      const response = await fetch('/api/admin/menu-items', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: item.id, is_archived: false }),
+      })
+      if (!response.ok) throw new Error('Failed to restore')
+      const updatedItem = await response.json()
+      onUpdate(updatedItem)
+    } catch {
+      setError('Failed to restore item. Please try again.')
       setTimeout(() => setError(null), 4000)
     }
   }
@@ -143,12 +183,64 @@ export default function MenuItemsSection({
       {renderCategory('Signature', signatureItems)}
       {renderCategory('Classics', classicItems)}
 
+      {/* Removed Items - collapsible section */}
+      {archivedItems.length > 0 && (
+        <div className="mt-8 pt-6 border-t border-delo-navy/10">
+          <button
+            onClick={() => setShowArchived(!showArchived)}
+            className="flex items-center gap-2 font-bricolage font-semibold text-base text-delo-navy/40 hover:text-delo-navy/60 transition-colors mb-3"
+          >
+            <motion.span
+              animate={{ rotate: showArchived ? 90 : 0 }}
+              transition={{ duration: 0.2 }}
+              className="inline-block text-sm"
+            >
+              ▶
+            </motion.span>
+            Archived Items ({archivedItems.length})
+          </button>
+          <AnimatePresence>
+            {showArchived && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-2 overflow-hidden"
+              >
+                {archivedItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between p-4 rounded-xl border bg-delo-navy/5 border-delo-navy/5"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-bricolage font-semibold text-lg text-delo-navy/40 truncate">
+                        {item.name}
+                      </h4>
+                      <p className="text-sm text-delo-navy/30">{item.category}</p>
+                    </div>
+                    <motion.button
+                      onClick={() => handleRestore(item)}
+                      whileTap={{ scale: 0.97 }}
+                      className="px-4 py-2 min-h-[44px] text-sm font-manrope font-semibold text-delo-maroon border border-delo-maroon/30 hover:bg-delo-maroon/5 rounded-lg transition-colors ml-4"
+                    >
+                      Restore
+                    </motion.button>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+
       {/* Edit modal - uses shared Modal component */}
       {editingItem && (
         <MenuItemEditor
           item={editingItem}
           categories={modifierCategories}
           onSave={(config) => handleSaveModifiers(editingItem, config)}
+          onRemove={() => handleRemove(editingItem)}
           onClose={() => setEditingItem(null)}
           isOpen={!!editingItem}
         />

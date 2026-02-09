@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { MenuItem } from '@/lib/supabase'
 import Modal from './Modal'
 
@@ -9,6 +9,7 @@ interface MenuItemEditorProps {
   item: MenuItem
   categories: string[]
   onSave: (modifierConfig: Record<string, boolean>) => void
+  onRemove: () => void
   onClose: () => void
   isOpen: boolean
 }
@@ -25,6 +26,7 @@ export default function MenuItemEditor({
   item,
   categories,
   onSave,
+  onRemove,
   onClose,
   isOpen,
 }: MenuItemEditorProps) {
@@ -37,6 +39,7 @@ export default function MenuItemEditor({
     return initial
   })
   const [isSaving, setIsSaving] = useState(false)
+  const [confirmingRemove, setConfirmingRemove] = useState(false)
 
   const handleToggle = (category: string) => {
     setConfig((prev) => ({
@@ -96,6 +99,50 @@ export default function MenuItemEditor({
         >
           {isSaving ? 'Saving...' : 'Save'}
         </motion.button>
+      </div>
+
+      {/* Remove from Menu */}
+      <div className="mt-6 pt-6 border-t border-delo-navy/10">
+        <AnimatePresence mode="wait">
+          {!confirmingRemove ? (
+            <motion.button
+              key="remove-btn"
+              onClick={() => setConfirmingRemove(true)}
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="w-full h-10 rounded-lg font-manrope font-semibold text-sm text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors"
+            >
+              Archive from Menu
+            </motion.button>
+          ) : (
+            <motion.div
+              key="remove-confirm"
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="text-center"
+            >
+              <p className="font-manrope text-sm text-delo-navy/70 mb-3">
+                Archive <span className="font-semibold">{item.name}</span> from the menu?
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setConfirmingRemove(false)}
+                  className="btn-secondary flex-1 text-sm"
+                >
+                  Cancel
+                </button>
+                <motion.button
+                  onClick={onRemove}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex-1 h-12 rounded-xl font-manrope font-semibold text-sm text-white bg-red-500 hover:bg-red-600 transition-colors"
+                >
+                  Yes, Archive
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </Modal>
   )

@@ -91,7 +91,8 @@ CREATE TABLE menu_items (
   description TEXT,
   image_url TEXT,
   category TEXT DEFAULT 'Classics',  -- 'Signature' or 'Classics'
-  is_active BOOLEAN DEFAULT true,
+  is_active BOOLEAN DEFAULT true,     -- false = "Sold Out" (visible but disabled)
+  is_archived BOOLEAN DEFAULT false,  -- true = hidden from customers entirely
   display_order INTEGER DEFAULT 0,
   modifier_config JSONB DEFAULT '{"milk": true, "temperature": true}',
   default_modifiers JSONB DEFAULT '{"milk": "Regular", "temperature": "Hot"}',
@@ -448,6 +449,19 @@ All form modals use `Modal.tsx`:
 - Size prop: sm, md, lg
 
 Used by: DrinkCustomizer, NewMenuItemForm, ModifierForm, MenuItemEditor
+
+### Archive vs Sold Out
+
+Two separate states for menu items:
+
+| State | Customer sees | Admin sees |
+|-------|--------------|------------|
+| `is_active=true, is_archived=false` | Normal drink | Toggle on |
+| `is_active=false, is_archived=false` | "Sold Out" | Toggle off |
+| `is_archived=true` | Hidden entirely | In collapsed "Archived Items" section |
+
+- **Sold Out (`is_active`)** — Used during events when a drink runs out
+- **Archived (`is_archived`)** — Used between events to remove drinks not being served. Restorable from admin.
 
 ### Sold-Out Display
 

@@ -12,6 +12,7 @@ async function getMenuData() {
     .select(
       'id, name, description, image_url, category, is_active, display_order, modifier_config, default_modifiers, created_at, updated_at'
     )
+    .eq('is_archived', false)
     .order('display_order')
 
   if (menuError) {

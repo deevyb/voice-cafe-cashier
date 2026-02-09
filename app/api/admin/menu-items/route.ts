@@ -72,7 +72,7 @@ export async function POST(request: Request) {
 export async function PATCH(request: Request) {
   try {
     const body = await request.json()
-    const { id, is_active, modifier_config } = body
+    const { id, is_active, is_archived, modifier_config } = body
 
     if (!id) {
       return NextResponse.json({ error: 'Item ID required' }, { status: 400 })
@@ -82,6 +82,9 @@ export async function PATCH(request: Request) {
     const updates: Record<string, unknown> = {}
     if (typeof is_active === 'boolean') {
       updates.is_active = is_active
+    }
+    if (typeof is_archived === 'boolean') {
+      updates.is_archived = is_archived
     }
     if (modifier_config !== undefined) {
       updates.modifier_config = modifier_config

@@ -15,6 +15,7 @@ export interface MenuItem {
   image_url: string | null
   category: string
   is_active: boolean
+  is_archived: boolean
   display_order: number
   // Dynamic modifier config - keys are modifier categories (e.g., "milk", "temperature")
   modifier_config: Record<string, boolean>
