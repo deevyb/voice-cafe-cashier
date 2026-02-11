@@ -1,16 +1,18 @@
 ---
 description: Load current project status at the start of every conversation
-globs: 
+globs:
 alwaysApply: true
 ---
 
 # Project Status — Always Read First
 
 At the start of every conversation, read the file `.claude/rules/status.md` to understand:
-- What routes/features are complete
+- What steps are complete
 - What's being worked on right now
 - What's next
 - Any blockers or pending decisions
+
+Also read `PLAN.md` in the project root for the full implementation plan.
 
 This is the **single source of truth** for project status, shared between Cursor and Claude Code.
 

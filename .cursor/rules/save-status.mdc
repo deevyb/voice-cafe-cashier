@@ -1,6 +1,6 @@
 ---
 description: Save session progress before ending work — use when asked to "save status" or wrap up a session
-globs: 
+globs:
 alwaysApply: false
 ---
 
@@ -14,7 +14,7 @@ When asked to save status or wrap up, follow these steps:
 
 2. **Update `.claude/rules/status.md`** with:
    - "Last Updated" date (today's date)
-   - Current route/feature statuses
+   - Current step statuses (pending/in-progress/complete)
    - "What's Next" with specific actionable steps
    - Any blockers or pending decisions
 

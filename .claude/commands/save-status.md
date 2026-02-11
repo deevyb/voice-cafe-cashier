@@ -11,7 +11,7 @@ Save all session progress so the next session can continue seamlessly.
 
 2. **Update .claude/rules/status.md** with:
    - "Last Updated" date
-   - Current route/feature statuses
+   - Current step statuses (pending/in-progress/complete)
    - "What's Next" with specific actionable steps
    - Any blockers or pending decisions
 

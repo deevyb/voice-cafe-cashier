@@ -1,38 +1,35 @@
 # Project Status
 
-> Last Updated: January 11, 2026
+> Last Updated: February 10, 2026
 
 ## Current State
 
-| Route | Status | Notes |
-|-------|--------|-------|
-| `/` | Complete | Landing page with navigation |
-| `/order` | Complete | Full ordering flow with confirmation & auto-reset |
-| `/kitchen` | Complete | Real-time barista display + NavMenu |
-| `/admin` | Complete | Passcode + tabs + menu items (with archive) + modifiers + dashboard |
-
-**Live App:** https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
+| Step | Status | Notes |
+|------|--------|-------|
+| Step 0: Fork + Setup | in-progress | Repo created, workflow files being set up |
+| Step 1: Stored Prompt + Tools | pending | |
+| Step 2: Database Schema | pending | |
+| Step 3: Text Mode (Responses API) | pending | |
+| Step 4: Voice Mode (Realtime API) | pending | |
+| Step 5: Rebrand (NYC theme) | pending | |
+| Step 6: Kitchen View Update | pending | |
+| Step 7: Owner Dashboard | pending | |
+| Step 8: Deliverables + Polish | pending | |
+| Step 9: Edge Case Testing | pending | |
 
 ## What's Next
 
-**Visual Personality — Pick a Direction:**
-- Three layout options were explored (see TECHNICAL.md § Visual Direction Options)
-- Owner needs to choose one (or mix elements)
-- Then implement the chosen direction
-
-| Option | Name | Feel |
-|--------|------|------|
-| A | The Courtyard | Warm, structured — category zones, corner ribbons |
-| B | Playful Pop | Fun, delightful — drink icons, confetti confirmation |
-| C | Editorial Elegance | Refined, confident — vertical labels, typography-focused |
+1. Finish Step 0A: create all workflow files, CLAUDE.md, initial commit
+2. Step 0B: Create Supabase project, set up env vars, install openai
+3. Step 1: Create stored prompt in OpenAI dashboard with menu + tools
 
 ## Blockers
 
-None currently.
+- Need coffee shop menu image to configure stored prompt (Step 1)
 
 ## Infrastructure
 
-- GitHub: deevyb/delo-kiosk
-- Vercel: Auto-deploys on push to main
-- Supabase: Database ready, menu seeded (7 drinks), realtime enabled
-- Code Quality: Prettier, ESLint, Error Boundary, shared CSS classes
+- GitHub: https://github.com/deevyb/voice-cafe-cashier
+- Vercel: [not yet deployed]
+- Supabase: [new project needed — separate from Delo]
+- OpenAI Stored Prompt ID: [not yet created]

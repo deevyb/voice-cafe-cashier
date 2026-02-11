@@ -1,77 +1,75 @@
-# Delo Coffee Kiosk - Project Guide
+# Voice Cafe Cashier - Project Guide
 
-## Who I'm Building For
+## What This Is
 
-**Owner:** Non-technical founder who knows exactly what they want — and wants to understand what's being built.
+AI voice cashier for a NYC coffee shop — a PM interview take-home project. Forked from delo-kiosk, rebuilt as an AI-powered ordering experience using OpenAI's Responses API (text) and Realtime API (voice).
 
-**Communication Rules:**
-- Explain technical concepts in plain, accessible language
-- Focus on meaningful learning moments, not every tiny choice
-- When a decision has real trade-offs, share options, implications, and your recommendation
-- Make real-world implications clear: "This means the app will load faster" not "This reduces bundle size"
-- **Always pause for manual testing before committing** — ask owner to test, wait for confirmation
+## Architecture
 
----
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 14, TypeScript, Tailwind CSS |
+| Database | Supabase (Postgres + Realtime) |
+| Text AI | OpenAI Responses API with stored prompt |
+| Voice AI | OpenAI Realtime API via WebRTC |
+| Hosting | Vercel |
 
-## The Business
+## Key Decisions
 
-**Delo Coffee** runs pop-up coffee events 1-2 times per month, serving 100-150 customers per event. The app replaces paper order cards that get lost or shuffled.
+- **Two modes**: Text chat or voice — customer picks at start, locked for session
+- **Stored prompt**: Single prompt ID in OpenAI dashboard, shared by both APIs
+- **4 tools**: `add_item`, `modify_item`, `remove_item`, `finalize_order`
+- **Menu lives in the prompt** — no DB menu table
+- **Cart updates live** as AI processes tool calls
 
-**The Solution:** iPad-based ordering where customers tap their order, it appears instantly on the kitchen display, and nothing gets lost.
+## Project Structure
 
----
+```
+app/
+  page.tsx              # Landing — mode selector
+  order/page.tsx        # AI ordering (text or voice)
+  kitchen/page.tsx      # Kitchen display (realtime)
+  admin/page.tsx        # Owner dashboard
+  api/
+    chat/route.ts       # Responses API (text mode)
+    realtime/token/     # Ephemeral token (voice mode)
+    orders/             # CRUD
+    admin/              # Stats + admin APIs
+components/
+  VoiceCashierClient.tsx  # Main ordering container
+  chat/                   # Text mode components
+  voice/                  # Voice mode components
+  cart/                   # Shared cart components
+  Kitchen*.tsx            # Kitchen display
+  OwnerDashboard*.tsx     # Analytics dashboard
+hooks/
+  useRealtimeSession.ts   # WebRTC + Realtime API
+lib/
+  supabase.ts             # DB client + types
+  realtime-config.ts      # OpenAI session config
+```
 
-## The Brand
+## Multi-Session Workflow
 
-Inspired by the _delo_ — a traditional Indian courtyard where strangers become friends.
-- **Warm & cozy** — like being welcomed into someone's home
-- **Playful** — not stuffy or pretentious
-- **Heritage-rooted** — honors tradition without being dated
+This project is built across multiple sessions in Claude Code and Cursor.
 
-**Colors:** Maroon `#921C12`, Cream `#F9F6EE`, Navy `#000024`, Terracotta `#C85A2E`
-
-**Fonts:** Yatra One (title), Bricolage (drinks/buttons), Cooper (labels), Manrope (options), Roboto Mono (descriptions)
-
----
-
-## Critical Requirements
-
-**Must-Haves:**
-- Stability above all — biggest fear is crashes/freezes during rush
-- Beautiful, silky animations (Framer Motion throughout)
-- Real-time sync — orders appear instantly on kitchen display
-- Fully editable menu — nothing hardcoded
-- iPad landscape only
-
-**Out of Scope:** Payments, prices, order numbers, multi-item orders, customer accounts
-
----
-
-## Success Criteria
-
-1. Get through next pop-up with zero lost orders
-2. App never crashes or freezes during the rush
-3. Customers find it intuitive (no explanation needed)
-4. Looks and feels like a natural extension of Delo's brand
-5. Every interaction feels smooth and polished
-
----
-
-## Specialized Plugins
-
-### `/frontend-design`
-For building new screens where visual creativity matters, or exploring multiple design directions.
-
-### `/feature-dev`
-For major features that touch many files or require understanding the whole system.
-
----
+- **Status**: `.claude/rules/status.md` — single source of truth (auto-loaded)
+- **Full plan**: `PLAN.md` — all implementation steps
+- **Save progress**: Run `/save-status` before ending any session
 
 ## Reference Documents
 
 | File | Purpose |
 |------|---------|
-| `TECHNICAL.md` | Architecture, schema, API, design decisions |
+| `PLAN.md` | Full implementation plan (Steps 0-9) |
+| `TECHNICAL.md` | Architecture, schema, API details |
 | `.claude/rules/status.md` | Current status and next tasks (auto-loaded) |
-| `Delo Coffee Ordering App – MVP Spec.md` | Functional requirements |
-| `Delo Coffee Brand Identity.md` | Brand story and voice |
+
+## Environment Variables
+
+```
+OPENAI_API_KEY=sk-...
+NEXT_PUBLIC_SUPABASE_URL=https://...supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+ADMIN_PASSCODE=...
+```
