@@ -1,181 +1,245 @@
 # Technical Documentation
 
-> This document is for developers. The project owner doesn't need to read this.
+> Last updated: February 10, 2026
 
-## Stack Decisions
+---
 
-### Frontend: Next.js 14+ (App Router)
+## Stack
 
-**Why:**
-
-- Industry standard, excellent documentation, large community
-- App Router provides modern React patterns (Server Components, Streaming)
-- Built-in routing matches our 3-route architecture perfectly
-- Vercel deployment is seamless
-
-### Styling: Tailwind CSS
-
-**Why:**
-
-- Utility-first approach speeds up development
-- Easy to implement custom color palette (Delo brand colors)
-- Excellent responsive design primitives
-- No CSS file management overhead
-
-### Animations: Framer Motion
-
-**Why:**
-
-- Owner explicitly requested "silky smooth" animations
-- Gold standard for React animations
-- Declarative API, easy to maintain
-- Handles gesture interactions well (important for iPad touch)
-
-### Database: Supabase (PostgreSQL)
-
-**Why:**
-
-- Built-in Realtime subscriptions (critical for kitchen display)
-- PostgreSQL reliability
-- Simple REST API + generated TypeScript types
-- Row Level Security for future auth needs
-- Generous free tier for MVP
-
-### Hosting: Vercel
-
-**Why:**
-
-- Zero-config Next.js deployment
-- Edge functions for low latency
-- Excellent reliability (critical given crash concerns)
-- Preview deployments for testing
+| Layer | Technology | Why |
+|-------|-----------|-----|
+| **Framework** | Next.js 14 (App Router) | Server Components, built-in API routes, Vercel deployment |
+| **Styling** | Tailwind CSS | Rapid iteration, custom palette, no CSS overhead |
+| **Animations** | Framer Motion | Smooth transitions, declarative API |
+| **Database** | Supabase (PostgreSQL) | Realtime subscriptions for kitchen display, reliable, free tier |
+| **Text AI** | OpenAI Responses API | Streaming, tool calling, stored prompt support |
+| **Voice AI** | OpenAI Realtime API (WebRTC) | Low-latency, full-duplex, browser-direct audio |
+| **Hosting** | Vercel | Zero-config Next.js, auto-deploy on push |
 
 ---
 
 ## Architecture
 
 ```
-/app
-  /order          # Customer-facing menu and ordering
-  /kitchen        # Real-time kitchen display
-  /admin          # Passcode-protected admin panel
-  /api
-    /orders       # POST: Create order, PATCH: Update status
-    /admin
-      /stats      # GET: Dashboard statistics
-      /menu-items # GET/POST/PATCH: Menu management
-      /modifiers  # GET/POST/PATCH: Modifier management
-      /orders     # GET: Export orders (CSV)
-      /verify     # POST: Passcode verification
-/components       # Shared UI components
-/lib              # Utilities, Supabase client, types
-/hooks            # Custom React hooks (useOrders, useRealtime, etc.)
+app/
+  page.tsx                        # Landing — mode selector (Voice / Text)
+  order/page.tsx                  # AI ordering experience
+  kitchen/page.tsx                # Barista display (realtime)
+  admin/page.tsx                  # Owner dashboard (passcode-protected)
+  api/
+    chat/route.ts                 # [NEW] Responses API — text mode
+    realtime/token/route.ts       # [NEW] Ephemeral token — voice mode
+    orders/route.ts               # POST: create order (multi-item)
+    orders/[id]/route.ts          # PATCH: update order status
+    admin/
+      stats/route.ts              # GET: dashboard analytics
+      orders/route.ts             # GET: CSV export
+      verify/route.ts             # POST: passcode check
+components/
+  VoiceCashierClient.tsx          # [NEW] Main ordering container
+  chat/                           # [NEW] Text mode UI
+    ChatPanel.tsx                 #   Conversation display
+    AIMessage.tsx                 #   AI message bubble
+    UserMessage.tsx               #   Customer message bubble
+    TextInput.tsx                 #   Input bar + send
+  voice/                          # [NEW] Voice mode UI
+    VoiceIndicator.tsx            #   Mic animation + status
+  cart/                           # [NEW] Shared cart UI
+    CartPanel.tsx                 #   Live cart display
+    CartItem.tsx                  #   Individual item row
+    ReceiptView.tsx               #   Post-order receipt
+  KitchenClient.tsx               # [MODIFY] Multi-item, new statuses
+  KitchenTabs.tsx                 # [MODIFY] 3 tabs: Queue/Making/Done
+  OrderCard.tsx                   # [MODIFY] Render items array
+  OwnerDashboardClient.tsx        # [NEW] Analytics dashboard
+  PasscodeGate.tsx                # Existing — reused for /admin
+  NavMenu.tsx                     # Existing — reused
+  Modal.tsx                       # Existing — reused
+  ErrorBoundary.tsx               # Existing — reused
+hooks/
+  useRealtimeSession.ts           # [NEW] WebRTC + Realtime API lifecycle
+lib/
+  supabase.ts                     # DB client + types (updated)
+  realtime-config.ts              # [NEW] Stored prompt ID + session config
 ```
+
+### Files to Delete (from Delo)
+
+OrderClient, DrinkCard, DrinkCustomizer, ModifierSelector, AdminClient, AdminTabs, MenuItemsSection, ModifiersSection, NewMenuItemForm, MenuItemEditor, ModifierForm, ModifierRow, MenuItemCard.
+
+Also: `app/api/admin/menu-items/`, `app/api/admin/modifiers/` (menu now lives in the stored prompt, not DB).
 
 ### Data Flow
 
-1. **Customer submits order** → API route → Supabase INSERT
-2. **Supabase Realtime** → Pushes to kitchen display via WebSocket
-3. **Barista updates status** → API route → Supabase UPDATE → Realtime broadcast
-4. **Admin toggles menu** → API route → Supabase UPDATE → Reflected on next /order load
+1. **Text mode**: Customer types → `/api/chat` → Responses API → streamed response + tool calls → client updates cart
+2. **Voice mode**: Customer speaks → WebRTC → Realtime API → tool calls via data channel → client updates cart
+3. **Finalize order**: `finalize_order` tool → client POSTs to `/api/orders` → Supabase INSERT
+4. **Kitchen**: Supabase Realtime → pushes new/updated orders via WebSocket
+5. **Status updates**: Barista taps button → PATCH `/api/orders/[id]` → Supabase UPDATE → Realtime broadcast
 
 ---
 
-## Database Schema
+## Database Schema (Planned)
+
+The new project uses a single `orders` table. Menu items and modifiers are **not** stored in the database — they live in the OpenAI stored prompt.
 
 ```sql
--- Menu items (drinks)
-CREATE TABLE menu_items (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name TEXT NOT NULL,
-  description TEXT,
-  image_url TEXT,
-  category TEXT DEFAULT 'Classics',  -- 'Signature' or 'Classics'
-  is_active BOOLEAN DEFAULT true,     -- false = "Sold Out" (visible but disabled)
-  is_archived BOOLEAN DEFAULT false,  -- true = hidden from customers entirely
-  display_order INTEGER DEFAULT 0,
-  modifier_config JSONB DEFAULT '{"milk": true, "temperature": true}',
-  default_modifiers JSONB DEFAULT '{"milk": "Regular", "temperature": "Hot"}',
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now()
-);
-
--- Modifier options (milk types, temperatures)
-CREATE TABLE modifiers (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  category TEXT NOT NULL CHECK (category IN ('milk', 'temperature')),
-  option TEXT NOT NULL,
-  is_active BOOLEAN DEFAULT true,
-  display_order INTEGER DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT now()
-);
-
--- Orders
 CREATE TABLE orders (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   customer_name TEXT NOT NULL,
-  item TEXT NOT NULL,
-  modifiers JSONB DEFAULT '{}',
-  status TEXT NOT NULL DEFAULT 'placed' CHECK (status IN ('placed', 'ready', 'canceled')),
+  items JSONB NOT NULL DEFAULT '[]',
+  status TEXT NOT NULL DEFAULT 'placed'
+    CHECK (status IN ('placed', 'in_progress', 'completed', 'canceled')),
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
--- Indexes for performance
 CREATE INDEX idx_orders_status ON orders(status);
 CREATE INDEX idx_orders_created_at ON orders(created_at DESC);
-CREATE INDEX idx_menu_items_active ON menu_items(is_active) WHERE is_active = true;
 ```
+
+Realtime must be enabled on the `orders` table.
 
 ### Schema Notes
 
-- `modifier_config` on menu_items controls which modifier categories apply to each drink
-- `modifiers` JSONB on orders stores selected choices: `{"milk": "Oat", "temperature": "Iced"}`
-- Denormalized item name in orders for simplicity and historical accuracy
-- Status enum is strict: only `placed`, `ready`, `canceled`
+- `items` is a JSONB array of `CartItem` objects (see Types below)
+- Status flow: `placed` → `in_progress` → `completed` (or `canceled` from any state)
+- No `menu_items` or `modifiers` tables — the AI prompt is the menu source of truth
+- This is a NEW Supabase project (not the Delo one)
+
+### Types — `lib/supabase.ts`
+
+```typescript
+export type OrderStatus = 'placed' | 'in_progress' | 'completed' | 'canceled'
+
+export interface CartItem {
+  name: string
+  size?: string
+  milk?: string
+  temperature?: string
+  extras?: string[]
+  quantity: number
+  price?: number
+}
+
+export interface Order {
+  id: string
+  customer_name: string
+  items: CartItem[]
+  status: OrderStatus
+  created_at: string
+  updated_at: string
+}
+```
 
 ---
 
 ## API Endpoints
 
-### GET /api/admin/stats
+### POST /api/chat (NEW)
 
-Returns aggregated dashboard statistics:
+Text mode AI conversation via OpenAI Responses API.
 
-```typescript
-interface DashboardStats {
-  today: OrderCounts      // Orders from today
-  allTime: OrderCounts    // All orders ever
-  popularDrinks: DrinkCount[]  // Top 20 drinks by count
-  modifierBreakdown: Record<string, ModifierOption[]>  // e.g., { milk: [...], temperature: [...] }
-}
-
-interface OrderCounts {
-  total: number
-  placed: number
-  ready: number
-  canceled: number
-}
-
-interface DrinkCount {
-  name: string
-  count: number
-}
-
-interface ModifierOption {
-  option: string      // e.g., "Oat"
-  count: number       // raw count
-  percentage: number  // 0-100
-}
+```
+Request:  { messages: ChatMessage[], cart: CartItem[] }
+Response: Streamed — text chunks + tool calls
 ```
 
-Uses `force-dynamic` for fresh data on every request.
+- References stored prompt ID for system instructions + tool definitions
+- Client handles tool execution locally (cart state updates)
+- Client sends `function_call_output` back in next request for context
+
+### POST /api/realtime/token (NEW)
+
+Returns ephemeral token for Realtime API WebRTC connection.
+
+```
+Response: { client_secret: { value: string }, ... }
+```
+
+- Server-side only (protects OPENAI_API_KEY)
+- Token is short-lived, single-use
+
+### POST /api/orders
+
+Creates a finalized order.
+
+```
+Request:  { customer_name: string, items: CartItem[] }
+Response: Order object
+```
+
+Changed from Delo: accepts `items` array instead of single `item` + `modifiers`.
+
+### PATCH /api/orders/[id]
+
+Updates order status.
+
+```
+Request:  { status: 'in_progress' | 'completed' | 'canceled' }
+```
+
+Changed from Delo: added `in_progress` and `completed` (was `ready`).
+
+### GET /api/admin/stats
+
+Returns dashboard analytics. Will be enhanced to extract metrics from `items` JSONB (popular items, modifier trends, etc.).
+
+### GET /api/admin/orders
+
+CSV export of orders. Unchanged pattern, updated for new schema.
+
+### POST /api/admin/verify
+
+Passcode check. Unchanged.
+
+---
+
+## OpenAI Integration
+
+### Stored Prompt
+
+A single stored prompt in the OpenAI dashboard contains:
+- System instructions (personality, behavior rules)
+- Full coffee shop menu (items, sizes, prices, modifiers)
+- Hidden rules (no hot frappuccinos, max 6 shots, etc.)
+- 4 tool definitions
+
+**Prompt ID** will be stored in `lib/realtime-config.ts` and referenced by both APIs.
+
+### Tool Definitions
+
+| Tool | Purpose | Key Parameters |
+|------|---------|----------------|
+| `add_item` | Add item to cart | name, size, milk, temperature, extras, quantity |
+| `modify_item` | Change existing cart item | cart_index, changes object |
+| `remove_item` | Remove item from cart | cart_index |
+| `finalize_order` | Customer confirms order | customer_name |
+
+### Text Mode (Responses API)
+
+- Server-side API route streams response
+- Tool calls returned inline with text
+- Client executes tools locally → updates cart state
+- Conversation history maintained on client
+
+### Voice Mode (Realtime API via WebRTC)
+
+1. Client fetches ephemeral token from `/api/realtime/token`
+2. Creates `RTCPeerConnection` + gets microphone
+3. Opens data channel (`oai-events`) for tool calls
+4. SDP offer/answer handshake with OpenAI
+5. `session.update` sent with stored prompt ID + tools
+6. Tool calls arrive via data channel → cart updates
+7. AI audio plays through `<audio>` element
+
+No transcript displayed in voice mode — just voice indicator + cart.
 
 ---
 
 ## Realtime Strategy
 
-### Kitchen Display Subscription
+### Kitchen Display (Supabase Realtime)
 
 ```typescript
 supabase
@@ -184,313 +248,99 @@ supabase
   .subscribe()
 ```
 
-### Fallback Strategy
+### Fallback
 
-- If WebSocket disconnects, show "Reconnecting..." banner
+- Disconnection: show "Reconnecting..." banner
 - Fall back to polling every 5 seconds
-- Auto-reconnect when connection restored
-- Never lose orders — they persist in database regardless
+- Auto-reconnect when restored
+- Orders persist in DB regardless
 
 ---
 
 ## Authentication
 
-### Admin Passcode
+### Admin/Owner Passcode
 
-- Simple client-side passcode check for MVP
-- Passcode stored in environment variable: `ADMIN_PASSCODE`
-- No session management — passcode checked on each admin page load
-- Stored in localStorage after successful entry (clears on browser close)
-
-### Future Considerations
-
-- Could upgrade to Supabase Auth if multi-user admin needed
-- Row Level Security already possible with current schema
+- Simple client-side check via `PasscodeGate.tsx`
+- Passcode in env var: `ADMIN_PASSCODE`
+- Stored in localStorage after entry
 
 ---
 
 ## Error Handling
 
-### Customer-Facing Errors
+### Customer-Facing (Ordering)
 
 - Never show technical errors
-- Friendly messages only: "Something went wrong. Please try again."
-- Automatic retry for transient failures
-- Always allow fallback to paper if needed
+- Friendly messages: "Something went wrong. Please try again."
+- Voice mode: graceful handling of mic issues, connection drops
 
-### Kitchen Display Errors
+### Kitchen Display
 
 - "Offline — reconnecting..." banner (non-blocking)
-- Orders persist locally until connection restored
-- Manual refresh always available
+- Orders persist locally until reconnected
 
-### Admin Errors
+### Dashboard
 
-- More detailed errors acceptable (wrong passcode, export failed, etc.)
-- Still human-readable, not technical
-
----
-
-## Animation Guidelines
-
-Using Framer Motion throughout for consistency:
-
-### Micro-interactions
-
-- Button press: subtle scale (0.98) + background shift
-- Card appear: fade in + slide up (200-300ms)
-- Card remove: fade out + slide (200ms)
-- Modal: backdrop fade + content scale from 0.95
-
-### Page Transitions
-
-- Cross-fade between states (300ms)
-- No jarring jumps
-
-### Performance
-
-- Use `layout` prop for smooth layout shifts
-- Avoid animating expensive properties (width, height when possible)
-- Use `transform` and `opacity` primarily
-
----
-
-## Testing Strategy
-
-### Unit Tests (Vitest)
-
-- Utility functions
-- Data transformations
-- Validation logic
-
-### Integration Tests
-
-- API routes
-- Database operations
-- Realtime subscriptions (mocked)
-
-### E2E Tests (Playwright)
-
-- Complete customer order flow
-- Kitchen status updates
-- Admin menu management
-
-### Manual Testing Checklist
-
-- [ ] Full order flow on actual iPad
-- [ ] Multiple concurrent orders
-- [ ] WiFi disconnect/reconnect
-- [ ] All modifier combinations
-- [ ] Admin passcode flow
-- [ ] CSV export with date ranges
-
----
-
-## Performance Targets
-
-- First Contentful Paint: < 1.5s
-- Time to Interactive: < 2s
-- Order submission: < 500ms perceived
-- Realtime update latency: < 200ms typical
+- More detailed errors acceptable (wrong passcode, export failed)
 
 ---
 
 ## Environment Variables
 
 ```env
-# Supabase (Required)
-NEXT_PUBLIC_SUPABASE_URL=https://wryykcdqojftbqgtxpgu.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
+# OpenAI (Required)
+OPENAI_API_KEY=sk-...
+
+# Supabase (Required) — NEW project, not the Delo one
+NEXT_PUBLIC_SUPABASE_URL=https://[new-project].supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 
 # Admin (Required)
-ADMIN_PASSCODE=<your-passcode>
-
-# Optional
-SUPABASE_SERVICE_ROLE_KEY=<for-server-side-operations>
-NEXT_PUBLIC_APP_URL=https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
+ADMIN_PASSCODE=...
 ```
-
-**Note:** Actual keys are stored in Vercel environment variables and local `.env` file (not committed to git).
 
 ---
 
 ## Deployment
 
-### Current Production
+### Infrastructure (Planned)
 
-- **Vercel:** https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app
-- **GitHub:** https://github.com/deevyb/delo-kiosk
-- **Supabase:** Project `wryykcdqojftbqgtxpgu` (us-west-2)
+- **GitHub:** https://github.com/deevyb/voice-cafe-cashier
+- **Vercel:** [not yet connected]
+- **Supabase:** [new project needed]
 
-### Vercel Setup ✅ Complete
+### Setup Checklist
 
-1. ~~Connect GitHub repository~~ — Connected to `deevyb/delo-kiosk`
-2. ~~Set environment variables~~ — SUPABASE_URL, ANON_KEY, ADMIN_PASSCODE
-3. ~~Deploy~~ — Auto-deploys on push to main
-
-### Supabase Setup ✅ Complete
-
-1. ~~Create project~~ — `delo-kiosk` in us-west-2
-2. ~~Run migrations~~ — 4 migrations applied (tables + realtime)
-3. ~~Enable Realtime on `orders` table~~ — Enabled via migration
-4. ~~Copy connection credentials to Vercel~~ — Done
-
-### Pre-Launch Checklist
-
-- [x] All env vars set in Vercel
-- [x] Supabase Realtime enabled
-- [x] Menu items seeded (7 drinks)
-- [x] Modifiers seeded (Regular/Oat milk, Hot/Iced)
-- [ ] Test order on production
-- [ ] Test kitchen display updates
-- [ ] Test admin access
-- [ ] iPad configured for kiosk mode (Guided Access)
+- [ ] Create new Supabase project
+- [ ] Run schema migration (orders table)
+- [ ] Enable Realtime on orders table
+- [ ] Connect Vercel to voice-cafe-cashier repo
+- [ ] Set env vars in Vercel (OPENAI_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY, ADMIN_PASSCODE)
+- [ ] Verify deploy
 
 ---
 
-## Known Limitations (MVP)
+## Animation Guidelines
 
-1. **Single passcode for all admins** — acceptable for 2-person team
-2. **No offline order queue** — requires internet to submit
-3. **No order editing** — customer must place new order if mistake
-4. **No analytics** — CSV export only for post-event analysis
-5. **No photo upload UI** — images require URL input
+Using Framer Motion:
 
----
-
-## Future Improvements (Post-MVP)
-
-- Order search/filter on kitchen display
-- Photo upload for menu items
-- Multiple modifier categories (size, extras)
-- Order history/analytics dashboard
-- Multi-location support
-- Staff roles and permissions
+- Button press: scale(0.98) + background shift
+- Card appear: fade in + slide up (200-300ms)
+- Card remove: fade out + slide (200ms)
+- Modal: backdrop fade + content scale from 0.95
+- Voice indicator: pulsing animation synced to speech state
+- Cart item add: highlight flash on new/modified items
+- Use `transform` and `opacity` primarily for performance
 
 ---
 
-## Design Decisions
+## Design (Pending — Step 5)
 
-### Animation Style
+The Delo brand (colors, fonts, CSS classes) is still in the codebase from the fork. Step 5 will rebrand to a NYC coffee shop aesthetic:
 
-**References:** Superpower.com, Netflix iOS, landonorris.com
+- **Palette:** charcoal, off-white, warm caramel, espresso brown (replacing delo-maroon, delo-cream, etc.)
+- **Font:** Inter (replacing Yatra One, Bricolage, Cooper, Manrope, Roboto Mono)
+- **CSS classes:** All `.delo-*` references will be replaced
 
-**Entrance Animation (Coordinated Fade-Slide):**
-- Custom easing curve: `[0.65, 0.05, 0, 1]` (smooth deceleration)
-- Cards slide up 40px while fading in
-- 70ms stagger between cards
-- Duration: 0.5s
-
-**Press Effect (Press-In):**
-- Scale to 0.97
-- Move down 2px (pressing "into" screen)
-- Shadow reduces on press
-- Spring physics: stiffness 400, damping 30 (minimal bounce)
-
-**Customization Modal (Square-style):**
-- Floating panel over softly dimmed menu grid (no blur)
-- Slide-up + fade-in transition
-- Both X button AND backdrop tap to close
-- Spring physics: stiffness 400, damping 30
-- Corner radius: `rounded-xl` (matches drink cards)
-
-### Typography System
-
-| Element | Font | Weight | Size |
-|---------|------|--------|------|
-| Page title "Delo Coffee" | Yatra One | 400 | 48px (text-5xl) |
-| Category headers | Bricolage | SemiBold | 16px (text-base) |
-| Drink names (cards) | Bricolage | SemiBold | 24px (text-2xl) |
-| Drink name (modal) | Bricolage | Bold | 36px (text-4xl) |
-| Modifier labels | Cooper | Medium | 14px (text-sm) |
-| Modifier buttons | Manrope | SemiBold | 18px (text-lg) |
-| Descriptions | Roboto Mono | Regular | 16px (text-base) |
-
-### Menu Categories
-
-- **Signature:** Elaichi Latte, Ginger Slap Latte, Tubo Latte
-- **Classics:** Latte, Cortado, Macchiato, Espresso
-- Stored in `category` column on `menu_items` table
-
-### Shared CSS Classes (globals.css)
-
-**Text & Labels:**
-- `.label-modifier` — Modifier labels (Milk, Temperature, Your Name)
-- `.text-modifier-option` — Text inside modifier buttons/inputs (Manrope SemiBold 18px)
-- `.text-description` — Small descriptive text
-
-**Buttons:**
-- `.btn-primary` — Maroon submit buttons, h-16 (with disabled state)
-- `.btn-secondary` — Cancel buttons, h-12, gray background
-- `.btn-modal-action` — Modal save/create buttons, h-12, maroon
-- `.btn-admin-add` — Admin "+ Add" buttons with press animation
-
-**Form Elements:**
-- `.input-form` — Standard form input (h-16, rounded-xl)
-- `.select-form` — Dropdown select with same styling
-- `.checkbox-form` — Checkbox input styling
-- `.checkbox-label` — Checkbox row wrapper with hover
-
-**Modal Elements:**
-- `.modal-title` — Modal header (h2, text-2xl, maroon)
-- `.modal-description` — Subtitle text below title
-- `.error-banner` — Error message display
-
-**State:**
-- `.item-unavailable` — 50% opacity for sold-out items
-
-### Shared Modal Component
-
-All form modals use `Modal.tsx`:
-- Backdrop: bg-delo-navy/40, click-to-close
-- Panel: bg-delo-cream, rounded-xl, shadow-2xl, p-8
-- X close button with hover animation
-- Spring animations (stiffness 400, damping 30)
-- Size prop: sm, md, lg
-
-Used by: DrinkCustomizer, NewMenuItemForm, ModifierForm, MenuItemEditor
-
-### Archive vs Sold Out
-
-Two separate states for menu items:
-
-| State | Customer sees | Admin sees |
-|-------|--------------|------------|
-| `is_active=true, is_archived=false` | Normal drink | Toggle on |
-| `is_active=false, is_archived=false` | "Sold Out" | Toggle off |
-| `is_archived=true` | Hidden entirely | In collapsed "Archived Items" section |
-
-- **Sold Out (`is_active`)** — Used during events when a drink runs out
-- **Archived (`is_archived`)** — Used between events to remove drinks not being served. Restorable from admin.
-
-### Sold-Out Display
-
-Items toggled OFF in admin appear on `/order` with:
-- 50% opacity (faded)
-- "Sold Out" maroon pill badge
-- Tap disabled, cursor not-allowed
-
-### Unavailable Modifier Display
-
-Modifiers toggled OFF appear in customizer modal:
-- Faded button with dashed border
-- "Sold Out" label below (maroon, semibold)
-- Auto-selects first available option if default unavailable
-
-### Visual Direction Options (Explored)
-
-| Option | Name | Feel | Key Features |
-|--------|------|------|--------------|
-| A | The Courtyard | Warm, structured | Category zones with borders, corner ribbons, framed confirmation |
-| B | Playful Pop | Fun, delightful | Drink icons (cardamom, ginger), floating sections, confetti |
-| C | Editorial Elegance | Refined, confident | Left-aligned header, vertical category labels, asymmetric |
-
-All options keep: Brand colors, fonts, existing animations.
-
-### Files with Important Comments
-
-- `components/DrinkCard.tsx` — ANIMATION CONFIGURATION guide and SPRING PHYSICS GUIDE
-
----
-
-_Last updated: January 11, 2026 — Restructured CLAUDE.md, added Design Decisions_
+Until Step 5, existing Delo styles remain functional.
