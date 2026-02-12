@@ -18,17 +18,8 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
   // All orders (placed and ready)
   const [orders, setOrders] = useState<Order[]>(initialOrders)
 
-  // Track which order IDs arrived via realtime (for entrance animation)
-  const [newOrderIds, setNewOrderIds] = useState<Set<string>>(new Set())
-
   // Active tab
   const [activeTab, setActiveTab] = useState<TabType>('placed')
-
-  // Clear newOrderIds on tab change so realtime orders don't replay entrance animation
-  const handleTabChange = useCallback((tab: TabType) => {
-    setActiveTab(tab)
-    setNewOrderIds(new Set())
-  }, [])
 
   // Realtime connection status
   const [isConnected, setIsConnected] = useState(true)
@@ -78,8 +69,6 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
           // Only add if it's a placed or ready order
           if (newOrder.status === 'placed' || newOrder.status === 'ready') {
             setOrders((prev) => [...prev, newOrder])
-            // Mark as new for animation
-            setNewOrderIds((prev) => new Set(prev).add(newOrder.id))
           }
         } else if (payload.eventType === 'UPDATE') {
           const updatedOrder = payload.new as Order
@@ -186,7 +175,7 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
       <div className="px-8 max-w-4xl mx-auto">
         <KitchenTabs
           activeTab={activeTab}
-          onTabChange={handleTabChange}
+          onTabChange={setActiveTab}
           placedCount={placedCount}
           readyCount={readyCount}
         />
@@ -226,7 +215,6 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
                   onMarkReady={handleMarkReady}
                   onCancelClick={() => setConfirmCancel(order)}
                   isUpdating={updatingOrderId === order.id}
-                  isNew={newOrderIds.has(order.id)}
                 />
               ))}
             </AnimatePresence>

@@ -9,7 +9,6 @@ interface OrderCardProps {
   onMarkReady: (orderId: string) => void
   onCancelClick: () => void
   isUpdating: boolean
-  isNew?: boolean // True for orders that arrive via realtime (should animate in)
 }
 
 /**
@@ -35,7 +34,6 @@ export default function OrderCard({
   onMarkReady,
   onCancelClick,
   isUpdating,
-  isNew = false,
 }: OrderCardProps) {
   // Track current time for relative time display (updates every minute)
   const [now, setNow] = useState(Date.now())
