@@ -27,7 +27,17 @@
 
 - None currently
 
-## Completed This Session (Feb 12)
+## Completed This Session (Feb 12 — latest)
+
+- Deduplicated prompt management in `app/api/chat/route.ts`:
+  - Removed 40-line `FALLBACK_SYSTEM_INSTRUCTIONS` inline block
+  - Stored prompt (`OPENAI_STORED_PROMPT_ID`) is now the single source of truth for personality/menu/rules
+  - Added early guard: returns 500 if `OPENAI_STORED_PROMPT_ID` is missing
+  - Only dynamic cart context (`Current cart JSON: ...`) is still injected as a system message
+  - File reduced from 123 → 81 lines
+- Prompt iteration workflow decided: iterate on content in OpenAI dashboard, keep tools in code
+
+## Completed Earlier (Feb 12)
 
 - Synced 2 upstream `delo-kiosk` kitchen commits via cherry-pick (PR #1)
   - `a3c1aa5`: Kitchen Mark Ready/Cancel buttons now update local state immediately
@@ -51,34 +61,12 @@
   - Switched `/order` page to `VoiceCashierClient`
   - Updated kitchen workflow to Queue/Making/Done + multi-item cards
   - Updated admin stats aggregation for `items` JSONB
-- Formalized Cursor + Claude Code cross-tool workflow in:
-  - `.cursor/rules/status.mdc`
-  - `.cursor/rules/cross-tool-workflow.mdc`
-  - `CLAUDE.md`
-  - `README.md`
-- Finalized menu rule decisions for prompt behavior:
-  - Milk on tea allowed only for Matcha Latte by default
-  - Extra Matcha Shot allowed only for Matcha Latte
-  - Ice level only for iced drinks; sweetness for hot + iced drinks
-- Added `OPENAI_PROMPT.md` with copy/paste stored prompt instructions + tool schemas
-- Expanded `OPENAI_PROMPT.md` into a full configuration guide:
-  - model/settings recommendations
-  - tradeoffs and alternative options
-  - developer message + prompt message guidance
-  - dashboard configuration walkthrough
-- Stored prompt created in OpenAI dashboard:
-  - `OPENAI_STORED_PROMPT_ID=pmpt_698e574a7cfc8194b478c8c014958954084a49f38f0029bb`
-- Wired prompt ID in local `.env.local`
-- Verification fix: updated `app/api/chat/route.ts` default model to `gpt-5.2` to match stored prompt settings and avoid `reasoning.effort unsupported` API error
-- Removed admin passcode gating and related code paths:
-  - `app/admin/page.tsx` now opens dashboard directly
-  - deleted `components/PasscodeGate.tsx`
-  - deleted `app/api/admin/verify/route.ts`
-  - removed `ADMIN_PASSCODE` from env docs/templates
-  - updated README/CLAUDE/TECHNICAL docs to reflect open admin access
-- Verified Vercel setup:
-  - `OPENAI_STORED_PROMPT_ID` and `OPENAI_TEXT_MODEL=gpt-5.2` configured
-  - production redeploy completed and healthy
+- Formalized Cursor + Claude Code cross-tool workflow
+- Finalized menu rule decisions for prompt behavior
+- Added `OPENAI_PROMPT.md` with full configuration guide
+- Stored prompt created in OpenAI dashboard (`pmpt_698e574a7cfc8194b478c8c014958954084a49f38f0029bb`)
+- Removed admin passcode gating and related code paths
+- Verified Vercel setup and production redeploy
 
 ## Infrastructure
 

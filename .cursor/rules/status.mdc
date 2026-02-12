@@ -20,10 +20,11 @@ This is the **single source of truth** for project status, shared between Cursor
 
 - Last Updated: February 12, 2026
 - Current phase: Step 4 pending, Step 5 pending, Step 7 pending
+- Latest change: Deduplicated chat route to use only stored prompt ID (removed inline fallback instructions)
 - Immediate next actions:
-  1. Implement voice mode (Realtime API via WebRTC)
-  2. Rebrand UI from Delo to NYC cafe system
-  3. Upgrade owner dashboard metrics/charts
+ 1. Implement voice mode (Realtime API via WebRTC)
+ 2. Rebrand UI from Delo to NYC cafe system
+ 3. Upgrade owner dashboard metrics/charts
 - Blockers: none
 
 ## Cursor + Claude Code Switching Protocol (Required)
