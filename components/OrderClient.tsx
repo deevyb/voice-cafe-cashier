@@ -281,17 +281,10 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
               </h1>
 
               <p className="font-bricolage font-semibold text-2xl text-delo-navy">
-                {submittedOrder.item}
+                {(submittedOrder.items || [])
+                  .map((item) => `${item.name}${item.quantity > 1 ? ` x${item.quantity}` : ''}`)
+                  .join(', ')}
               </p>
-
-              {/* Modifiers line - only show if there are modifiers */}
-              {(submittedOrder.modifiers?.milk || submittedOrder.modifiers?.temperature) && (
-                <p className="text-modifier-option text-delo-navy/80 mt-2">
-                  {[submittedOrder.modifiers?.milk, submittedOrder.modifiers?.temperature]
-                    .filter(Boolean)
-                    .join(', ')}
-                </p>
-              )}
             </motion.div>
           </motion.div>
         )}

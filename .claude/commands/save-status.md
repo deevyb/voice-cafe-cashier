@@ -9,7 +9,7 @@ Save all session progress so the next session can continue seamlessly.
 
 1. **Check git status** — Run `git status` to see what's changed
 
-2. **Update .claude/rules/status.md** with:
+2. **Update `.claude/rules/status.md`  and `.cursor/rules/status.mdc`** with:
    - "Last Updated" date
    - Current step statuses (pending/in-progress/complete)
    - "What's Next" with specific actionable steps

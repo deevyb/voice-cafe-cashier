@@ -5,12 +5,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   try {
     const { id } = await params
     const body = await request.json()
-    const { status } = body
+    const nextStatus = body.status === 'ready' ? 'completed' : body.status
 
     // Validate status
-    if (!status || !['ready', 'canceled'].includes(status)) {
+    if (!nextStatus || !['in_progress', 'completed', 'canceled'].includes(nextStatus)) {
       return NextResponse.json(
-        { error: 'Invalid status. Must be "ready" or "canceled"' },
+        { error: 'Invalid status. Must be "in_progress", "completed", or "canceled"' },
         { status: 400 }
       )
     }
@@ -19,7 +19,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const { data, error } = await supabase
       .from('orders')
       .update({
-        status,
+        status: nextStatus,
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)

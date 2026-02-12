@@ -12,7 +12,7 @@ interface KitchenClientProps {
   initialOrders: Order[]
 }
 
-type TabType = 'placed' | 'ready'
+type TabType = 'placed' | 'in_progress' | 'completed'
 
 export default function KitchenClient({ initialOrders }: KitchenClientProps) {
   // All orders (placed and ready)
@@ -42,20 +42,34 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
     [orders]
   )
 
-  const readyOrders = useMemo(
+  const inProgressOrders = useMemo(
     () =>
       orders
-        .filter((o) => o.status === 'ready')
+        .filter((o) => o.status === 'in_progress')
+        .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()),
+    [orders]
+  )
+
+  const completedOrders = useMemo(
+    () =>
+      orders
+        .filter((o) => o.status === 'completed')
         .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()),
     [orders]
   )
 
   // Current tab's orders
-  const currentOrders = activeTab === 'placed' ? placedOrders : readyOrders
+  const currentOrders =
+    activeTab === 'placed'
+      ? placedOrders
+      : activeTab === 'in_progress'
+        ? inProgressOrders
+        : completedOrders
 
   // Counts for tabs
   const placedCount = placedOrders.length
-  const readyCount = readyOrders.length
+  const inProgressCount = inProgressOrders.length
+  const completedCount = completedOrders.length
 
   /**
    * Realtime subscription for order updates
@@ -66,8 +80,12 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
         if (payload.eventType === 'INSERT') {
           const newOrder = payload.new as Order
-          // Only add if it's a placed or ready order
-          if (newOrder.status === 'placed' || newOrder.status === 'ready') {
+          // Only add if it's an active kitchen status
+          if (
+            newOrder.status === 'placed' ||
+            newOrder.status === 'in_progress' ||
+            newOrder.status === 'completed'
+          ) {
             setOrders((prev) => [...prev, newOrder])
           }
         } else if (payload.eventType === 'UPDATE') {
@@ -94,9 +112,9 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
   }, [])
 
   /**
-   * Mark an order as ready
+   * Move an order to in_progress
    */
-  const handleMarkReady = useCallback(async (orderId: string) => {
+  const handleStartMaking = useCallback(async (orderId: string) => {
     setUpdatingOrderId(orderId)
     setError(null)
 
@@ -104,7 +122,7 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
       const response = await fetch(`/api/orders/${orderId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'ready' }),
+        body: JSON.stringify({ status: 'in_progress' }),
       })
 
       if (!response.ok) {
@@ -115,7 +133,34 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
       const updatedOrder = await response.json()
       setOrders((prev) => prev.map((o) => (o.id === updatedOrder.id ? updatedOrder : o)))
     } catch {
-      setError("Couldn't update order. Please try again.")
+      setError("Couldn't start the order. Please try again.")
+    } finally {
+      setUpdatingOrderId(null)
+    }
+  }, [])
+
+  /**
+   * Move an order to completed
+   */
+  const handleDone = useCallback(async (orderId: string) => {
+    setUpdatingOrderId(orderId)
+    setError(null)
+
+    try {
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'completed' }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update')
+      }
+
+      const updatedOrder = await response.json()
+      setOrders((prev) => prev.map((o) => (o.id === updatedOrder.id ? updatedOrder : o)))
+    } catch {
+      setError("Couldn't complete order. Please try again.")
     } finally {
       setUpdatingOrderId(null)
     }
@@ -177,7 +222,8 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
           activeTab={activeTab}
           onTabChange={setActiveTab}
           placedCount={placedCount}
-          readyCount={readyCount}
+          inProgressCount={inProgressCount}
+          completedCount={completedCount}
         />
       </div>
 
@@ -202,7 +248,11 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
         {currentOrders.length === 0 ? (
           <div className="text-center py-16">
             <p className="font-roboto-mono text-delo-navy/40 text-lg">
-              {activeTab === 'placed' ? 'No orders waiting' : 'No orders ready yet'}
+              {activeTab === 'placed'
+                ? 'No orders waiting'
+                : activeTab === 'in_progress'
+                  ? 'No drinks currently being made'
+                  : 'No completed orders yet'}
             </p>
           </div>
         ) : (
@@ -212,7 +262,8 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
                 <OrderCard
                   key={order.id}
                   order={order}
-                  onMarkReady={handleMarkReady}
+                  onStartMaking={handleStartMaking}
+                  onDone={handleDone}
                   onCancelClick={() => setConfirmCancel(order)}
                   isUpdating={updatingOrderId === order.id}
                 />
@@ -252,7 +303,7 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
                   Cancel this order?
                 </h2>
                 <p className="font-manrope text-delo-navy/70 mb-6">
-                  {confirmCancel.customer_name}&apos;s {confirmCancel.item}
+                  {confirmCancel.customer_name}&apos;s order
                 </p>
                 <div className="flex gap-3">
                   <button

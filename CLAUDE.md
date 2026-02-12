@@ -57,6 +57,17 @@ This project is built across multiple sessions in Claude Code and Cursor.
 - **Full plan**: `PLAN.md` — all implementation steps
 - **Save progress**: Run `/save-status` before ending any session
 
+### Required Cross-Tool Protocol
+
+- Assume seamless handoff between Cursor and Claude Code is a core project requirement.
+- At session start, always read `.claude/rules/status.md` + `PLAN.md` before making changes.
+- During work, keep changes incremental and easy for the next session/tool to continue.
+- At session end (or major checkpoint), update `.claude/rules/status.md` with:
+  - what was completed,
+  - what remains in-progress,
+  - exact next action.
+- Do not create alternate status docs; `.claude/rules/status.md` remains canonical.
+
 ## Reference Documents
 
 | File | Purpose |
@@ -71,5 +82,5 @@ This project is built across multiple sessions in Claude Code and Cursor.
 OPENAI_API_KEY=sk-...
 NEXT_PUBLIC_SUPABASE_URL=https://...supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-ADMIN_PASSCODE=...
+OPENAI_STORED_PROMPT_ID=pmpt_...
 ```

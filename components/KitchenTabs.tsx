@@ -3,21 +3,24 @@
 import { motion } from 'framer-motion'
 
 interface KitchenTabsProps {
-  activeTab: 'placed' | 'ready'
-  onTabChange: (tab: 'placed' | 'ready') => void
+  activeTab: 'placed' | 'in_progress' | 'completed'
+  onTabChange: (tab: 'placed' | 'in_progress' | 'completed') => void
   placedCount: number
-  readyCount: number
+  inProgressCount: number
+  completedCount: number
 }
 
 export default function KitchenTabs({
   activeTab,
   onTabChange,
   placedCount,
-  readyCount,
+  inProgressCount,
+  completedCount,
 }: KitchenTabsProps) {
   const tabs = [
-    { id: 'placed' as const, label: 'Placed', count: placedCount },
-    { id: 'ready' as const, label: 'Ready', count: readyCount },
+    { id: 'placed' as const, label: 'Queue', count: placedCount },
+    { id: 'in_progress' as const, label: 'Making', count: inProgressCount },
+    { id: 'completed' as const, label: 'Done', count: completedCount },
   ]
 
   return (

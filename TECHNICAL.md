@@ -1,6 +1,6 @@
 # Technical Documentation
 
-> Last updated: February 10, 2026
+> Last updated: February 12, 2026
 
 ---
 
@@ -25,7 +25,7 @@ app/
   page.tsx                        # Landing — mode selector (Voice / Text)
   order/page.tsx                  # AI ordering experience
   kitchen/page.tsx                # Barista display (realtime)
-  admin/page.tsx                  # Owner dashboard (passcode-protected)
+  admin/page.tsx                  # Owner dashboard
   api/
     chat/route.ts                 # [NEW] Responses API — text mode
     realtime/token/route.ts       # [NEW] Ephemeral token — voice mode
@@ -34,7 +34,6 @@ app/
     admin/
       stats/route.ts              # GET: dashboard analytics
       orders/route.ts             # GET: CSV export
-      verify/route.ts             # POST: passcode check
 components/
   VoiceCashierClient.tsx          # [NEW] Main ordering container
   chat/                           # [NEW] Text mode UI
@@ -52,7 +51,6 @@ components/
   KitchenTabs.tsx                 # [MODIFY] 3 tabs: Queue/Making/Done
   OrderCard.tsx                   # [MODIFY] Render items array
   OwnerDashboardClient.tsx        # [NEW] Analytics dashboard
-  PasscodeGate.tsx                # Existing — reused for /admin
   NavMenu.tsx                     # Existing — reused
   Modal.tsx                       # Existing — reused
   ErrorBoundary.tsx               # Existing — reused
@@ -189,12 +187,6 @@ Returns dashboard analytics. Will be enhanced to extract metrics from `items` JS
 
 CSV export of orders. Unchanged pattern, updated for new schema.
 
-### POST /api/admin/verify
-
-Passcode check. Unchanged.
-
----
-
 ## OpenAI Integration
 
 ### Stored Prompt
@@ -259,11 +251,7 @@ supabase
 
 ## Authentication
 
-### Admin/Owner Passcode
-
-- Simple client-side check via `PasscodeGate.tsx`
-- Passcode in env var: `ADMIN_PASSCODE`
-- Stored in localStorage after entry
+Admin dashboard is intentionally open for this project (no passcode gate).
 
 ---
 
@@ -282,7 +270,7 @@ supabase
 
 ### Dashboard
 
-- More detailed errors acceptable (wrong passcode, export failed)
+- More detailed errors acceptable (export failed, data load issues)
 
 ---
 
@@ -296,28 +284,28 @@ OPENAI_API_KEY=sk-...
 NEXT_PUBLIC_SUPABASE_URL=https://[new-project].supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 
-# Admin (Required)
-ADMIN_PASSCODE=...
+# Prompt (Required)
+OPENAI_STORED_PROMPT_ID=pmpt_...
 ```
 
 ---
 
 ## Deployment
 
-### Infrastructure (Planned)
+### Infrastructure (Current)
 
 - **GitHub:** https://github.com/deevyb/voice-cafe-cashier
-- **Vercel:** [not yet connected]
-- **Supabase:** [new project needed]
+- **Vercel:** `voice-cafe-cashier.vercel.app` (production connected)
+- **Supabase:** `voice-cafe-cashier` (`kvlkuoeemroveoodqbtv`, `us-west-1`)
 
 ### Setup Checklist
 
-- [ ] Create new Supabase project
-- [ ] Run schema migration (orders table)
-- [ ] Enable Realtime on orders table
-- [ ] Connect Vercel to voice-cafe-cashier repo
-- [ ] Set env vars in Vercel (OPENAI_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY, ADMIN_PASSCODE)
-- [ ] Verify deploy
+- [x] Create new Supabase project
+- [x] Run schema migration (orders table)
+- [x] Enable Realtime on orders table
+- [x] Connect Vercel to voice-cafe-cashier repo
+- [x] Set env vars in Vercel (OPENAI_API_KEY, OPENAI_STORED_PROMPT_ID, SUPABASE_URL, SUPABASE_ANON_KEY, OPENAI_TEXT_MODEL)
+- [x] Verify deploy
 
 ---
 

@@ -6,7 +6,17 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Types for our database tables
-export type OrderStatus = 'placed' | 'ready' | 'canceled'
+export type OrderStatus = 'placed' | 'in_progress' | 'completed' | 'canceled'
+
+export interface CartItem {
+  name: string
+  size?: string
+  milk?: string
+  temperature?: string
+  extras?: string[]
+  quantity: number
+  price?: number
+}
 
 export interface MenuItem {
   id: string
@@ -36,11 +46,7 @@ export interface Modifier {
 export interface Order {
   id: string
   customer_name: string
-  item: string
-  modifiers: {
-    milk?: string
-    temperature?: string
-  }
+  items: CartItem[]
   status: OrderStatus
   created_at: string
   updated_at: string
@@ -50,7 +56,8 @@ export interface Order {
 export interface OrderCounts {
   total: number
   placed: number
-  ready: number
+  in_progress: number
+  completed: number
   canceled: number
 }
 

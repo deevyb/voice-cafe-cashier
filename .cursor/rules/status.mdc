@@ -16,4 +16,26 @@ Also read `PLAN.md` in the project root for the full implementation plan.
 
 This is the **single source of truth** for project status, shared between Cursor and Claude Code.
 
+## Save-Status Snapshot (Mirror)
+
+- Last Updated: February 12, 2026
+- Current phase: Step 4 pending, Step 5 pending, Step 7 pending
+- Immediate next actions:
+  1. Implement voice mode (Realtime API via WebRTC)
+  2. Rebrand UI from Delo to NYC cafe system
+  3. Upgrade owner dashboard metrics/charts
+- Blockers: none
+
+## Cursor + Claude Code Switching Protocol (Required)
+
+- Treat this repository as a **dual-tool workflow**: work may continue in either Cursor or Claude Code at any time.
+- Do not create alternate status trackers. Use only `.claude/rules/status.md` for session handoff.
+- Before implementing, confirm current step and blockers from `.claude/rules/status.md`.
+- After meaningful progress, update `.claude/rules/status.md` with:
+  - completed work,
+  - what is in-progress,
+  - explicit next actions for the next session.
+- Keep `PLAN.md` aligned with execution order; use it as canonical implementation plan.
+- Prefer incremental, handoff-friendly changes with clear notes so the next tool session can resume immediately.
+
 When ending a session where meaningful progress was made, update `.claude/rules/status.md` to reflect what changed — so the next session (in either tool) picks up seamlessly.

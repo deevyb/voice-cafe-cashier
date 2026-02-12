@@ -24,7 +24,7 @@ A minimal iPad ordering system for Delo Coffee pop-up events. Customers place si
 
 ### Admin Panel (`/admin`)
 
-- Passcode-protected access
+- Direct access (no passcode)
 - Toggle menu items on/off
 - Manage modifier options (milk types, temperatures)
 - Export orders as CSV by date range
@@ -86,12 +86,13 @@ delo-kiosk/
    npm install
    ```
 
-3. Create `.env.local` with your Supabase credentials:
+3. Create `.env.local` with your project credentials:
 
    ```env
+   OPENAI_API_KEY=sk-...
+   OPENAI_STORED_PROMPT_ID=pmpt_...
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
-   ADMIN_PASSCODE=your_passcode
    ```
 
 4. Run the development server:
@@ -119,6 +120,25 @@ See [TECHNICAL.md](./TECHNICAL.md) for full schema details.
 ## Deployment
 
 The app auto-deploys to Vercel when you push to `main`. Environment variables are configured in Vercel dashboard.
+
+---
+
+## Cursor + Claude Code Workflow
+
+This project is intentionally developed using both Cursor and Claude Code, with seamless handoff as a requirement.
+
+- **Status source of truth:** `.claude/rules/status.md`
+- **Implementation plan:** `PLAN.md`
+- **Project guide:** `CLAUDE.md`
+
+### Session Handoff Rules
+
+1. Start each session by reading `.claude/rules/status.md` and `PLAN.md`.
+2. Continue from the current in-progress step unless priorities are explicitly changed.
+3. After meaningful progress, update `.claude/rules/status.md` with completed work, in-progress work, and next steps.
+4. Do not create alternate status trackers.
+
+This workflow keeps development consistent regardless of which tool is used next.
 
 ---
 

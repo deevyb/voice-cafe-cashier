@@ -12,7 +12,6 @@ import { MenuItem, Modifier } from '@/lib/supabase'
 interface AdminClientProps {
   initialMenuItems: MenuItem[]
   initialModifiers: Modifier[]
-  onLogout: () => void
 }
 
 /**
@@ -23,7 +22,6 @@ interface AdminClientProps {
 export default function AdminClient({
   initialMenuItems,
   initialModifiers,
-  onLogout,
 }: AdminClientProps) {
   const [activeTab, setActiveTab] = useState<AdminTab>('menu')
   const [menuItems, setMenuItems] = useState(initialMenuItems)
@@ -60,7 +58,7 @@ export default function AdminClient({
             <h1 className="font-yatra text-4xl text-delo-maroon mb-1">Delo Coffee Admin</h1>
             <p className="text-description">Manage your menu and view orders</p>
           </div>
-          <NavMenu onLogout={onLogout} />
+          <NavMenu />
         </div>
 
         {/* Tabs */}

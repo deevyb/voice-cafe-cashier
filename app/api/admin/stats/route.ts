@@ -14,9 +14,7 @@ export const dynamic = 'force-dynamic'
 export async function GET() {
   try {
     // Fetch all orders for aggregation
-    const { data: orders, error } = await supabase
-      .from('orders')
-      .select('item, modifiers, status, created_at')
+    const { data: orders, error } = await supabase.from('orders').select('items, status, created_at')
 
     if (error) throw error
 
@@ -34,18 +32,24 @@ export async function GET() {
         (acc, order) => {
           acc.total++
           if (order.status === 'placed') acc.placed++
-          else if (order.status === 'ready') acc.ready++
+          else if (order.status === 'in_progress') acc.in_progress++
+          else if (order.status === 'completed') acc.completed++
           else if (order.status === 'canceled') acc.canceled++
           return acc
         },
-        { total: 0, placed: 0, ready: 0, canceled: 0 }
+        { total: 0, placed: 0, in_progress: 0, completed: 0, canceled: 0 }
       )
     }
 
-    // Popular drinks - group by item name, sort by count
+    // Popular drinks - group by item name across all order items, sort by count
     const drinkCounts: Record<string, number> = {}
     for (const order of allOrders) {
-      drinkCounts[order.item] = (drinkCounts[order.item] || 0) + 1
+      const orderItems = Array.isArray(order.items) ? order.items : []
+      for (const item of orderItems) {
+        if (!item?.name) continue
+        const quantity = typeof item.quantity === 'number' && item.quantity > 0 ? item.quantity : 1
+        drinkCounts[item.name] = (drinkCounts[item.name] || 0) + quantity
+      }
     }
 
     const popularDrinks = Object.entries(drinkCounts)
@@ -57,14 +61,18 @@ export async function GET() {
     const modifierCounts: Record<string, Record<string, number>> = {}
 
     for (const order of allOrders) {
-      if (!order.modifiers) continue
-
-      for (const [category, option] of Object.entries(order.modifiers)) {
-        if (!option) continue // Skip null/undefined values
-
-        if (!modifierCounts[category]) modifierCounts[category] = {}
-        modifierCounts[category][option as string] =
-          (modifierCounts[category][option as string] || 0) + 1
+      const orderItems = Array.isArray(order.items) ? order.items : []
+      for (const item of orderItems) {
+        const pairs: Array<[string, string | undefined]> = [
+          ['size', item.size],
+          ['milk', item.milk],
+          ['temperature', item.temperature],
+        ]
+        for (const [category, option] of pairs) {
+          if (!option) continue
+          if (!modifierCounts[category]) modifierCounts[category] = {}
+          modifierCounts[category][option] = (modifierCounts[category][option] || 0) + 1
+        }
       }
     }
 

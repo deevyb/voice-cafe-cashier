@@ -61,14 +61,15 @@ export default function DashboardSection() {
 
   const generateCSV = (orders: Order[]): string => {
     // Separate Date and Time columns for better pivot table grouping
-    const headers = ['Customer Name', 'Drink', 'Milk', 'Temperature', 'Status', 'Date', 'Time']
+    const headers = ['Customer Name', 'Items', 'Status', 'Date', 'Time']
 
     const rows = orders.map((order) => [
       // Quote text fields to handle commas/special chars
       `"${order.customer_name.replace(/"/g, '""')}"`,
-      `"${order.item.replace(/"/g, '""')}"`,
-      order.modifiers.milk || '',
-      order.modifiers.temperature || '',
+      `"${(order.items || [])
+        .map((item) => `${item.name}${item.quantity > 1 ? ` x${item.quantity}` : ''}`)
+        .join('; ')
+        .replace(/"/g, '""')}"`,
       order.status,
       formatDate(order.created_at), // YYYY-MM-DD (recognized as date by spreadsheets)
       formatTime(order.created_at), // HH:MM (sortable)
@@ -252,7 +253,10 @@ function StatsCard({ title, counts }: { title: string; counts: OrderCounts }) {
           <span className="font-semibold text-[#C85A2E]">{counts.placed}</span> placed
         </span>
         <span className="text-delo-navy/70">
-          <span className="font-semibold text-green-600">{counts.ready}</span> ready
+          <span className="font-semibold text-amber-600">{counts.in_progress}</span> making
+        </span>
+        <span className="text-delo-navy/70">
+          <span className="font-semibold text-green-600">{counts.completed}</span> completed
         </span>
         <span className="text-delo-navy/70">
           <span className="font-semibold text-red-500">{counts.canceled}</span> canceled

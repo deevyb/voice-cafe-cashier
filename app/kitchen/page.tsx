@@ -5,11 +5,11 @@ import KitchenClient from '@/components/KitchenClient'
 export const dynamic = 'force-dynamic'
 
 async function getOrders() {
-  // Fetch orders with status 'placed' or 'ready' (not canceled)
+  // Fetch active kitchen orders (not canceled)
   const { data: orders, error } = await supabase
     .from('orders')
     .select('*')
-    .in('status', ['placed', 'ready'])
+    .in('status', ['placed', 'in_progress', 'completed'])
     .order('created_at', { ascending: true })
 
   if (error) {
