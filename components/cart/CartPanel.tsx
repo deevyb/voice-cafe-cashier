@@ -11,7 +11,7 @@ export default function CartPanel({ cart }: { cart: CartEntry[] }) {
   const total = getTotal(cart)
 
   return (
-    <aside className="h-[70vh] rounded-xl border border-delo-navy/10 bg-delo-cream/60 p-4">
+    <aside className="rounded-xl border border-delo-navy/10 bg-delo-cream/60 p-4">
       <h2 className="mb-3 border-b border-delo-navy/10 pb-2 font-bricolage text-xl text-delo-navy">
         Your Order
       </h2>

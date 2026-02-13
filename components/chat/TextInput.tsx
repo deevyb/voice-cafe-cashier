@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 
 export default function TextInput({
   onSend,
@@ -10,6 +10,7 @@ export default function TextInput({
   disabled?: boolean
 }) {
   const [value, setValue] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
@@ -17,16 +18,17 @@ export default function TextInput({
     if (!next || disabled) return
     onSend(next)
     setValue('')
+    inputRef.current?.focus()
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-2">
       <input
+        ref={inputRef}
         value={value}
         onChange={(event) => setValue(event.target.value)}
         placeholder="Type your order..."
         className="flex-1 rounded-lg border border-delo-navy/20 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-delo-maroon/40"
-        disabled={disabled}
       />
       <button
         type="submit"

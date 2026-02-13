@@ -1,17 +1,12 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import type { CartItem } from '@/lib/supabase'
 import ChatPanel, { type ChatMessage } from '@/components/chat/ChatPanel'
 import CartPanel from '@/components/cart/CartPanel'
 import ReceiptView from '@/components/cart/ReceiptView'
 
 type AppMode = 'voice' | 'text' | null
-
-type ToolCall = {
-  name: string
-  arguments: any
-}
 
 function createId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`
@@ -27,11 +22,6 @@ export default function VoiceCashierClient() {
   const [orderFinalized, setOrderFinalized] = useState(false)
   const [receipt, setReceipt] = useState<{ customerName: string; orderId: string } | null>(null)
 
-  const chatHistoryForApi = useMemo(
-    () => messages.map((message) => ({ role: message.role, content: message.content })),
-    [messages]
-  )
-
   const submitOrder = async (customerName: string, cartItems: CartItem[]) => {
     const response = await fetch('/api/orders', {
       method: 'POST',
@@ -43,32 +33,6 @@ export default function VoiceCashierClient() {
     const order = await response.json()
     setOrderFinalized(true)
     setReceipt({ customerName, orderId: order.id })
-  }
-
-  const applyToolCall = async (currentCart: CartItem[], toolCall: ToolCall) => {
-    const args = toolCall.arguments || {}
-    const name = toolCall.name
-
-    if (name === 'add_item') {
-      return [...currentCart, { ...args, quantity: args.quantity || 1 }]
-    }
-
-    if (name === 'modify_item') {
-      return currentCart.map((item, index) =>
-        index === args.cart_index ? { ...item, ...(args.changes || {}) } : item
-      )
-    }
-
-    if (name === 'remove_item') {
-      return currentCart.filter((_, index) => index !== args.cart_index)
-    }
-
-    if (name === 'finalize_order') {
-      await submitOrder(args.customer_name || 'Guest', currentCart)
-      return currentCart
-    }
-
-    return currentCart
   }
 
   const handleSend = async (text: string) => {
@@ -91,14 +55,19 @@ export default function VoiceCashierClient() {
       }
 
       const result = await response.json()
-      let nextCart = [...cart]
-      for (const call of (result.toolCalls || []) as ToolCall[]) {
-        nextCart = await applyToolCall(nextCart, call)
+
+      // Server is authoritative: set cart directly from response
+      if (result.cart) {
+        setCart(result.cart)
       }
-      setCart(nextCart)
+
+      // Handle finalize if server detected it
+      if (result.finalize) {
+        await submitOrder(result.finalize.customer_name, result.cart || cart)
+      }
 
       const assistantText =
-        result.text || (result.toolCalls?.length ? 'Got it. I updated your order.' : 'Could you say that another way?')
+        result.text || (result.cart ? 'Got it. I updated your order.' : 'Could you say that another way?')
       setMessages((prev) => [...prev, { id: createId(), role: 'assistant', content: assistantText }])
     } catch {
       setMessages((prev) => [
@@ -121,7 +90,7 @@ export default function VoiceCashierClient() {
               className="rounded-xl border border-delo-navy/20 bg-white p-6 text-left hover:border-delo-maroon/40"
               onClick={() => setMode('text')}
             >
-              <p className="font-semibold text-delo-navy">Text</p>
+              <p className="font-semibold text-delo-navy">Chat</p>
               <p className="text-sm text-delo-navy/70">Chat with the cashier and see live cart updates.</p>
             </button>
             <button
@@ -160,14 +129,14 @@ export default function VoiceCashierClient() {
         </button>
       </div>
 
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 lg:grid-cols-[2fr_1fr]">
-        <ChatPanel messages={messages} isProcessing={isProcessing} onSend={handleSend} />
+      <div className="mx-auto flex max-w-6xl flex-col gap-4">
         <div className="space-y-3">
           {orderFinalized && receipt ? (
             <ReceiptView customerName={receipt.customerName} cart={cart} orderId={receipt.orderId} />
           ) : null}
           <CartPanel cart={cart} />
         </div>
+        <ChatPanel messages={messages} isProcessing={isProcessing} onSend={handleSend} />
       </div>
     </main>
   )

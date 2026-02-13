@@ -69,7 +69,7 @@ Also: `app/api/admin/menu-items/`, `app/api/admin/modifiers/` (menu now lives in
 
 ### Data Flow
 
-1. **Text mode**: Customer types → `/api/chat` → Responses API → streamed response + tool calls → client updates cart
+1. **Text mode**: Customer types → `/api/chat` → Responses API → server-side agentic loop (execute tool calls, feed `function_call_output` back via `previous_response_id`, repeat until text reply; max 6 iterations) → returns final text + authoritative cart to client
 2. **Voice mode**: Customer speaks → WebRTC → Realtime API → tool calls via data channel → client updates cart
 3. **Finalize order**: `finalize_order` tool → client POSTs to `/api/orders` → Supabase INSERT
 4. **Kitchen**: Supabase Realtime → pushes new/updated orders via WebSocket

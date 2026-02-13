@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 12, 2026
+> Last Updated: February 13, 2026
 
 ## Current State
 
@@ -27,17 +27,35 @@
 
 - None currently
 
-## Completed This Session (Feb 12 — latest)
+## Completed This Session (Feb 13 — latest)
+
+- Implemented server-side iterative tool-call loop in `app/api/chat/route.ts`:
+  - Model tool calls are now executed server-side with `function_call_output` fed back via `previous_response_id`
+  - Loop continues until model returns text (max 6 iterations), enabling multi-item modifications in one turn
+  - Client is now a thin renderer: sets cart directly from server response (no local tool-call application)
+  - Removed client-side `applyToolCall` and `ToolCall` type from `VoiceCashierClient.tsx`
+  - Cart extras display: separated onto own line, removed "extras:" prefix, consolidated duplicates (e.g. "2 Pumps Hazelnut Syrup")
+- Debugged intermittent cart/tool-call mismatch with runtime instrumentation:
+  - Verified the flow is nondeterministic at model output time, not caused by stale client state or cart reducer logic
+  - Removed all temporary debug instrumentation after user-confirmed stability
+- Implemented and verified UI/chat polish fixes:
+  - Input focus now remains in the text field after send (send button still disables during processing)
+  - Assistant markdown now renders in chat bubbles (bold/inline formatting supported)
+  - Chat auto-scroll now stays pinned to latest messages
+  - Cart detail row now hides when only `N/A`/empty drink attributes exist (pastries show price without `N/A` detail line)
+- Added dependency: `react-markdown` for assistant message rendering
+- Cart layout remains compact above chat (no fixed tall empty cart area)
+
+- Mode selector button renamed from "Text" to "Chat"
+
+## Completed Earlier (Feb 12)
 
 - Deduplicated prompt management in `app/api/chat/route.ts`:
   - Removed 40-line `FALLBACK_SYSTEM_INSTRUCTIONS` inline block
   - Stored prompt (`OPENAI_STORED_PROMPT_ID`) is now the single source of truth for personality/menu/rules
   - Added early guard: returns 500 if `OPENAI_STORED_PROMPT_ID` is missing
   - Only dynamic cart context (`Current cart JSON: ...`) is still injected as a system message
-  - File reduced from 123 → 81 lines
 - Prompt iteration workflow decided: iterate on content in OpenAI dashboard, keep tools in code
-
-## Completed Earlier (Feb 12)
 
 - Synced 2 upstream `delo-kiosk` kitchen commits via cherry-pick (PR #1)
   - `a3c1aa5`: Kitchen Mark Ready/Cancel buttons now update local state immediately

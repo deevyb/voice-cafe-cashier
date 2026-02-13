@@ -18,9 +18,9 @@ This is the **single source of truth** for project status, shared between Cursor
 
 ## Save-Status Snapshot (Mirror)
 
-- Last Updated: February 12, 2026
+- Last Updated: February 13, 2026
 - Current phase: Step 4 pending, Step 5 pending, Step 7 pending
-- Latest change: Deduplicated chat route to use only stored prompt ID (removed inline fallback instructions)
+- Latest change: Server-side agentic tool-call loop, chat UX polish (markdown, autoscroll, focus, cart display), mode selector "Chat" rename
 - Immediate next actions:
  1. Implement voice mode (Realtime API via WebRTC)
  2. Rebrand UI from Delo to NYC cafe system

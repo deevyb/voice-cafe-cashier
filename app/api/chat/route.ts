@@ -1,27 +1,35 @@
 import OpenAI from 'openai'
 import { NextResponse } from 'next/server'
 import { ORDER_TOOLS, OPENAI_STORED_PROMPT_ID } from '@/lib/realtime-config'
+import type { CartItem } from '@/lib/supabase'
 
 const model = process.env.OPENAI_TEXT_MODEL || 'gpt-5.2'
+const MAX_TOOL_ITERATIONS = 6
 
 type InputMessage = {
   role: 'system' | 'user' | 'assistant'
   content: string
 }
 
+type ParsedToolCall = {
+  name: string
+  call_id: string
+  arguments: Record<string, any>
+}
+
 function parseResponse(response: any) {
-  const toolCalls: { name: string; arguments: unknown }[] = []
+  const toolCalls: ParsedToolCall[] = []
   let text = ''
 
   for (const item of response?.output || []) {
     if (item?.type === 'function_call') {
-      let args: unknown = {}
+      let args: Record<string, any> = {}
       try {
         args = JSON.parse(item.arguments || '{}')
       } catch {
         args = {}
       }
-      toolCalls.push({ name: item.name, arguments: args })
+      toolCalls.push({ name: item.name, call_id: item.call_id, arguments: args })
     }
 
     if (item?.type === 'message' && Array.isArray(item.content)) {
@@ -34,6 +42,27 @@ function parseResponse(response: any) {
   }
 
   return { text: text.trim(), toolCalls }
+}
+
+function applyToolCall(cart: CartItem[], call: ParsedToolCall): { cart: CartItem[]; finalize?: { customer_name: string } } {
+  const args = call.arguments
+  if (call.name === 'add_item') {
+    return { cart: [...cart, { ...args, quantity: args.quantity || 1 } as CartItem] }
+  }
+  if (call.name === 'modify_item') {
+    return {
+      cart: cart.map((item, index) =>
+        index === args.cart_index ? { ...item, ...(args.changes || {}) } : item
+      ),
+    }
+  }
+  if (call.name === 'remove_item') {
+    return { cart: cart.filter((_, index) => index !== args.cart_index) }
+  }
+  if (call.name === 'finalize_order') {
+    return { cart, finalize: { customer_name: args.customer_name || 'Guest' } }
+  }
+  return { cart }
 }
 
 export async function POST(request: Request) {
@@ -51,28 +80,64 @@ export async function POST(request: Request) {
 
     const body = await request.json()
     const messages = (body.messages || []) as InputMessage[]
-    const cart = body.cart || []
+    let cart = (body.cart || []) as CartItem[]
 
     const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-    const input = [
-      {
-        role: 'system',
-        content: `Current cart JSON: ${JSON.stringify(cart)}`,
-      },
+    const input: any[] = [
+      { role: 'system', content: `Current cart JSON: ${JSON.stringify(cart)}` },
       ...messages,
     ]
 
-    const response = await client.responses.create({
+    let response = await client.responses.create({
       model,
       input,
       tools: ORDER_TOOLS,
       prompt: { id: OPENAI_STORED_PROMPT_ID },
     } as any)
 
-    const parsed = parseResponse(response)
+    let finalText = ''
+    let finalize: { customer_name: string } | undefined
+    let iteration = 0
 
-    return NextResponse.json(parsed)
+    while (iteration < MAX_TOOL_ITERATIONS) {
+      const parsed = parseResponse(response)
+
+      if (parsed.text) {
+        finalText = parsed.text
+      }
+
+      if (parsed.toolCalls.length === 0) {
+        break
+      }
+
+      // Execute all tool calls and build function_call_output items
+      const outputItems: any[] = []
+      for (const call of parsed.toolCalls) {
+        const result = applyToolCall(cart, call)
+        cart = result.cart
+        if (result.finalize) finalize = result.finalize
+
+        outputItems.push({
+          type: 'function_call_output',
+          call_id: call.call_id,
+          output: JSON.stringify({ success: true, cart }),
+        })
+      }
+
+      // Continue conversation with tool results
+      response = await client.responses.create({
+        model,
+        input: outputItems,
+        tools: ORDER_TOOLS,
+        prompt: { id: OPENAI_STORED_PROMPT_ID },
+        previous_response_id: response.id,
+      } as any)
+
+      iteration++
+    }
+
+    return NextResponse.json({ text: finalText, cart, finalize })
   } catch (error) {
     console.error('Chat route error:', error)
     return NextResponse.json({ error: 'Failed to process chat request' }, { status: 500 })

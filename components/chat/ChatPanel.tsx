@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import AIMessage from './AIMessage'
 import UserMessage from './UserMessage'
 import TextInput from './TextInput'
@@ -19,13 +20,22 @@ export default function ChatPanel({
   isProcessing: boolean
   onSend: (value: string) => void
 }) {
+  const messagesRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const container = messagesRef.current
+    if (container) {
+      container.scrollTop = container.scrollHeight
+    }
+  }, [messages, isProcessing])
+
   return (
     <section className="flex h-[70vh] flex-col rounded-xl border border-delo-navy/10 bg-delo-cream/60 p-4">
       <div className="mb-3 border-b border-delo-navy/10 pb-2">
         <h2 className="font-bricolage text-xl text-delo-navy">Chat</h2>
       </div>
 
-      <div className="flex-1 space-y-3 overflow-y-auto pr-1">
+      <div ref={messagesRef} className="flex-1 space-y-3 overflow-y-auto pr-1">
         {messages.map((message) =>
           message.role === 'assistant' ? (
             <AIMessage key={message.id} text={message.content} />
