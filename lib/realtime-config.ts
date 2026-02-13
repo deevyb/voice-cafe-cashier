@@ -90,13 +90,25 @@ export const ORDER_TOOLS = [
   {
     type: 'function',
     name: 'modify_item',
-    description: 'Modify an existing cart item by index',
+    description: 'Modify an existing cart item by index. Pass the cart_index and a changes object with only the fields to update.',
     parameters: {
       type: 'object',
       additionalProperties: false,
       properties: {
-        cart_index: { type: 'number' },
-        changes: { type: 'object' },
+        cart_index: { type: 'number', description: 'Zero-based index of the item in the cart' },
+        changes: {
+          type: 'object',
+          description: 'Object with fields to update on the cart item',
+          properties: {
+            name: { type: 'string' },
+            size: { type: 'string' },
+            milk: { type: 'string' },
+            temperature: { type: 'string' },
+            extras: { type: 'array', items: { type: 'string' } },
+            quantity: { type: 'number' },
+            price: { type: 'number' },
+          },
+        },
       },
       required: ['cart_index', 'changes'],
     },

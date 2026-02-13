@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect } from 'react'
 import { ORDER_TOOLS, VOICE_INSTRUCTIONS } from '@/lib/realtime-config'
+import { applyToolCall } from '@/lib/cart-utils'
 import type { CartItem } from '@/lib/supabase'
 
 export type ConnectionState = 'idle' | 'connecting' | 'connected' | 'error'
@@ -21,6 +22,7 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
   const dcRef = useRef<RTCDataChannel | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
+  const cartRef = useRef<CartItem[]>([])
 
   // Keep options in a ref so the data channel handler always has the latest
   const optionsRef = useRef(options)
@@ -43,6 +45,7 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
       audioRef.current.srcObject = null
       audioRef.current = null
     }
+    cartRef.current = []
     setConnectionState('idle')
     setIsSpeaking(false)
     setIsUserSpeaking(false)
@@ -65,9 +68,8 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
         type: 'session.update',
         session: {
           type: 'realtime',
-          model: 'gpt-4o-mini-realtime-preview',
+          model: 'gpt-realtime-mini',
           instructions: VOICE_INSTRUCTIONS,
-          output_modalities: ['audio'],
           audio: {
             input: {
               turn_detection: { type: 'semantic_vad' },
@@ -86,23 +88,43 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
     sendEvent({ type: 'response.create' })
   }, [sendEvent])
 
-  // Handle tool calls — M1: acknowledge without updating cart
-  // M2 will add actual cart updates here
+  // Handle tool calls — parse arguments, update cart, notify parent
   const handleToolCall = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (event: any) => {
       const { call_id, name, arguments: argsStr } = event
       console.log(`[Realtime] Tool call: ${name}`, argsStr)
 
-      // Send function output back so conversation doesn't stall
+      // Parse arguments from JSON string
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let args: Record<string, any> = {}
+      try {
+        args = JSON.parse(argsStr || '{}')
+      } catch {
+        args = {}
+      }
+
+      // Apply cart mutation using shared utility
+      const result = applyToolCall(cartRef.current, name, args)
+      cartRef.current = result.cart
+
+      // Notify parent to update UI
+      optionsRef.current.onCartUpdate?.(() => result.cart)
+
+      // Send function output back to OpenAI (with cart so AI knows state)
       sendEvent({
         type: 'conversation.item.create',
         item: {
           type: 'function_call_output',
           call_id,
-          output: JSON.stringify({ success: true }),
+          output: JSON.stringify({ success: true, cart: result.cart }),
         },
       })
+
+      // Handle finalize — trigger order submission
+      if (result.finalize) {
+        optionsRef.current.onFinalize?.(result.finalize.customer_name)
+      }
 
       // Trigger the AI's next response
       sendEvent({ type: 'response.create' })
@@ -134,7 +156,11 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
           break
 
         case 'response.audio.delta':
+        case 'response.output_audio.delta':
           setIsSpeaking(true)
+          break
+
+        case 'response.output_audio_transcript.done':
           break
 
         case 'response.done':

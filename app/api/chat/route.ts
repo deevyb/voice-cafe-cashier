@@ -1,6 +1,7 @@
 import OpenAI from 'openai'
 import { NextResponse } from 'next/server'
 import { ORDER_TOOLS, OPENAI_STORED_PROMPT_ID } from '@/lib/realtime-config'
+import { applyToolCall } from '@/lib/cart-utils'
 import type { CartItem } from '@/lib/supabase'
 
 const model = process.env.OPENAI_TEXT_MODEL || 'gpt-5.2'
@@ -42,27 +43,6 @@ function parseResponse(response: any) {
   }
 
   return { text: text.trim(), toolCalls }
-}
-
-function applyToolCall(cart: CartItem[], call: ParsedToolCall): { cart: CartItem[]; finalize?: { customer_name: string } } {
-  const args = call.arguments
-  if (call.name === 'add_item') {
-    return { cart: [...cart, { ...args, quantity: args.quantity || 1 } as CartItem] }
-  }
-  if (call.name === 'modify_item') {
-    return {
-      cart: cart.map((item, index) =>
-        index === args.cart_index ? { ...item, ...(args.changes || {}) } : item
-      ),
-    }
-  }
-  if (call.name === 'remove_item') {
-    return { cart: cart.filter((_, index) => index !== args.cart_index) }
-  }
-  if (call.name === 'finalize_order') {
-    return { cart, finalize: { customer_name: args.customer_name || 'Guest' } }
-  }
-  return { cart }
 }
 
 export async function POST(request: Request) {
@@ -114,7 +94,7 @@ export async function POST(request: Request) {
       // Execute all tool calls and build function_call_output items
       const outputItems: any[] = []
       for (const call of parsed.toolCalls) {
-        const result = applyToolCall(cart, call)
+        const result = applyToolCall(cart, call.name, call.arguments)
         cart = result.cart
         if (result.finalize) finalize = result.finalize
 

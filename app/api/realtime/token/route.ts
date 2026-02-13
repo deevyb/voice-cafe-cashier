@@ -15,7 +15,7 @@ export async function POST() {
       body: JSON.stringify({
         session: {
           type: 'realtime',
-          model: 'gpt-4o-mini-realtime-preview',
+          model: 'gpt-realtime-mini',
           audio: {
             output: {
               voice: 'marin',

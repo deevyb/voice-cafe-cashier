@@ -19,13 +19,12 @@ This is the **single source of truth** for project status, shared between Cursor
 ## Save-Status Snapshot (Mirror)
 
 - Last Updated: February 13, 2026
-- Current phase: Step 4 in-progress (M1 done, M2+M3 pending), Step 5 pending, Step 7 pending
-- Latest change: Voice Mode M1 — WebRTC connection, auto-greeting, inline instructions fix for model mismatch
+- Current phase: Step 4 in-progress (M1+M2 done, M3 pending), Step 5 pending, Step 7 pending
+- Latest change: Voice model switch to gpt-realtime-mini (GA), fix modify_item tool schema, fix GA event names
 - Immediate next actions:
- 1. Step 4 M2: Voice tool-call handling (cart updates via voice)
- 2. Step 4 M3: Voice order finalization, error handling, polish
- 3. Step 5: Rebrand UI from Delo to NYC cafe system
- 4. Step 7: Upgrade owner dashboard metrics/charts
+  1. Step 4 M3: Voice order finalization, error handling, polish
+  2. Step 5: Rebrand UI from Delo to NYC cafe system
+  3. Step 7: Upgrade owner dashboard metrics/charts
 - Blockers: none
 
 ## Cursor + Claude Code Switching Protocol (Required)
