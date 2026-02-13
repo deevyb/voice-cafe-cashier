@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import type { CartItem } from '@/lib/supabase'
 import ChatPanel, { type ChatMessage } from '@/components/chat/ChatPanel'
 import CartPanel from '@/components/cart/CartPanel'
 import ReceiptView from '@/components/cart/ReceiptView'
+import VoiceIndicator from '@/components/voice/VoiceIndicator'
+import { useRealtimeSession } from '@/hooks/useRealtimeSession'
 
 type AppMode = 'voice' | 'text' | null
 
@@ -35,6 +37,35 @@ export default function VoiceCashierClient() {
     setReceipt({ customerName, orderId: order.id })
   }
 
+  // --- Voice mode hooks (called unconditionally per React rules) ---
+  const handleVoiceFinalize = useCallback(
+    async (customerName: string) => {
+      try {
+        await submitOrder(customerName, cart)
+      } catch (err) {
+        console.error('Voice finalize error:', err)
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [cart]
+  )
+
+  const voice = useRealtimeSession({
+    onCartUpdate: setCart,
+    onFinalize: handleVoiceFinalize,
+  })
+
+  const handleModeChange = useCallback(
+    (newMode: AppMode) => {
+      if (mode === 'voice' && voice.isConnected) {
+        voice.disconnect()
+      }
+      setMode(newMode)
+    },
+    [mode, voice]
+  )
+
+  // --- Text mode handlers ---
   const handleSend = async (text: string) => {
     if (isProcessing || orderFinalized) return
 
@@ -79,6 +110,7 @@ export default function VoiceCashierClient() {
     }
   }
 
+  // --- Render ---
   if (mode === null) {
     return (
       <main className="min-h-screen bg-delo-cream p-8">
@@ -88,17 +120,17 @@ export default function VoiceCashierClient() {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <button
               className="rounded-xl border border-delo-navy/20 bg-white p-6 text-left hover:border-delo-maroon/40"
-              onClick={() => setMode('text')}
+              onClick={() => handleModeChange('text')}
             >
               <p className="font-semibold text-delo-navy">Chat</p>
               <p className="text-sm text-delo-navy/70">Chat with the cashier and see live cart updates.</p>
             </button>
             <button
               className="rounded-xl border border-delo-navy/20 bg-white p-6 text-left hover:border-delo-maroon/40"
-              onClick={() => setMode('voice')}
+              onClick={() => handleModeChange('voice')}
             >
               <p className="font-semibold text-delo-navy">Voice</p>
-              <p className="text-sm text-delo-navy/70">Voice mode is coming next. Use text mode for now.</p>
+              <p className="text-sm text-delo-navy/70">Speak your order and hear the cashier respond.</p>
             </button>
           </div>
         </div>
@@ -109,12 +141,36 @@ export default function VoiceCashierClient() {
   if (mode === 'voice') {
     return (
       <main className="min-h-screen bg-delo-cream p-8">
-        <div className="mx-auto max-w-3xl rounded-xl border border-delo-navy/10 bg-white p-6">
-          <h2 className="mb-2 font-bricolage text-2xl text-delo-navy">Voice Mode</h2>
-          <p className="text-delo-navy/70">Voice mode will be added after text mode is fully validated.</p>
-          <button className="mt-4 rounded-lg bg-delo-maroon px-4 py-2 text-delo-cream" onClick={() => setMode('text')}>
-            Switch to Text Mode
+        <div className="mx-auto mb-4 flex max-w-6xl items-center justify-between">
+          <h1 className="font-bricolage text-3xl text-delo-maroon">Voice Cafe Cashier</h1>
+          <button
+            className="rounded-lg border border-delo-navy/20 px-3 py-2 text-sm"
+            onClick={() => handleModeChange(null)}
+          >
+            Change Mode
           </button>
+        </div>
+
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2">
+          {/* Left: Voice indicator */}
+          <div className="rounded-xl border border-delo-navy/10 bg-white p-6">
+            <VoiceIndicator
+              connectionState={voice.connectionState}
+              isSpeaking={voice.isSpeaking}
+              isUserSpeaking={voice.isUserSpeaking}
+              error={voice.error}
+              onConnect={voice.connect}
+              onDisconnect={voice.disconnect}
+            />
+          </div>
+
+          {/* Right: Cart + Receipt */}
+          <div className="space-y-3">
+            {orderFinalized && receipt ? (
+              <ReceiptView customerName={receipt.customerName} cart={cart} orderId={receipt.orderId} />
+            ) : null}
+            <CartPanel cart={cart} />
+          </div>
         </div>
       </main>
     )
@@ -124,7 +180,7 @@ export default function VoiceCashierClient() {
     <main className="min-h-screen bg-delo-cream p-8">
       <div className="mx-auto mb-4 flex max-w-6xl items-center justify-between">
         <h1 className="font-bricolage text-3xl text-delo-maroon">Voice Cafe Cashier</h1>
-        <button className="rounded-lg border border-delo-navy/20 px-3 py-2 text-sm" onClick={() => setMode(null)}>
+        <button className="rounded-lg border border-delo-navy/20 px-3 py-2 text-sm" onClick={() => handleModeChange(null)}>
           Change Mode
         </button>
       </div>
