@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 14, 2026 (late evening session)
+> Last Updated: February 14, 2026 (night session)
 
 ## Current State
 
@@ -27,7 +27,15 @@
 
 - None currently
 
-## Completed This Session (Feb 14 late evening — latest)
+## Completed This Session (Feb 14 night — latest)
+
+- **Chat mode side-by-side layout**: Changed text/chat mode from vertical stack (cart on top, chat below) to side-by-side grid matching voice mode — ChatPanel on left, CartPanel on right. Uses same `grid grid-cols-1 md:grid-cols-2` responsive layout.
+- **Voice mode default**: `/order` page now starts directly in voice mode instead of showing a mode selector screen. Removed the mode selector entirely.
+- **Direct mode toggle**: Replaced "Change Mode" button (which went back to selector) with direct toggle buttons — "Switch to Chat" in voice mode, "Switch to Voice" in text mode.
+- **Confirmation overlay reset to voice**: After order confirmation, dismiss/auto-dismiss now resets to voice mode (not the removed selector screen).
+- All changes in `components/VoiceCashierClient.tsx` only (13 insertions, 41 deletions — net simplification).
+
+## Completed Earlier (Feb 14 late evening)
 
 - **Order confirmation receipt card**: Replaced the simple comma-separated item list on the confirmation overlay with a styled receipt card showing item name, size, milk, quantity, per-item price, and total. Clean white card with dividers inside the existing animated overlay.
 - **Manual dismiss instead of auto-redirect**: Removed the 3.5s auto-redirect to `/order`. Added a "Done" button that resets state in-app (no full page reload) and returns to the mode selector. Added 30s auto-dismiss fallback if untouched.

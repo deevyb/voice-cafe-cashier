@@ -8,7 +8,7 @@ import CartPanel from '@/components/cart/CartPanel'
 import VoiceIndicator from '@/components/voice/VoiceIndicator'
 import { useRealtimeSession } from '@/hooks/useRealtimeSession'
 
-type AppMode = 'voice' | 'text' | null
+type AppMode = 'voice' | 'text'
 
 const INITIAL_GREETING: ChatMessage = {
   id: 'init',
@@ -26,7 +26,7 @@ function createId() {
 export default function VoiceCashierClient() {
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_GREETING])
   const [cart, setCart] = useState<CartItem[]>([])
-  const [mode, setMode] = useState<AppMode>(null)
+  const [mode, setMode] = useState<AppMode>('voice')
   const [isProcessing, setIsProcessing] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [orderFinalized, setOrderFinalized] = useState(false)
@@ -100,24 +100,24 @@ export default function VoiceCashierClient() {
     setMessages([{ ...INITIAL_GREETING, id: createId() }])
   }, [])
 
-  // Dismiss confirmation overlay and return to mode selector
+  // Dismiss confirmation overlay and return to voice mode for next customer
   const handleDismissConfirmation = useCallback(() => {
     resetOrderState()
-    setMode(null)
+    setMode('voice')
   }, [resetOrderState])
 
-  // Auto-dismiss confirmation and return to mode selector if untouched
+  // Auto-dismiss confirmation and return to voice mode if untouched
   useEffect(() => {
     if (!confirmedOrder) return
     const timer = setTimeout(() => {
       resetOrderState()
-      setMode(null)
+      setMode('voice')
     }, CONFIRMATION_AUTO_DISMISS_MS)
     return () => clearTimeout(timer)
   }, [confirmedOrder, resetOrderState])
 
   const handleModeChange = useCallback(
-    (newMode: AppMode) => {
+    (newMode: 'voice' | 'text') => {
       if (mode === 'voice' && voice.isConnected) {
         voice.disconnect()
       }
@@ -174,34 +174,6 @@ export default function VoiceCashierClient() {
 
   // --- Render ---
 
-  // Mode selector
-  if (mode === null) {
-    return (
-      <main className="min-h-screen bg-delo-cream p-8">
-        <div className="mx-auto max-w-3xl text-center">
-          <h1 className="mb-2 font-bricolage text-4xl text-delo-maroon">Voice Cafe Cashier</h1>
-          <p className="mb-8 text-delo-navy/70">Choose your ordering mode</p>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <button
-              className="rounded-xl border border-delo-navy/20 bg-white p-6 text-left hover:border-delo-maroon/40"
-              onClick={() => handleModeChange('text')}
-            >
-              <p className="font-semibold text-delo-navy">Chat</p>
-              <p className="text-sm text-delo-navy/70">Chat with the cashier and see live cart updates.</p>
-            </button>
-            <button
-              className="rounded-xl border border-delo-navy/20 bg-white p-6 text-left hover:border-delo-maroon/40"
-              onClick={() => handleModeChange('voice')}
-            >
-              <p className="font-semibold text-delo-navy">Voice</p>
-              <p className="text-sm text-delo-navy/70">Speak your order and hear the cashier respond.</p>
-            </button>
-          </div>
-        </div>
-      </main>
-    )
-  }
-
   // Voice mode
   if (mode === 'voice') {
     return (
@@ -211,9 +183,9 @@ export default function VoiceCashierClient() {
             <h1 className="font-bricolage text-3xl text-delo-maroon">Voice Cafe Cashier</h1>
             <button
               className="rounded-lg border border-delo-navy/20 px-3 py-2 text-sm"
-              onClick={() => handleModeChange(null)}
+              onClick={() => handleModeChange('text')}
             >
-              Change Mode
+              Switch to Chat
             </button>
           </div>
 
@@ -326,12 +298,13 @@ export default function VoiceCashierClient() {
       <main className="min-h-screen bg-delo-cream p-8">
         <div className="mx-auto mb-4 flex max-w-6xl items-center justify-between">
           <h1 className="font-bricolage text-3xl text-delo-maroon">Voice Cafe Cashier</h1>
-          <button className="rounded-lg border border-delo-navy/20 px-3 py-2 text-sm" onClick={() => handleModeChange(null)}>
-            Change Mode
+          <button className="rounded-lg border border-delo-navy/20 px-3 py-2 text-sm" onClick={() => handleModeChange('voice')}>
+            Switch to Voice
           </button>
         </div>
 
-        <div className="mx-auto flex max-w-6xl flex-col gap-4">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2">
+          <ChatPanel messages={messages} isProcessing={isProcessing} onSend={handleSend} />
           <div className="space-y-3">
             <CartPanel
               cart={cart}
@@ -340,7 +313,6 @@ export default function VoiceCashierClient() {
               isSubmitting={isSubmitting}
             />
           </div>
-          <ChatPanel messages={messages} isProcessing={isProcessing} onSend={handleSend} />
         </div>
       </main>
 
