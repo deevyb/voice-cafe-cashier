@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import type { CartItem as CartEntry } from '@/lib/supabase'
 import CartItemRow from './CartItem'
 
@@ -7,8 +8,26 @@ function getTotal(cart: CartEntry[]) {
   return cart.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0)
 }
 
-export default function CartPanel({ cart }: { cart: CartEntry[] }) {
+interface CartPanelProps {
+  cart: CartEntry[]
+  onPlaceOrder?: (customerName: string) => void
+  orderFinalized?: boolean
+  isSubmitting?: boolean
+}
+
+export default function CartPanel({ cart, onPlaceOrder, orderFinalized, isSubmitting }: CartPanelProps) {
   const total = getTotal(cart)
+  const [showNameInput, setShowNameInput] = useState(false)
+  const [customerName, setCustomerName] = useState('')
+
+  const handlePlaceOrder = () => {
+    const name = customerName.trim() || 'Guest'
+    onPlaceOrder?.(name)
+    setShowNameInput(false)
+    setCustomerName('')
+  }
+
+  const showButton = cart.length > 0 && !orderFinalized && onPlaceOrder && !isSubmitting
 
   return (
     <aside className="rounded-xl border border-delo-navy/10 bg-delo-cream/60 p-4">
@@ -25,6 +44,50 @@ export default function CartPanel({ cart }: { cart: CartEntry[] }) {
       <div className="mt-4 border-t border-delo-navy/10 pt-3 font-semibold text-delo-navy">
         Total: ${total.toFixed(2)}
       </div>
+
+      {/* Submitting indicator */}
+      {isSubmitting && (
+        <div className="mt-3 text-center text-sm text-delo-navy/60">Placing your order...</div>
+      )}
+
+      {/* Place Order button + inline name input */}
+      {showButton && !showNameInput && (
+        <button
+          onClick={() => setShowNameInput(true)}
+          className="mt-3 w-full rounded-lg bg-delo-maroon px-4 py-2.5 text-sm font-medium text-delo-cream transition-colors hover:bg-delo-maroon/90"
+        >
+          Place Order
+        </button>
+      )}
+
+      {showButton && showNameInput && (
+        <div className="mt-3 space-y-2">
+          <label className="block text-sm text-delo-navy/70">Name for the order</label>
+          <input
+            type="text"
+            value={customerName}
+            onChange={(e) => setCustomerName(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handlePlaceOrder()}
+            placeholder="Guest"
+            autoFocus
+            className="w-full rounded-lg border border-delo-navy/20 px-3 py-2 text-sm text-delo-navy placeholder:text-delo-navy/40 focus:border-delo-maroon/40 focus:outline-none"
+          />
+          <div className="flex gap-2">
+            <button
+              onClick={handlePlaceOrder}
+              className="flex-1 rounded-lg bg-delo-maroon px-4 py-2 text-sm font-medium text-delo-cream transition-colors hover:bg-delo-maroon/90"
+            >
+              Confirm
+            </button>
+            <button
+              onClick={() => { setShowNameInput(false); setCustomerName('') }}
+              className="rounded-lg border border-delo-navy/20 px-4 py-2 text-sm text-delo-navy transition-colors hover:bg-delo-navy/5"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </aside>
   )
 }

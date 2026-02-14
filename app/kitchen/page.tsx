@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from 'next/cache'
 import { supabase, Order } from '@/lib/supabase'
 import KitchenClient from '@/components/KitchenClient'
 
@@ -5,7 +6,9 @@ import KitchenClient from '@/components/KitchenClient'
 export const dynamic = 'force-dynamic'
 
 async function getOrders() {
-  // Fetch active kitchen orders (not canceled)
+  // Opt out of Next.js fetch caching so Supabase queries always hit the DB
+  noStore()
+
   const { data: orders, error } = await supabase
     .from('orders')
     .select('*')

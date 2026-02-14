@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 14, 2026
+> Last Updated: February 14, 2026 (evening session)
 
 ## Current State
 
@@ -10,7 +10,7 @@
 | Step 1: Stored Prompt + Tools | complete | Stored prompt created and ID wired locally (`OPENAI_STORED_PROMPT_ID`) |
 | Step 2: Database Schema | complete | Orders now use `items` JSONB + statuses (`placed`,`in_progress`,`completed`,`canceled`) |
 | Step 3: Text Mode (Responses API) | complete | Added `/api/chat` + new `VoiceCashierClient` text/cart flow with tool-call handling |
-| Step 4: Voice Mode (Realtime API) | in-progress | M1 complete (WebRTC connection, voice conversation, auto-greeting). M2 complete (voice tool-call handling, cart updates, model switch to GA). M3 pending. |
+| Step 4: Voice Mode (Realtime API) | complete | M1 (WebRTC + voice), M2 (tool calls + cart), M3 (finalize polish, error handling, Place Order button) all complete. |
 | Step 5: Rebrand (NYC theme) | pending | |
 | Step 6: Kitchen View Update | complete | Kitchen supports Queue/Making/Done, multi-item rendering, and new status flow |
 | Step 7: Owner Dashboard | pending | |
@@ -19,15 +19,29 @@
 
 ## What's Next
 
-1. Step 4 M3: Order finalization via voice, error handling, mic denial UX, disconnect cleanup
-2. Step 5: Rebrand UI from Delo to NYC cafe visual system
-3. Step 7: Upgrade owner dashboard visualizations and metrics depth
+1. Step 5: Rebrand UI from Delo to NYC cafe visual system
+2. Step 7: Upgrade owner dashboard visualizations and metrics depth
+3. Step 8: Deliverables + Polish
 
 ## Blockers
 
 - None currently
 
-## Completed This Session (Feb 14 — latest)
+## Completed This Session (Feb 14 evening — latest)
+
+- **Full-screen order confirmation**: Replaced inline `ReceiptView` with a full-screen animated confirmation overlay (checkmark icon, "On it!", customer name, item list) using framer-motion spring animation. Auto-redirects to `/order` after 3.5 seconds. Works in both text and voice modes.
+- **Kitchen queue bug fix**: Orders were not appearing in `/kitchen` because Next.js 14 was caching the Supabase fetch response. Added `unstable_noStore()` from `next/cache` to the kitchen server component to opt out of fetch caching.
+
+## Completed Earlier (Feb 14)
+
+- **Step 4 M3 complete**: Voice order finalization, error handling, and polish:
+  - **Manual "Place Order" button**: Added to `CartPanel` (both text + voice modes) with inline name input. Users can finalize orders without relying on the AI.
+  - **Async finalize with AI feedback**: `handleToolCall` now awaits `onFinalize` and sends real `{ success: true/false }` to the AI. On failure, the AI can naturally inform the customer.
+  - **Submitting state**: Added `isSubmitting` state — shows "Placing your order..." in both VoiceIndicator and CartPanel during order submission.
+  - **Mic denial UX**: Exposed `micDenied` state from hook. VoiceIndicator shows mic-off icon + step-by-step instructions when mic access is denied.
+  - **WebRTC disconnect detection**: Added `iceconnectionstatechange` listener + data channel error/close handlers. Distinguishes intentional disconnect from unexpected drops. Auto-reconnects once on connection loss, then shows manual "Reconnect" error.
+  - **Mode switch reset**: Cart, receipt, `orderFinalized`, and messages all reset when switching modes.
+  - **Empty cart guard**: `finalize_order` on empty cart is rejected in both `cart-utils.ts` and the voice hook.
 
 - **Instrumentation cleanup complete**: Removed temporary debug `fetch(.../ingest/...)` logging from `hooks/useRealtimeSession.ts`, `lib/cart-utils.ts`, and `app/api/chat/route.ts` after user-confirmed fix verification. Kept functional behavior changes intact.
 - **Fixed missing prices on cart items**: Created `lib/menu.ts` with deterministic price calculator (`calculatePrice()`) based on menu lookup. Prices are now computed from item properties (name, size, milk, extras) instead of relying on the AI model to supply them. Applied in `lib/cart-utils.ts` for both `add_item` and `modify_item`. Removed `price` from tool schemas.

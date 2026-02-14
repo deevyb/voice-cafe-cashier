@@ -127,6 +127,10 @@ export function applyToolCall(
     return { cart: cart.filter((_, i) => i !== args.cart_index) }
   }
   if (name === 'finalize_order') {
+    // Empty cart guard — caller should handle the error
+    if (cart.length === 0) {
+      return { cart }
+    }
     return { cart, finalize: { customer_name: args.customer_name || 'Guest' } }
   }
   return { cart }

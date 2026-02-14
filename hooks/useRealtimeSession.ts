@@ -11,7 +11,7 @@ export type ConnectionState = 'idle' | 'connecting' | 'connected' | 'error'
 
 interface UseRealtimeSessionOptions {
   onCartUpdate?: (updater: (prev: CartItem[]) => CartItem[]) => void
-  onFinalize?: (customerName: string) => void
+  onFinalize?: (customerName: string) => Promise<void>
 }
 
 export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
@@ -19,6 +19,7 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [isUserSpeaking, setIsUserSpeaking] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [micDenied, setMicDenied] = useState(false)
 
   const pcRef = useRef<RTCPeerConnection | null>(null)
   const dcRef = useRef<RTCDataChannel | null>(null)
@@ -26,11 +27,17 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
   const streamRef = useRef<MediaStream | null>(null)
   const cartRef = useRef<CartItem[]>([])
 
+  // Track intentional disconnect to distinguish from unexpected drops
+  const intentionalDisconnectRef = useRef(false)
+  // Track whether we've already attempted an auto-reconnect
+  const reconnectAttemptedRef = useRef(false)
+
   // Keep options in a ref so the data channel handler always has the latest
   const optionsRef = useRef(options)
   optionsRef.current = options
 
-  const disconnect = useCallback(() => {
+  // Internal cleanup (no state changes — used by both disconnect and reconnect)
+  const cleanup = useCallback(() => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop())
       streamRef.current = null
@@ -48,11 +55,17 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
       audioRef.current = null
     }
     cartRef.current = []
+  }, [])
+
+  const disconnect = useCallback(() => {
+    intentionalDisconnectRef.current = true
+    cleanup()
     setConnectionState('idle')
     setIsSpeaking(false)
     setIsUserSpeaking(false)
     setError(null)
-  }, [])
+    setMicDenied(false)
+  }, [cleanup])
 
   // Send event over the data channel
   const sendEvent = useCallback((event: Record<string, unknown>) => {
@@ -97,10 +110,11 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
     sendEvent(greetingEvent)
   }, [sendEvent])
 
-  // Handle tool calls — parse arguments, update cart, notify parent
+  // Handle tool calls — parse arguments, update cart, notify parent.
+  // For finalize_order: awaits the parent callback and sends real success/failure to the AI.
   const handleToolCall = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (event: any) => {
+    async (event: any) => {
       const { call_id, name, arguments: argsStr } = event
       console.log(`[Realtime] Tool call: ${name}`, argsStr)
 
@@ -120,7 +134,51 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
       // Notify parent to update UI
       optionsRef.current.onCartUpdate?.(() => result.cart)
 
-      // Send function output back to OpenAI (with cart so AI knows state)
+      // For finalize_order: await the parent callback and send real result to AI
+      if (result.finalize) {
+        // Guard: reject empty cart finalization
+        if (cartRef.current.length === 0) {
+          sendEvent({
+            type: 'conversation.item.create',
+            item: {
+              type: 'function_call_output',
+              call_id,
+              output: JSON.stringify({ success: false, error: 'Cart is empty — nothing to finalize.' }),
+            },
+          })
+          sendEvent({ type: 'response.create' })
+          return
+        }
+
+        try {
+          await optionsRef.current.onFinalize?.(result.finalize.customer_name)
+          // Order saved successfully
+          sendEvent({
+            type: 'conversation.item.create',
+            item: {
+              type: 'function_call_output',
+              call_id,
+              output: JSON.stringify({ success: true, order_confirmed: true, cart: result.cart }),
+            },
+          })
+        } catch (err) {
+          // Order submission failed — tell the AI so it can inform the customer
+          const errorMsg = err instanceof Error ? err.message : 'Failed to place order'
+          console.error('[Realtime] Finalize error:', err)
+          sendEvent({
+            type: 'conversation.item.create',
+            item: {
+              type: 'function_call_output',
+              call_id,
+              output: JSON.stringify({ success: false, error: errorMsg }),
+            },
+          })
+        }
+        sendEvent({ type: 'response.create' })
+        return
+      }
+
+      // Non-finalize tool calls: send success and brief follow-up
       sendEvent({
         type: 'conversation.item.create',
         item: {
@@ -130,24 +188,14 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
         },
       })
 
-      // Handle finalize — trigger order submission
-      if (result.finalize) {
-        optionsRef.current.onFinalize?.(result.finalize.customer_name)
-      }
-
-      // Trigger the AI's next response.
-      // Keep non-finalize turns brief and avoid recap spam.
-      const nextResponseEvent =
-        name === 'finalize_order'
-          ? { type: 'response.create' }
-          : {
-              type: 'response.create',
-              response: {
-                instructions:
-                  'Reply with exactly: "Anything else?" Do not repeat, summarize, or mention any item names.',
-              },
-            }
-      sendEvent(nextResponseEvent)
+      // Trigger the AI's next response — keep non-finalize turns brief
+      sendEvent({
+        type: 'response.create',
+        response: {
+          instructions:
+            'Reply with exactly: "Anything else?" Do not repeat, summarize, or mention any item names.',
+        },
+      })
     },
     [sendEvent]
   )
@@ -188,6 +236,8 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
           break
 
         case 'response.function_call_arguments.done':
+          // handleToolCall is async for finalize_order; fire-and-forget here since
+          // it manages its own error handling and AI communication
           handleToolCall(event)
           break
 
@@ -206,6 +256,7 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
             event.type.startsWith('response.audio_transcript') ||
             event.type.startsWith('response.output_audio_transcript')
           ) {
+            // Known event types — silently ignore
           }
           // Log non-audio events for debugging
           if (!event.type.startsWith('response.audio')) {
@@ -219,8 +270,11 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
 
   const connect = useCallback(async () => {
     try {
+      intentionalDisconnectRef.current = false
+      reconnectAttemptedRef.current = false
       setConnectionState('connecting')
       setError(null)
+      setMicDenied(false)
 
       // 1. Fetch ephemeral token from our server
       const tokenRes = await fetch('/api/realtime/token', { method: 'POST' })
@@ -244,21 +298,54 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
         audio.srcObject = e.streams[0]
       }
 
-      // 4. Get microphone access
+      // 4. WebRTC connection monitoring — detect dropped connections
+      pc.oniceconnectionstatechange = () => {
+        const state = pc.iceConnectionState
+        console.log('[Realtime] ICE connection state:', state)
+        if (state === 'disconnected' || state === 'failed') {
+          if (intentionalDisconnectRef.current) return
+
+          // Attempt one auto-reconnect
+          if (!reconnectAttemptedRef.current) {
+            reconnectAttemptedRef.current = true
+            console.log('[Realtime] Connection lost — attempting auto-reconnect')
+            cleanup()
+            // Re-invoke connect (will be called from the outer scope)
+            // Use setTimeout to avoid re-entrancy issues
+            setTimeout(() => {
+              setConnectionState('connecting')
+              setError(null)
+              // The connect function reference is stable, so we call it via a ref
+              connectRef.current?.()
+            }, 500)
+          } else {
+            // Auto-reconnect already attempted — show error
+            console.error('[Realtime] Connection lost after auto-reconnect attempt')
+            cleanup()
+            setError('Connection lost. Please tap to reconnect.')
+            setConnectionState('error')
+            setIsSpeaking(false)
+            setIsUserSpeaking(false)
+          }
+        }
+      }
+
+      // 5. Get microphone access
       let ms: MediaStream
       try {
         ms = await navigator.mediaDevices.getUserMedia({ audio: true })
       } catch (micErr: unknown) {
         const errName = micErr instanceof DOMException ? micErr.name : ''
         if (errName === 'NotAllowedError' || errName === 'PermissionDeniedError') {
-          throw Object.assign(new Error('Microphone access was denied. Please allow microphone access in your browser settings and try again.'), { micDenied: true })
+          setMicDenied(true)
+          throw new Error('Microphone access was denied. Please allow microphone access in your browser settings and try again.')
         }
         throw new Error('Could not access microphone. Please check your audio settings.')
       }
       streamRef.current = ms
       pc.addTrack(ms.getTracks()[0])
 
-      // 5. Create data channel for events
+      // 6. Create data channel for events
       const dc = pc.createDataChannel('oai-events')
       dcRef.current = dc
 
@@ -276,12 +363,28 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
         }
       })
 
-      dc.addEventListener('close', () => {
-        console.log('[Realtime] Data channel closed')
-        setConnectionState('idle')
+      dc.addEventListener('error', (e) => {
+        console.error('[Realtime] Data channel error:', e)
+        if (!intentionalDisconnectRef.current) {
+          setError('Voice connection error. Please try again.')
+        }
       })
 
-      // 6. SDP offer/answer with OpenAI Realtime API
+      dc.addEventListener('close', () => {
+        console.log('[Realtime] Data channel closed')
+        if (intentionalDisconnectRef.current) {
+          // User clicked "End Session" — silent idle
+          setConnectionState('idle')
+        } else {
+          // Unexpected close — show error
+          setError('Connection lost. Please tap to reconnect.')
+          setConnectionState('error')
+          setIsSpeaking(false)
+          setIsUserSpeaking(false)
+        }
+      })
+
+      // 7. SDP offer/answer with OpenAI Realtime API
       const offer = await pc.createOffer()
       await pc.setLocalDescription(offer)
 
@@ -312,16 +415,21 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
       console.error('[Realtime] Connection error:', err)
       setError(errorMessage)
       setConnectionState('error')
-      disconnect()
+      cleanup()
     }
-  }, [disconnect, sendSessionUpdate, triggerGreeting, handleServerEvent])
+  }, [cleanup, sendSessionUpdate, triggerGreeting, handleServerEvent])
+
+  // Ref to connect function for auto-reconnect from ICE state change handler
+  const connectRef = useRef(connect)
+  connectRef.current = connect
 
   // Clean up on unmount
   useEffect(() => {
     return () => {
-      disconnect()
+      intentionalDisconnectRef.current = true
+      cleanup()
     }
-  }, [disconnect])
+  }, [cleanup])
 
   return {
     connect,
@@ -330,6 +438,7 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
     isSpeaking,
     isUserSpeaking,
     error,
+    micDenied,
     isConnected: connectionState === 'connected',
   }
 }

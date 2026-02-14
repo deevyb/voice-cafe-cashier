@@ -8,6 +8,8 @@ interface VoiceIndicatorProps {
   isSpeaking: boolean
   isUserSpeaking: boolean
   error: string | null
+  micDenied?: boolean
+  isSubmitting?: boolean
   onConnect: () => void
   onDisconnect: () => void
 }
@@ -17,6 +19,14 @@ function MicIcon({ size = 40, className = '' }: { size?: number; className?: str
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
       <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
       <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+    </svg>
+  )
+}
+
+function MicOffIcon({ size = 40, className = '' }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z" />
     </svg>
   )
 }
@@ -34,6 +44,8 @@ export default function VoiceIndicator({
   isSpeaking,
   isUserSpeaking,
   error,
+  micDenied,
+  isSubmitting,
   onConnect,
   onDisconnect,
 }: VoiceIndicatorProps) {
@@ -74,14 +86,29 @@ export default function VoiceIndicator({
     )
   }
 
-  // Error — show message and retry
+  // Error — show message and retry, with special mic-denied UX
   if (connectionState === 'error') {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-16">
         <div className="flex h-28 w-28 items-center justify-center rounded-full bg-red-50">
-          <ErrorIcon size={48} className="text-red-400" />
+          {micDenied ? (
+            <MicOffIcon size={48} className="text-red-400" />
+          ) : (
+            <ErrorIcon size={48} className="text-red-400" />
+          )}
         </div>
-        <p className="max-w-xs text-center text-sm text-red-600">{error || 'Connection failed'}</p>
+        {micDenied ? (
+          <div className="max-w-xs space-y-2 text-center">
+            <p className="text-sm font-medium text-red-600">Microphone access was denied</p>
+            <ol className="space-y-1 text-left text-xs text-delo-navy/70">
+              <li>1. Click the lock or camera icon in your browser address bar</li>
+              <li>2. Find &quot;Microphone&quot; and change it to &quot;Allow&quot;</li>
+              <li>3. Tap &quot;Try Again&quot; below</li>
+            </ol>
+          </div>
+        ) : (
+          <p className="max-w-xs text-center text-sm text-red-600">{error || 'Connection failed'}</p>
+        )}
         <motion.button
           onClick={onConnect}
           className="rounded-lg bg-delo-maroon px-5 py-2.5 text-sm font-medium text-delo-cream"
@@ -94,16 +121,24 @@ export default function VoiceIndicator({
     )
   }
 
-  // Connected — show listening/speaking state
-  const statusText = isSpeaking
-    ? 'AI is speaking...'
-    : isUserSpeaking
-      ? 'Listening...'
-      : 'Ready — speak anytime'
+  // Connected — show listening/speaking/submitting state
+  const statusText = isSubmitting
+    ? 'Placing your order...'
+    : isSpeaking
+      ? 'AI is speaking...'
+      : isUserSpeaking
+        ? 'Listening...'
+        : 'Ready — speak anytime'
 
   const ringColor = isSpeaking ? 'bg-delo-maroon/15' : 'bg-blue-500/15'
-  const circleColor = isSpeaking ? 'bg-delo-maroon' : isUserSpeaking ? 'bg-blue-500' : 'bg-delo-navy/20'
-  const isActive = isSpeaking || isUserSpeaking
+  const circleColor = isSubmitting
+    ? 'bg-green-500'
+    : isSpeaking
+      ? 'bg-delo-maroon'
+      : isUserSpeaking
+        ? 'bg-blue-500'
+        : 'bg-delo-navy/20'
+  const isActive = isSpeaking || isUserSpeaking || isSubmitting
 
   return (
     <div className="flex flex-col items-center justify-center gap-5 py-16">
