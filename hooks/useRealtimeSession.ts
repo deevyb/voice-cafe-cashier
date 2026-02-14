@@ -113,13 +113,11 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
   // Handle tool calls — parse arguments, update cart, notify parent.
   // For finalize_order: awaits the parent callback and sends real success/failure to the AI.
   const handleToolCall = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (event: any) => {
       const { call_id, name, arguments: argsStr } = event
       console.log(`[Realtime] Tool call: ${name}`, argsStr)
 
       // Parse arguments from JSON string
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let args: Record<string, any> = {}
       try {
         args = JSON.parse(argsStr || '{}')
@@ -201,9 +199,7 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
   )
 
   // Handle all server-sent events from the data channel
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleServerEvent = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (event: any) => {
       switch (event.type) {
         case 'session.created':

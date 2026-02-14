@@ -84,7 +84,6 @@ function applyDrinkDefaults(item: CartItem): CartItem {
  * - Deterministically calculates prices from the menu lookup (never trusts AI-supplied prices).
  * - Normalizes syrup extras to the correct pump count based on size.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function applyToolCall(
   cart: CartItem[],
   name: string,
