@@ -66,7 +66,7 @@ export default function NavMenu({ onLogout }: NavMenuProps) {
       {/* Dots/Grid Icon Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded-lg hover:bg-delo-navy/5 transition-colors"
+        className="p-2 rounded-lg hover:bg-cafe-charcoal/5 transition-colors"
         aria-label="Navigation menu"
         aria-expanded={isOpen}
       >
@@ -75,7 +75,7 @@ export default function NavMenu({ onLogout }: NavMenuProps) {
           height="24"
           viewBox="0 0 24 24"
           fill="none"
-          className="text-delo-navy/70"
+          className="text-cafe-charcoal/70"
         >
           {/* 3x3 Grid of dots */}
           <circle cx="6" cy="6" r="2" fill="currentColor" />
@@ -94,7 +94,7 @@ export default function NavMenu({ onLogout }: NavMenuProps) {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-delo-navy/10 overflow-hidden min-w-[160px] z-50"
+            className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-cafe-charcoal/10 overflow-hidden min-w-[160px] z-50"
             initial={{ opacity: 0, scale: 0.95, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
@@ -109,11 +109,11 @@ export default function NavMenu({ onLogout }: NavMenuProps) {
                     href={item.href}
                     onClick={() => setIsOpen(false)}
                     className={`
-                      block px-4 py-2.5 font-manrope text-sm transition-colors
+                      block px-4 py-2.5 font-sans text-sm transition-colors
                       ${
                         isActive
-                          ? 'bg-delo-maroon/10 text-delo-maroon font-semibold'
-                          : 'text-delo-navy/70 hover:bg-delo-navy/5 hover:text-delo-navy'
+                          ? 'bg-cafe-coffee/10 text-cafe-coffee font-semibold'
+                          : 'text-cafe-charcoal/70 hover:bg-cafe-charcoal/5 hover:text-cafe-charcoal'
                       }
                     `}
                   >
@@ -125,13 +125,13 @@ export default function NavMenu({ onLogout }: NavMenuProps) {
               {/* Logout option (only if handler provided) */}
               {onLogout && (
                 <>
-                  <div className="border-t border-delo-navy/10 my-2" />
+                  <div className="border-t border-cafe-charcoal/10 my-2" />
                   <button
                     onClick={() => {
                       setIsOpen(false)
                       onLogout()
                     }}
-                    className="w-full text-left px-4 py-2.5 font-manrope text-sm text-delo-navy/50 hover:text-delo-maroon hover:bg-delo-navy/5 transition-colors"
+                    className="w-full text-left px-4 py-2.5 font-sans text-sm text-cafe-charcoal/50 hover:text-cafe-coffee hover:bg-cafe-charcoal/5 transition-colors"
                   >
                     Log out
                   </button>

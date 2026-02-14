@@ -194,10 +194,10 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
   return (
     <>
       {/* Menu grid - always visible behind modal */}
-      <div className="min-h-screen bg-delo-cream p-8">
+      <div className="min-h-screen bg-cafe-cream p-8">
         {/* Header */}
         <header className="text-center mb-8">
-          <h1 className="font-yatra text-5xl text-delo-maroon">Delo Coffee</h1>
+          <h1 className="font-serif text-5xl text-cafe-coffee">Coffee Rooom</h1>
         </header>
 
         {/* Menu by Category */}
@@ -205,7 +205,7 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
           {groupedMenu.map(({ category, items }) => (
             <section key={category}>
               {/* Category header */}
-              <h2 className="font-bricolage font-semibold text-base uppercase tracking-wider text-delo-navy/60 mb-4">
+              <h2 className="font-sans font-semibold text-base uppercase tracking-wider text-cafe-charcoal/60 mb-4">
                 {category}
               </h2>
 
@@ -250,7 +250,7 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
       <AnimatePresence>
         {screen === 'confirmed' && submittedOrder && (
           <motion.div
-            className="fixed inset-0 bg-delo-cream flex items-center justify-center z-50"
+            className="fixed inset-0 bg-cafe-cream flex items-center justify-center z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -262,9 +262,9 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
               transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             >
               {/* Checkmark icon */}
-              <div className="w-16 h-16 rounded-full bg-delo-maroon/10 flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-full bg-cafe-coffee/10 flex items-center justify-center mx-auto mb-4">
                 <svg
-                  className="w-8 h-8 text-delo-maroon"
+                  className="w-8 h-8 text-cafe-coffee"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -274,13 +274,13 @@ export default function OrderClient({ menuItems, modifiers }: OrderClientProps) 
                 </svg>
               </div>
 
-              <p className="text-description text-delo-navy/60 mb-6">On it!</p>
+              <p className="text-description text-cafe-charcoal/60 mb-6">On it!</p>
 
-              <h1 className="font-bricolage font-bold text-4xl text-delo-navy mb-4">
+              <h1 className="font-sans font-bold text-4xl text-cafe-charcoal mb-4">
                 {submittedOrder.customer_name}
               </h1>
 
-              <p className="font-bricolage font-semibold text-2xl text-delo-navy">
+              <p className="font-sans font-semibold text-2xl text-cafe-charcoal">
                 {(submittedOrder.items || [])
                   .map((item) => `${item.name}${item.quantity > 1 ? ` x${item.quantity}` : ''}`)
                   .join(', ')}

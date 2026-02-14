@@ -34,7 +34,7 @@ export default function ConnectionStatus({ isConnected }: ConnectionStatusProps)
             </svg>
 
             {/* Message */}
-            <p className="font-manrope text-sm text-amber-700">
+            <p className="font-sans text-sm text-amber-700">
               <span className="font-semibold">Offline</span> — reconnecting to live updates...
             </p>
 

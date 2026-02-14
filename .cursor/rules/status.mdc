@@ -19,12 +19,12 @@ This is the **single source of truth** for project status, shared between Cursor
 ## Save-Status Snapshot (Mirror)
 
 - Last Updated: February 14, 2026 (late night session)
-- Current phase: Step 4 complete, Step 5 pending, Step 7 pending
-- Latest change: Synced stored prompt v4 (new Ordering flow + Behavior & Guardrails sections) into VOICE_INSTRUCTIONS and OPENAI_PROMPT.md, preserved [VOICE-ONLY] overrides
+- Current phase: Steps 0–6 complete (including Step 5 rebrand + prompt v4 sync), Steps 7–9 pending
+- Latest change: Merged step5-rebrand into main — rebrand (36 files) + stored prompt v4 sync combined
 - Immediate next actions:
- 1. Step 5: Rebrand UI from Delo to NYC cafe system
- 2. Step 7: Upgrade owner dashboard metrics/charts
- 3. Step 8: Deliverables + Polish
+ 1. Step 7: Upgrade owner dashboard metrics/charts
+ 2. Step 8: Deliverables + Polish
+ 3. Step 9: Edge Case Testing
 - Blockers: none
 
 ## Cursor + Claude Code Switching Protocol (Required)

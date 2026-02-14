@@ -5,21 +5,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Delo Primary Palette
-        'delo-maroon': '#921C12',
-        'delo-cream': '#F9F6EE',
-        'delo-navy': '#000024',
-        // Delo Secondary Palette
-        'delo-terracotta': '#C85A2E',
-        'delo-sage': '#8B9E8B',
-        'delo-gold': '#D4A574',
+        // Cafe Primary Palette
+        'cafe-coffee': '#6F4E37',
+        'cafe-cream': '#FAF9F6',
+        'cafe-charcoal': '#2D2D2D',
+        // Cafe Secondary Palette
+        'cafe-espresso': '#3C2415',
+        'cafe-latte': '#D4A574',
+        'cafe-steam': '#9B9590',
       },
       fontFamily: {
-        yatra: ['Yatra One', 'cursive'],
-        bricolage: ['Bricolage Grotesque', 'sans-serif'],
-        'roboto-mono': ['Roboto Mono', 'monospace'],
-        cooper: ['Cooper Md BT', 'serif'],
-        manrope: ['Manrope', 'sans-serif'],
+        serif: ['DM Serif Display', 'serif'],
+        sans: ['Inter', 'sans-serif'],
       },
     },
   },

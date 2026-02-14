@@ -178,11 +178,11 @@ export default function VoiceCashierClient() {
   if (mode === 'voice') {
     return (
       <>
-        <main className="min-h-screen bg-delo-cream p-8">
+        <main className="min-h-screen bg-cafe-cream p-8">
           <div className="mx-auto mb-4 flex max-w-6xl items-center justify-between">
-            <h1 className="font-bricolage text-3xl text-delo-maroon">Voice Cafe Cashier</h1>
+            <h1 className="font-serif text-3xl text-cafe-coffee">Coffee Rooom</h1>
             <button
-              className="rounded-lg border border-delo-navy/20 px-3 py-2 text-sm"
+              className="rounded-lg border border-cafe-charcoal/20 px-3 py-2 text-sm"
               onClick={() => handleModeChange('text')}
             >
               Switch to Chat
@@ -190,7 +190,7 @@ export default function VoiceCashierClient() {
           </div>
 
           <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="rounded-xl border border-delo-navy/10 bg-white p-6">
+            <div className="rounded-xl border border-cafe-charcoal/10 bg-white p-6">
               <VoiceIndicator
                 connectionState={voice.connectionState}
                 isSpeaking={voice.isSpeaking}
@@ -217,7 +217,7 @@ export default function VoiceCashierClient() {
         <AnimatePresence>
           {confirmedOrder && (
             <motion.div
-              className="fixed inset-0 z-50 flex items-center justify-center bg-delo-cream"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-cafe-cream"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -228,19 +228,19 @@ export default function VoiceCashierClient() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
               >
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-delo-maroon/10">
-                  <svg className="h-8 w-8 text-delo-maroon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-cafe-coffee/10">
+                  <svg className="h-8 w-8 text-cafe-coffee" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <p className="mb-6 text-delo-navy/60">On it!</p>
+                <p className="mb-6 text-cafe-charcoal/60">On it!</p>
 
                 {/* Receipt card */}
-                <div className="mb-6 rounded-xl border border-delo-navy/10 bg-white p-5 text-left shadow-sm">
-                  <h2 className="mb-3 text-center font-bricolage text-lg font-semibold text-delo-navy">
+                <div className="mb-6 rounded-xl border border-cafe-charcoal/10 bg-white p-5 text-left shadow-sm">
+                  <h2 className="mb-3 text-center font-sans text-lg font-semibold text-cafe-charcoal">
                     Order for {confirmedOrder.customerName}
                   </h2>
-                  <div className="border-t border-delo-navy/10" />
+                  <div className="border-t border-cafe-charcoal/10" />
                   <ul className="mt-3 space-y-3">
                     {confirmedOrder.items.map((item, i) => {
                       const details = [item.size, item.milk]
@@ -250,24 +250,24 @@ export default function VoiceCashierClient() {
                       return (
                         <li key={i}>
                           <div className="flex items-start justify-between">
-                            <span className="font-medium text-delo-navy">
+                            <span className="font-medium text-cafe-charcoal">
                               {item.name}{item.quantity > 1 ? ` ×${item.quantity}` : ''}
                             </span>
                             {lineTotal !== undefined && (
-                              <span className="ml-2 whitespace-nowrap text-sm text-delo-navy/80">
+                              <span className="ml-2 whitespace-nowrap text-sm text-cafe-charcoal/80">
                                 ${lineTotal.toFixed(2)}
                               </span>
                             )}
                           </div>
                           {details && (
-                            <p className="text-sm text-delo-navy/60">{details}</p>
+                            <p className="text-sm text-cafe-charcoal/60">{details}</p>
                           )}
                         </li>
                       )
                     })}
                   </ul>
-                  <div className="mt-3 border-t border-delo-navy/10 pt-3">
-                    <div className="flex justify-between font-semibold text-delo-navy">
+                  <div className="mt-3 border-t border-cafe-charcoal/10 pt-3">
+                    <div className="flex justify-between font-semibold text-cafe-charcoal">
                       <span>Total</span>
                       <span>
                         ${confirmedOrder.items
@@ -280,7 +280,7 @@ export default function VoiceCashierClient() {
 
                 <button
                   onClick={handleDismissConfirmation}
-                  className="w-full rounded-lg bg-delo-maroon px-6 py-3 font-medium text-delo-cream transition-colors hover:bg-delo-maroon/90"
+                  className="w-full rounded-lg bg-cafe-coffee px-6 py-3 font-medium text-cafe-cream transition-colors hover:bg-cafe-coffee/90"
                 >
                   Done
                 </button>
@@ -295,10 +295,10 @@ export default function VoiceCashierClient() {
   // Text mode
   return (
     <>
-      <main className="min-h-screen bg-delo-cream p-8">
+      <main className="min-h-screen bg-cafe-cream p-8">
         <div className="mx-auto mb-4 flex max-w-6xl items-center justify-between">
-          <h1 className="font-bricolage text-3xl text-delo-maroon">Voice Cafe Cashier</h1>
-          <button className="rounded-lg border border-delo-navy/20 px-3 py-2 text-sm" onClick={() => handleModeChange('voice')}>
+          <h1 className="font-serif text-3xl text-cafe-coffee">Coffee Rooom</h1>
+          <button className="rounded-lg border border-cafe-charcoal/20 px-3 py-2 text-sm" onClick={() => handleModeChange('voice')}>
             Switch to Voice
           </button>
         </div>
@@ -320,7 +320,7 @@ export default function VoiceCashierClient() {
       <AnimatePresence>
         {confirmedOrder && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-delo-cream"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-cafe-cream"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -331,19 +331,19 @@ export default function VoiceCashierClient() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             >
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-delo-maroon/10">
-                <svg className="h-8 w-8 text-delo-maroon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-cafe-coffee/10">
+                <svg className="h-8 w-8 text-cafe-coffee" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <p className="mb-6 text-delo-navy/60">On it!</p>
+              <p className="mb-6 text-cafe-charcoal/60">On it!</p>
 
               {/* Receipt card */}
-              <div className="mb-6 rounded-xl border border-delo-navy/10 bg-white p-5 text-left shadow-sm">
-                <h2 className="mb-3 text-center font-bricolage text-lg font-semibold text-delo-navy">
+              <div className="mb-6 rounded-xl border border-cafe-charcoal/10 bg-white p-5 text-left shadow-sm">
+                <h2 className="mb-3 text-center font-sans text-lg font-semibold text-cafe-charcoal">
                   Order for {confirmedOrder.customerName}
                 </h2>
-                <div className="border-t border-delo-navy/10" />
+                <div className="border-t border-cafe-charcoal/10" />
                 <ul className="mt-3 space-y-3">
                   {confirmedOrder.items.map((item, i) => {
                     const details = [item.size, item.milk]
@@ -353,24 +353,24 @@ export default function VoiceCashierClient() {
                     return (
                       <li key={i}>
                         <div className="flex items-start justify-between">
-                          <span className="font-medium text-delo-navy">
+                          <span className="font-medium text-cafe-charcoal">
                             {item.name}{item.quantity > 1 ? ` ×${item.quantity}` : ''}
                           </span>
                           {lineTotal !== undefined && (
-                            <span className="ml-2 whitespace-nowrap text-sm text-delo-navy/80">
+                            <span className="ml-2 whitespace-nowrap text-sm text-cafe-charcoal/80">
                               ${lineTotal.toFixed(2)}
                             </span>
                           )}
                         </div>
                         {details && (
-                          <p className="text-sm text-delo-navy/60">{details}</p>
+                          <p className="text-sm text-cafe-charcoal/60">{details}</p>
                         )}
                       </li>
                     )
                   })}
                 </ul>
-                <div className="mt-3 border-t border-delo-navy/10 pt-3">
-                  <div className="flex justify-between font-semibold text-delo-navy">
+                <div className="mt-3 border-t border-cafe-charcoal/10 pt-3">
+                  <div className="flex justify-between font-semibold text-cafe-charcoal">
                     <span>Total</span>
                     <span>
                       ${confirmedOrder.items
@@ -383,7 +383,7 @@ export default function VoiceCashierClient() {
 
               <button
                 onClick={handleDismissConfirmation}
-                className="w-full rounded-lg bg-delo-maroon px-6 py-3 font-medium text-delo-cream transition-colors hover:bg-delo-maroon/90"
+                className="w-full rounded-lg bg-cafe-coffee px-6 py-3 font-medium text-cafe-cream transition-colors hover:bg-cafe-coffee/90"
               >
                 New Order
               </button>

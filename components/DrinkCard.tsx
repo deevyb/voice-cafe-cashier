@@ -77,8 +77,8 @@ export default function DrinkCard({ drink, index, isSelected, onSelect }: DrinkC
           relative w-full aspect-square rounded-xl p-6
           flex flex-col items-center justify-center text-center
           ${isSoldOut ? 'item-unavailable cursor-not-allowed' : ''}
-          ${isSelected && !isSoldOut ? 'border-2 border-delo-maroon' : 'border border-delo-navy/5'}
-          ${!isSoldOut && !isSelected ? 'hover:border-delo-maroon/20' : ''}
+          ${isSelected && !isSoldOut ? 'border-2 border-cafe-coffee' : 'border border-cafe-charcoal/5'}
+          ${!isSoldOut && !isSelected ? 'hover:border-cafe-coffee/20' : ''}
         `}
         style={{
           backgroundColor: '#fff',
@@ -91,12 +91,12 @@ export default function DrinkCard({ drink, index, isSelected, onSelect }: DrinkC
       >
         {/* Sold Out badge */}
         {isSoldOut && (
-          <span className="absolute top-3 right-3 bg-delo-maroon text-delo-cream text-xs font-manrope font-semibold px-2 py-1 rounded-full">
+          <span className="absolute top-3 right-3 bg-cafe-coffee text-cafe-cream text-xs font-sans font-semibold px-2 py-1 rounded-full">
             Sold Out
           </span>
         )}
 
-        <span className="font-bricolage font-semibold text-2xl text-delo-navy leading-tight">
+        <span className="font-sans font-semibold text-2xl text-cafe-charcoal leading-tight">
           {drink.name}
         </span>
       </motion.button>

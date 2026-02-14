@@ -56,12 +56,12 @@ export default function OrderCard({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, x: -100, scale: 0.95, transition: { duration: 0.15, ease: 'easeIn' } }}
       transition={{ type: 'spring', ...springConfig }}
-      className="bg-white rounded-xl p-6 shadow-sm border border-delo-navy/5"
+      className="bg-white rounded-xl p-6 shadow-sm border border-cafe-charcoal/5"
     >
       {/* Top row: Customer and time */}
       <div className="flex items-start justify-between mb-1">
-        <h3 className="font-bricolage font-bold text-2xl text-delo-navy">{order.customer_name}</h3>
-        <span className="font-roboto-mono text-sm text-delo-navy/50 bg-delo-navy/5 px-2 py-1 rounded flex-shrink-0 ml-2">
+        <h3 className="font-sans font-bold text-2xl text-cafe-charcoal">{order.customer_name}</h3>
+        <span className="font-sans text-sm text-cafe-charcoal/50 bg-cafe-charcoal/5 px-2 py-1 rounded flex-shrink-0 ml-2">
           {timeAgo}
         </span>
       </div>
@@ -72,7 +72,7 @@ export default function OrderCard({
           const details = [item.size, item.milk, item.temperature]
           if (item.extras?.length) details.push(`extras: ${item.extras.join(', ')}`)
           return (
-            <p key={`${item.name}-${index}`} className="font-manrope text-base text-delo-navy/80">
+            <p key={`${item.name}-${index}`} className="font-sans text-base text-cafe-charcoal/80">
               {index + 1}. {item.name}
               {item.quantity > 1 ? ` x${item.quantity}` : ''}
               {details.filter(Boolean).length ? ` — ${details.filter(Boolean).join(', ')}` : ''}
@@ -88,7 +88,7 @@ export default function OrderCard({
             whileTap={{ scale: 0.97 }}
             onClick={() => onStartMaking(order.id)}
             disabled={isUpdating}
-            className="flex-1 py-3 px-4 rounded-lg bg-delo-maroon text-delo-cream font-manrope font-semibold transition-colors hover:bg-delo-maroon/90 disabled:opacity-50 disabled:cursor-not-allowed min-h-[52px]"
+            className="flex-1 py-3 px-4 rounded-lg bg-cafe-coffee text-cafe-cream font-sans font-semibold transition-colors hover:bg-cafe-coffee/90 disabled:opacity-50 disabled:cursor-not-allowed min-h-[52px]"
           >
             {isUpdating ? 'Updating...' : 'Start Making'}
           </motion.button>
@@ -96,7 +96,7 @@ export default function OrderCard({
             whileTap={{ scale: 0.97 }}
             onClick={onCancelClick}
             disabled={isUpdating}
-            className="py-3 px-4 rounded-lg bg-delo-navy/10 text-delo-navy font-manrope font-semibold transition-colors hover:bg-delo-navy/15 disabled:opacity-50 disabled:cursor-not-allowed min-h-[52px]"
+            className="py-3 px-4 rounded-lg bg-cafe-charcoal/10 text-cafe-charcoal font-sans font-semibold transition-colors hover:bg-cafe-charcoal/15 disabled:opacity-50 disabled:cursor-not-allowed min-h-[52px]"
           >
             Cancel
           </motion.button>
@@ -110,7 +110,7 @@ export default function OrderCard({
             whileTap={{ scale: 0.97 }}
             onClick={() => onDone(order.id)}
             disabled={isUpdating}
-            className="flex-1 py-3 px-4 rounded-lg bg-green-600 text-white font-manrope font-semibold transition-colors hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed min-h-[52px]"
+            className="flex-1 py-3 px-4 rounded-lg bg-green-600 text-white font-sans font-semibold transition-colors hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed min-h-[52px]"
           >
             {isUpdating ? 'Updating...' : 'Done'}
           </motion.button>
@@ -129,7 +129,7 @@ export default function OrderCard({
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
-          <span className="font-manrope font-semibold text-sm">Completed</span>
+          <span className="font-sans font-semibold text-sm">Completed</span>
         </div>
       )}
     </motion.div>

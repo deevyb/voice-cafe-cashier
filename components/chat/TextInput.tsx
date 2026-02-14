@@ -28,11 +28,11 @@ export default function TextInput({
         value={value}
         onChange={(event) => setValue(event.target.value)}
         placeholder="Type your order..."
-        className="flex-1 rounded-lg border border-delo-navy/20 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-delo-maroon/40"
+        className="flex-1 rounded-lg border border-cafe-charcoal/20 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-cafe-coffee/40"
       />
       <button
         type="submit"
-        className="rounded-lg bg-delo-maroon px-4 py-3 text-delo-cream disabled:opacity-50"
+        className="rounded-lg bg-cafe-coffee px-4 py-3 text-cafe-cream disabled:opacity-50"
         disabled={disabled}
       >
         Send

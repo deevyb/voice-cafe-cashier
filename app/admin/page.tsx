@@ -12,7 +12,7 @@ export default function AdminPage() {
 
   // Set page title and fetch data on mount
   useEffect(() => {
-    document.title = 'Delo Coffee Admin Panel'
+    document.title = 'Coffee Rooom Admin'
     fetchData()
   }, [])
 
@@ -50,9 +50,9 @@ export default function AdminPage() {
   // Show loading while fetching data
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-delo-cream">
+      <div className="min-h-screen flex items-center justify-center bg-cafe-cream">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-delo-maroon border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-8 h-8 border-2 border-cafe-coffee border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-description">Loading admin data...</p>
         </div>
       </div>
@@ -62,7 +62,7 @@ export default function AdminPage() {
   // Show error if data fetch failed
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-delo-cream p-8">
+      <div className="min-h-screen flex items-center justify-center bg-cafe-cream p-8">
         <div className="text-center max-w-md">
           <p className="text-red-600 mb-4">{error}</p>
           <button onClick={fetchData} className="btn-primary px-8">

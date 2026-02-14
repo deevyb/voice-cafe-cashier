@@ -2,28 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Self-hosted Cooper font */
-@font-face {
-  font-family: 'Cooper Md BT';
-  src: url('/fonts/CooperMdBTMedium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Cooper Md BT';
-  src: url('/fonts/CooperMdBTMediumItalic.ttf') format('truetype');
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* Base styles for Delo */
+/* Base styles for Coffee Rooom */
 html,
 body {
-  @apply bg-delo-cream text-delo-navy;
-  font-family: 'Bricolage Grotesque', sans-serif;
+  @apply bg-cafe-cream text-cafe-charcoal;
+  font-family: 'Inter', sans-serif;
 }
 
 /* Prevent overscroll/bounce on iPad */
@@ -44,8 +27,8 @@ html {
 
 /* Selection color matching brand */
 ::selection {
-  background-color: #921c12;
-  color: #f9f6ee;
+  background-color: #6F4E37;
+  color: #FAF9F6;
 }
 
 /* ============================================
@@ -55,28 +38,28 @@ html {
 
 /* Modifier/input labels (Milk, Temperature, Your Name) */
 .label-modifier {
-  @apply font-cooper text-sm uppercase tracking-wide text-delo-navy/60;
+  @apply font-sans text-sm uppercase tracking-wide text-cafe-charcoal/60;
 }
 
 /* Small descriptive text */
 .text-description {
-  @apply font-roboto-mono text-delo-navy/60;
+  @apply font-sans text-cafe-charcoal/60;
 }
 
-/* Primary action button (maroon) */
+/* Primary action button (coffee brown) */
 .btn-primary {
-  @apply h-16 rounded-xl font-bricolage font-semibold text-xl uppercase tracking-wide;
-  @apply bg-delo-maroon text-delo-cream;
+  @apply h-16 rounded-xl font-sans font-semibold text-xl uppercase tracking-wide;
+  @apply bg-cafe-coffee text-cafe-cream;
   @apply transition-colors;
 }
 
 .btn-primary:disabled {
-  @apply bg-delo-navy/20 text-delo-navy/40 cursor-not-allowed;
+  @apply bg-cafe-charcoal/20 text-cafe-charcoal/40 cursor-not-allowed;
 }
 
 /* Modifier option text (buttons like "Regular"/"Oat" and name input) */
 .text-modifier-option {
-  @apply font-manrope font-semibold text-lg;
+  @apply font-sans font-semibold text-lg;
 }
 
 /* Unavailable/sold-out item state */
@@ -91,7 +74,7 @@ html {
 
 /* Modal title (h2) */
 .modal-title {
-  @apply font-bricolage font-bold text-2xl text-delo-maroon pr-12 mb-2;
+  @apply font-serif text-2xl text-cafe-coffee pr-12 mb-2;
 }
 
 /* Modal description text */
@@ -101,38 +84,38 @@ html {
 
 /* Standard form input */
 .input-form {
-  @apply w-full h-16 px-6 text-modifier-option text-delo-navy bg-white rounded-xl;
-  @apply border border-delo-navy/10 focus:border-delo-maroon focus:outline-none transition-colors;
+  @apply w-full h-16 px-6 text-modifier-option text-cafe-charcoal bg-white rounded-xl;
+  @apply border border-cafe-charcoal/10 focus:border-cafe-coffee focus:outline-none transition-colors;
 }
 
 /* Form select dropdown */
 .select-form {
-  @apply w-full h-16 px-6 pr-12 text-modifier-option text-delo-navy bg-white rounded-xl;
-  @apply border border-delo-navy/10 focus:border-delo-maroon focus:outline-none transition-colors;
+  @apply w-full h-16 px-6 pr-12 text-modifier-option text-cafe-charcoal bg-white rounded-xl;
+  @apply border border-cafe-charcoal/10 focus:border-cafe-coffee focus:outline-none transition-colors;
   @apply appearance-none cursor-pointer;
 }
 
 /* Secondary button (Cancel, etc.) */
 .btn-secondary {
-  @apply h-12 rounded-xl font-manrope font-semibold;
-  @apply text-delo-navy/60 bg-delo-navy/5 hover:bg-delo-navy/10 transition-colors;
+  @apply h-12 rounded-xl font-sans font-semibold;
+  @apply text-cafe-charcoal/60 bg-cafe-charcoal/5 hover:bg-cafe-charcoal/10 transition-colors;
 }
 
 /* Modal action button (Save, Create - smaller than btn-primary) */
 .btn-modal-action {
-  @apply h-12 rounded-xl font-manrope font-semibold;
-  @apply text-delo-cream bg-delo-maroon hover:bg-delo-maroon/90 transition-colors;
+  @apply h-12 rounded-xl font-sans font-semibold;
+  @apply text-cafe-cream bg-cafe-coffee hover:bg-cafe-coffee/90 transition-colors;
 }
 
 .btn-modal-action:disabled {
-  @apply bg-delo-navy/20 text-delo-navy/40 cursor-not-allowed;
+  @apply bg-cafe-charcoal/20 text-cafe-charcoal/40 cursor-not-allowed;
 }
 
 /* Admin section inline add button (smaller, used in headers) */
 .btn-admin-add {
   @apply px-4 py-2 min-h-[44px] rounded-lg;
-  @apply font-manrope font-semibold text-sm;
-  @apply text-delo-cream bg-delo-maroon hover:bg-delo-maroon/90;
+  @apply font-sans font-semibold text-sm;
+  @apply text-cafe-cream bg-cafe-coffee hover:bg-cafe-coffee/90;
   @apply transition-colors whitespace-nowrap shrink-0;
 }
 
@@ -143,8 +126,8 @@ html {
 
 /* Checkbox styling */
 .checkbox-form {
-  @apply w-[18px] h-[18px] rounded border-2 border-delo-navy/20;
-  @apply text-delo-maroon focus:ring-delo-maroon focus:ring-offset-0 cursor-pointer;
+  @apply w-[18px] h-[18px] rounded border-2 border-cafe-charcoal/20;
+  @apply text-cafe-coffee focus:ring-cafe-coffee focus:ring-offset-0 cursor-pointer;
 }
 
 /* Checkbox label row */
@@ -153,14 +136,14 @@ html {
 }
 
 .checkbox-label span {
-  @apply font-manrope font-semibold text-base text-delo-navy;
-  @apply group-hover:text-delo-maroon transition-colors;
+  @apply font-sans font-semibold text-base text-cafe-charcoal;
+  @apply group-hover:text-cafe-coffee transition-colors;
 }
 
 /* Date input styling - override webkit default blue color */
 .date-input {
-  color: #000024; /* delo-navy */
-  -webkit-text-fill-color: #000024;
+  color: #2D2D2D; /* cafe-charcoal */
+  -webkit-text-fill-color: #2D2D2D;
 }
 
 .date-input::-webkit-datetime-edit,
@@ -168,8 +151,8 @@ html {
 .date-input::-webkit-datetime-edit-month-field,
 .date-input::-webkit-datetime-edit-day-field,
 .date-input::-webkit-datetime-edit-year-field {
-  color: #000024;
-  -webkit-text-fill-color: #000024;
+  color: #2D2D2D;
+  -webkit-text-fill-color: #2D2D2D;
 }
 
 /* Calendar picker icon - match brand color */

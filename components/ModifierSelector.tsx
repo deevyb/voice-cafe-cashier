@@ -55,17 +55,17 @@ export default function ModifierSelector({
                   min-w-[120px]
                   ${
                     isUnavailable
-                      ? 'bg-white/50 text-delo-navy/30 border border-dashed border-delo-navy/15 cursor-not-allowed'
+                      ? 'bg-white/50 text-cafe-charcoal/30 border border-dashed border-cafe-charcoal/15 cursor-not-allowed'
                       : isSelected
-                        ? 'bg-delo-maroon text-delo-cream'
-                        : 'bg-white text-delo-navy border border-delo-navy/10 hover:border-delo-maroon/30'
+                        ? 'bg-cafe-coffee text-cafe-cream'
+                        : 'bg-white text-cafe-charcoal border border-cafe-charcoal/10 hover:border-cafe-coffee/30'
                   }
                 `}
               >
                 {option.option}
               </motion.button>
               {isUnavailable && (
-                <span className="text-sm font-manrope font-semibold text-delo-maroon/60 mt-1.5">
+                <span className="text-sm font-sans font-semibold text-cafe-coffee/60 mt-1.5">
                   Sold Out
                 </span>
               )}
