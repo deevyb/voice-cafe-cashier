@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 14, 2026 (night session)
+> Last Updated: February 14, 2026 (late night session)
 
 ## Current State
 
@@ -27,7 +27,19 @@
 
 - None currently
 
-## Completed This Session (Feb 14 night — latest)
+## Completed This Session (Feb 14 late night — latest)
+
+- **Stored prompt v4 sync**: Pulled updated stored prompt (`pmpt_698e574a...` v4) from OpenAI platform via Responses API. Updated `VOICE_INSTRUCTIONS` in `lib/realtime-config.ts` and documented prompt in `OPENAI_PROMPT.md`. Changes from v3→v4:
+  - Renamed "Important rules" → "Important menu rules"
+  - Removed standalone off-menu item rule (now in Behavior & Guardrails)
+  - Added new "Ordering flow" section (6-step flow: greet → name → items → acknowledge → confirm → goodbye)
+  - Added new "Behavior & Guardrails" section (menu-only answers, off-topic deflection, clarifying questions, item explanations, nearest-option suggestions)
+  - Added `---` section dividers
+  - Voice-specific `[VOICE-ONLY]` overrides preserved (immediate defaults, multi-item tool-call batching)
+  - Added `[VOICE-ONLY] Voice behavior` block: filler words for naturalness, pause after questions, "Still there?" silence prompt, warm/neighborly tone
+  - Menu and prices unchanged; `lib/menu.ts` unmodified
+
+## Completed Earlier (Feb 14 night)
 
 - **Chat mode side-by-side layout**: Changed text/chat mode from vertical stack (cart on top, chat below) to side-by-side grid matching voice mode — ChatPanel on left, CartPanel on right. Uses same `grid grid-cols-1 md:grid-cols-2` responsive layout.
 - **Voice mode default**: `/order` page now starts directly in voice mode instead of showing a mode selector screen. Removed the mode selector entirely.
