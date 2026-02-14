@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 
+const voiceModel = process.env.OPENAI_REALTIME_MODEL || 'gpt-realtime'
+
 export async function POST() {
   try {
     if (!process.env.OPENAI_API_KEY) {
@@ -15,7 +17,7 @@ export async function POST() {
       body: JSON.stringify({
         session: {
           type: 'realtime',
-          model: 'gpt-realtime-mini',
+          model: voiceModel,
           audio: {
             output: {
               voice: 'marin',

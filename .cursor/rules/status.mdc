@@ -18,9 +18,9 @@ This is the **single source of truth** for project status, shared between Cursor
 
 ## Save-Status Snapshot (Mirror)
 
-- Last Updated: February 13, 2026
+- Last Updated: February 14, 2026
 - Current phase: Step 4 in-progress (M1+M2 done, M3 pending), Step 5 pending, Step 7 pending
-- Latest change: Voice model switch to gpt-realtime-mini (GA), fix modify_item tool schema, fix GA event names
+- Latest change: Aligned voice prompt with stored prompt rules, added deterministic drink defaults/syrup normalization, switched voice model default to gpt-realtime, and cleaned debug instrumentation after verification
 - Immediate next actions:
   1. Step 4 M3: Voice order finalization, error handling, polish
   2. Step 5: Rebrand UI from Delo to NYC cafe system

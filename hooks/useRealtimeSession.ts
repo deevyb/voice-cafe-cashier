@@ -5,6 +5,8 @@ import { ORDER_TOOLS, VOICE_INSTRUCTIONS } from '@/lib/realtime-config'
 import { applyToolCall } from '@/lib/cart-utils'
 import type { CartItem } from '@/lib/supabase'
 
+const voiceModel = process.env.NEXT_PUBLIC_OPENAI_REALTIME_MODEL || 'gpt-realtime'
+
 export type ConnectionState = 'idle' | 'connecting' | 'connected' | 'error'
 
 interface UseRealtimeSessionOptions {
@@ -68,7 +70,7 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
         type: 'session.update',
         session: {
           type: 'realtime',
-          model: 'gpt-realtime-mini',
+          model: voiceModel,
           instructions: VOICE_INSTRUCTIONS,
           audio: {
             input: {
@@ -85,7 +87,14 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
 
   // Trigger the AI's greeting after session is configured
   const triggerGreeting = useCallback(() => {
-    sendEvent({ type: 'response.create' })
+    const greetingEvent = {
+      type: 'response.create',
+      response: {
+        instructions:
+          'Greet briefly and ask what they would like to order. Do not call tools until the customer provides an order.',
+      },
+    }
+    sendEvent(greetingEvent)
   }, [sendEvent])
 
   // Handle tool calls — parse arguments, update cart, notify parent
@@ -126,8 +135,19 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
         optionsRef.current.onFinalize?.(result.finalize.customer_name)
       }
 
-      // Trigger the AI's next response
-      sendEvent({ type: 'response.create' })
+      // Trigger the AI's next response.
+      // Keep non-finalize turns brief and avoid recap spam.
+      const nextResponseEvent =
+        name === 'finalize_order'
+          ? { type: 'response.create' }
+          : {
+              type: 'response.create',
+              response: {
+                instructions:
+                  'Reply with exactly: "Anything else?" Do not repeat, summarize, or mention any item names.',
+              },
+            }
+      sendEvent(nextResponseEvent)
     },
     [sendEvent]
   )
@@ -171,12 +191,22 @@ export function useRealtimeSession(options: UseRealtimeSessionOptions = {}) {
           handleToolCall(event)
           break
 
+        case 'conversation.item.input_audio_transcription.completed':
+          break
+
         case 'error':
           console.error('[Realtime] Server error:', event.error)
           setError(event.error?.message || 'An error occurred')
           break
 
         default:
+          if (
+            event.type.startsWith('conversation.item') ||
+            event.type.startsWith('input_audio_buffer') ||
+            event.type.startsWith('response.audio_transcript') ||
+            event.type.startsWith('response.output_audio_transcript')
+          ) {
+          }
           // Log non-audio events for debugging
           if (!event.type.startsWith('response.audio')) {
             console.log('[Realtime]', event.type)

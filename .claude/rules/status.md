@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 13, 2026
+> Last Updated: February 14, 2026
 
 ## Current State
 
@@ -27,7 +27,16 @@
 
 - None currently
 
-## Completed This Session (Feb 13 — latest)
+## Completed This Session (Feb 14 — latest)
+
+- **Instrumentation cleanup complete**: Removed temporary debug `fetch(.../ingest/...)` logging from `hooks/useRealtimeSession.ts`, `lib/cart-utils.ts`, and `app/api/chat/route.ts` after user-confirmed fix verification. Kept functional behavior changes intact.
+- **Fixed missing prices on cart items**: Created `lib/menu.ts` with deterministic price calculator (`calculatePrice()`) based on menu lookup. Prices are now computed from item properties (name, size, milk, extras) instead of relying on the AI model to supply them. Applied in `lib/cart-utils.ts` for both `add_item` and `modify_item`. Removed `price` from tool schemas.
+- **Fixed multi-item voice ordering UX**: Updated `VOICE_INSTRUCTIONS` in `lib/realtime-config.ts` to instruct the model to add items one at a time with brief acknowledgments, instead of batching all items after repeating the full order. This is a voice-specific change — the text mode dashboard prompt keeps "add all of them" behavior which is correct for chat UX.
+- **Fixed off-menu items being accepted (e.g. Hot Chocolate)**: Added `enum` constraint to the `name` field in the `add_item` tool schema, restricting it to valid menu item names. Also added client-side validation in `applyToolCall` via `isValidMenuItem()` as a fallback.
+- **New file**: `lib/menu.ts` — canonical menu data (item names, base prices, add-on costs) used for validation and pricing.
+- **Prompt divergence established**: `VOICE_INSTRUCTIONS` and the stored dashboard prompt now intentionally differ on multi-item handling. Comment added to `lib/realtime-config.ts` documenting this.
+
+## Completed Earlier (Feb 13)
 
 - **Switched voice model from preview to GA**: Changed from `gpt-4o-realtime-preview` to `gpt-realtime-mini` (generally available) in both `app/api/realtime/token/route.ts` and `hooks/useRealtimeSession.ts`
   - Preview models couldn't combine audio output with tool calls; GA model supports both
@@ -83,9 +92,11 @@
 ## Architecture Note: Voice vs Text Prompt Delivery
 
 - **Text mode**: Uses stored prompt ID (`OPENAI_STORED_PROMPT_ID`) via Responses API — `gpt-5.2`
-- **Voice mode**: Uses inline `VOICE_INSTRUCTIONS` constant via Realtime API — `gpt-realtime-mini` (GA)
-- Same prompt content, different delivery mechanisms due to model family incompatibility
+- **Voice mode**: Uses inline `VOICE_INSTRUCTIONS` constant via Realtime API — `gpt-realtime` (configurable via env)
+- Prompts share the same menu/rules but **intentionally diverge** on UX-sensitive behavior:
+  - Multi-item ordering: voice adds one-at-a-time; text batches all at once
 - When updating the menu/rules: update the OpenAI dashboard prompt AND `VOICE_INSTRUCTIONS` in `lib/realtime-config.ts`
+- Price calculation is handled by `lib/menu.ts` (not by the AI) — update prices there when the menu changes
 
 ## Infrastructure
 
