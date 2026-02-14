@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 14, 2026 (evening session)
+> Last Updated: February 14, 2026 (late evening session)
 
 ## Current State
 
@@ -27,7 +27,13 @@
 
 - None currently
 
-## Completed This Session (Feb 14 evening — latest)
+## Completed This Session (Feb 14 late evening — latest)
+
+- **Order confirmation receipt card**: Replaced the simple comma-separated item list on the confirmation overlay with a styled receipt card showing item name, size, milk, quantity, per-item price, and total. Clean white card with dividers inside the existing animated overlay.
+- **Manual dismiss instead of auto-redirect**: Removed the 3.5s auto-redirect to `/order`. Added a "Done" button that resets state in-app (no full page reload) and returns to the mode selector. Added 30s auto-dismiss fallback if untouched.
+- **Fixed `resetOrderState` initialization order**: Moved `useEffect` that references `resetOrderState` to after the `useCallback` definition to fix `ReferenceError: Cannot access before initialization`.
+
+## Completed Earlier (Feb 14 evening)
 
 - **Full-screen order confirmation**: Replaced inline `ReceiptView` with a full-screen animated confirmation overlay (checkmark icon, "On it!", customer name, item list) using framer-motion spring animation. Auto-redirects to `/order` after 3.5 seconds. Works in both text and voice modes.
 - **Kitchen queue bug fix**: Orders were not appearing in `/kitchen` because Next.js 14 was caching the Supabase fetch response. Added `unstable_noStore()` from `next/cache` to the kitchen server component to opt out of fetch caching.

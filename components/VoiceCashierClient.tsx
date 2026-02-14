@@ -16,8 +16,8 @@ const INITIAL_GREETING: ChatMessage = {
   content: 'Welcome! What can I get started for you today?',
 }
 
-/** Auto-redirect delay after confirmation screen (ms) */
-const CONFIRMATION_REDIRECT_MS = 3500
+/** Auto-dismiss confirmation if customer doesn't interact (ms) */
+const CONFIRMATION_AUTO_DISMISS_MS = 30_000
 
 function createId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`
@@ -34,15 +34,6 @@ export default function VoiceCashierClient() {
     customerName: string
     items: CartItem[]
   } | null>(null)
-
-  // Auto-redirect to /order after confirmation screen
-  useEffect(() => {
-    if (!confirmedOrder) return
-    const timer = setTimeout(() => {
-      window.location.href = '/order'
-    }, CONFIRMATION_REDIRECT_MS)
-    return () => clearTimeout(timer)
-  }, [confirmedOrder])
 
   // Shared order submission — used by AI-driven finalize (both modes) and manual Place Order button
   const submitOrder = async (customerName: string, cartItems: CartItem[]) => {
@@ -108,6 +99,22 @@ export default function VoiceCashierClient() {
     setIsSubmitting(false)
     setMessages([{ ...INITIAL_GREETING, id: createId() }])
   }, [])
+
+  // Dismiss confirmation overlay and return to mode selector
+  const handleDismissConfirmation = useCallback(() => {
+    resetOrderState()
+    setMode(null)
+  }, [resetOrderState])
+
+  // Auto-dismiss confirmation and return to mode selector if untouched
+  useEffect(() => {
+    if (!confirmedOrder) return
+    const timer = setTimeout(() => {
+      resetOrderState()
+      setMode(null)
+    }, CONFIRMATION_AUTO_DISMISS_MS)
+    return () => clearTimeout(timer)
+  }, [confirmedOrder, resetOrderState])
 
   const handleModeChange = useCallback(
     (newMode: AppMode) => {
@@ -244,7 +251,7 @@ export default function VoiceCashierClient() {
               exit={{ opacity: 0 }}
             >
               <motion.div
-                className="text-center"
+                className="w-full max-w-sm px-4 text-center"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
@@ -255,14 +262,56 @@ export default function VoiceCashierClient() {
                   </svg>
                 </div>
                 <p className="mb-6 text-delo-navy/60">On it!</p>
-                <h1 className="mb-4 font-bricolage text-4xl font-bold text-delo-navy">
-                  {confirmedOrder.customerName}
-                </h1>
-                <p className="font-bricolage text-2xl font-semibold text-delo-navy">
-                  {confirmedOrder.items
-                    .map((item) => `${item.name}${item.quantity > 1 ? ` x${item.quantity}` : ''}`)
-                    .join(', ')}
-                </p>
+
+                {/* Receipt card */}
+                <div className="mb-6 rounded-xl border border-delo-navy/10 bg-white p-5 text-left shadow-sm">
+                  <h2 className="mb-3 text-center font-bricolage text-lg font-semibold text-delo-navy">
+                    Order for {confirmedOrder.customerName}
+                  </h2>
+                  <div className="border-t border-delo-navy/10" />
+                  <ul className="mt-3 space-y-3">
+                    {confirmedOrder.items.map((item, i) => {
+                      const details = [item.size, item.milk]
+                        .filter((v) => v && v.trim().toLowerCase() !== 'n/a')
+                        .join(' · ')
+                      const lineTotal = item.price ? item.price * item.quantity : undefined
+                      return (
+                        <li key={i}>
+                          <div className="flex items-start justify-between">
+                            <span className="font-medium text-delo-navy">
+                              {item.name}{item.quantity > 1 ? ` ×${item.quantity}` : ''}
+                            </span>
+                            {lineTotal !== undefined && (
+                              <span className="ml-2 whitespace-nowrap text-sm text-delo-navy/80">
+                                ${lineTotal.toFixed(2)}
+                              </span>
+                            )}
+                          </div>
+                          {details && (
+                            <p className="text-sm text-delo-navy/60">{details}</p>
+                          )}
+                        </li>
+                      )
+                    })}
+                  </ul>
+                  <div className="mt-3 border-t border-delo-navy/10 pt-3">
+                    <div className="flex justify-between font-semibold text-delo-navy">
+                      <span>Total</span>
+                      <span>
+                        ${confirmedOrder.items
+                          .reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0)
+                          .toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleDismissConfirmation}
+                  className="w-full rounded-lg bg-delo-maroon px-6 py-3 font-medium text-delo-cream transition-colors hover:bg-delo-maroon/90"
+                >
+                  Done
+                </button>
               </motion.div>
             </motion.div>
           )}
@@ -305,7 +354,7 @@ export default function VoiceCashierClient() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="text-center"
+              className="w-full max-w-sm px-4 text-center"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ type: 'spring', stiffness: 400, damping: 30 }}
@@ -316,14 +365,56 @@ export default function VoiceCashierClient() {
                 </svg>
               </div>
               <p className="mb-6 text-delo-navy/60">On it!</p>
-              <h1 className="mb-4 font-bricolage text-4xl font-bold text-delo-navy">
-                {confirmedOrder.customerName}
-              </h1>
-              <p className="font-bricolage text-2xl font-semibold text-delo-navy">
-                {confirmedOrder.items
-                  .map((item) => `${item.name}${item.quantity > 1 ? ` x${item.quantity}` : ''}`)
-                  .join(', ')}
-              </p>
+
+              {/* Receipt card */}
+              <div className="mb-6 rounded-xl border border-delo-navy/10 bg-white p-5 text-left shadow-sm">
+                <h2 className="mb-3 text-center font-bricolage text-lg font-semibold text-delo-navy">
+                  Order for {confirmedOrder.customerName}
+                </h2>
+                <div className="border-t border-delo-navy/10" />
+                <ul className="mt-3 space-y-3">
+                  {confirmedOrder.items.map((item, i) => {
+                    const details = [item.size, item.milk]
+                      .filter((v) => v && v.trim().toLowerCase() !== 'n/a')
+                      .join(' · ')
+                    const lineTotal = item.price ? item.price * item.quantity : undefined
+                    return (
+                      <li key={i}>
+                        <div className="flex items-start justify-between">
+                          <span className="font-medium text-delo-navy">
+                            {item.name}{item.quantity > 1 ? ` ×${item.quantity}` : ''}
+                          </span>
+                          {lineTotal !== undefined && (
+                            <span className="ml-2 whitespace-nowrap text-sm text-delo-navy/80">
+                              ${lineTotal.toFixed(2)}
+                            </span>
+                          )}
+                        </div>
+                        {details && (
+                          <p className="text-sm text-delo-navy/60">{details}</p>
+                        )}
+                      </li>
+                    )
+                  })}
+                </ul>
+                <div className="mt-3 border-t border-delo-navy/10 pt-3">
+                  <div className="flex justify-between font-semibold text-delo-navy">
+                    <span>Total</span>
+                    <span>
+                      ${confirmedOrder.items
+                        .reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0)
+                        .toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={handleDismissConfirmation}
+                className="w-full rounded-lg bg-delo-maroon px-6 py-3 font-medium text-delo-cream transition-colors hover:bg-delo-maroon/90"
+              >
+                New Order
+              </button>
             </motion.div>
           </motion.div>
         )}
