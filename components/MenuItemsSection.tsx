@@ -132,7 +132,7 @@ export default function MenuItemsSection({
 
     return (
       <div className="mb-8 last:mb-0">
-        <h3 className="font-bricolage font-semibold text-base text-delo-navy/60 uppercase tracking-wide mb-3">
+        <h3 className="font-sans font-semibold text-base text-cafe-charcoal/60 uppercase tracking-wide mb-3">
           {title}
         </h3>
         <div className="space-y-2">
@@ -150,7 +150,7 @@ export default function MenuItemsSection({
   }
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-delo-navy/10">
+    <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10">
       {/* Error banner */}
       <AnimatePresence>
         {error && (
@@ -185,10 +185,10 @@ export default function MenuItemsSection({
 
       {/* Removed Items - collapsible section */}
       {archivedItems.length > 0 && (
-        <div className="mt-8 pt-6 border-t border-delo-navy/10">
+        <div className="mt-8 pt-6 border-t border-cafe-charcoal/10">
           <button
             onClick={() => setShowArchived(!showArchived)}
-            className="flex items-center gap-2 font-bricolage font-semibold text-base text-delo-navy/40 hover:text-delo-navy/60 transition-colors mb-3"
+            className="flex items-center gap-2 font-sans font-semibold text-base text-cafe-charcoal/40 hover:text-cafe-charcoal/60 transition-colors mb-3"
           >
             <motion.span
               animate={{ rotate: showArchived ? 90 : 0 }}
@@ -211,18 +211,18 @@ export default function MenuItemsSection({
                 {archivedItems.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between p-4 rounded-xl border bg-delo-navy/5 border-delo-navy/5"
+                    className="flex items-center justify-between p-4 rounded-xl border bg-cafe-charcoal/5 border-cafe-charcoal/5"
                   >
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-bricolage font-semibold text-lg text-delo-navy/40 truncate">
+                      <h4 className="font-sans font-semibold text-lg text-cafe-charcoal/40 truncate">
                         {item.name}
                       </h4>
-                      <p className="text-sm text-delo-navy/30">{item.category}</p>
+                      <p className="text-sm text-cafe-charcoal/30">{item.category}</p>
                     </div>
                     <motion.button
                       onClick={() => handleRestore(item)}
                       whileTap={{ scale: 0.97 }}
-                      className="px-4 py-2 min-h-[44px] text-sm font-manrope font-semibold text-delo-maroon border border-delo-maroon/30 hover:bg-delo-maroon/5 rounded-lg transition-colors ml-4"
+                      className="px-4 py-2 min-h-[44px] text-sm font-sans font-semibold text-cafe-coffee border border-cafe-coffee/30 hover:bg-cafe-coffee/5 rounded-lg transition-colors ml-4"
                     >
                       Restore
                     </motion.button>

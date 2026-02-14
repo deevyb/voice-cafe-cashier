@@ -123,7 +123,7 @@ export default function ModifiersSection({ modifiers, onUpdate, onAdd }: Modifie
   const renderCategory = (category: string, items: Modifier[]) => {
     return (
       <div key={category} className="mb-8 last:mb-0">
-        <h3 className="font-bricolage font-semibold text-base text-delo-navy/60 uppercase tracking-wide mb-3">
+        <h3 className="font-sans font-semibold text-base text-cafe-charcoal/60 uppercase tracking-wide mb-3">
           {formatCategoryName(category)}
         </h3>
         <div className="space-y-2">
@@ -141,7 +141,7 @@ export default function ModifiersSection({ modifiers, onUpdate, onAdd }: Modifie
   }
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-delo-navy/10">
+    <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10">
       {/* Error banner */}
       <AnimatePresence>
         {error && (
@@ -172,7 +172,7 @@ export default function ModifiersSection({ modifiers, onUpdate, onAdd }: Modifie
 
       {/* Categories */}
       {categories.length === 0 ? (
-        <p className="text-delo-navy/40 text-sm py-8 text-center">
+        <p className="text-cafe-charcoal/40 text-sm py-8 text-center">
           No modifiers found. Add your first modifier option above.
         </p>
       ) : (

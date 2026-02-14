@@ -149,7 +149,7 @@ export default function DashboardSection() {
       {isLoadingStats ? (
         <StatsLoadingSkeleton />
       ) : statsError ? (
-        <div className="bg-white rounded-xl p-6 border border-delo-navy/10">
+        <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10">
           <p className="text-red-600 text-sm">{statsError}</p>
         </div>
       ) : stats ? (
@@ -174,8 +174,8 @@ export default function DashboardSection() {
       ) : null}
 
       {/* CSV Export Section */}
-      <div className="bg-white rounded-xl p-6 border border-delo-navy/10">
-        <h2 className="font-bricolage font-semibold text-xl text-delo-navy mb-2">Export Orders</h2>
+      <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10">
+        <h2 className="font-sans font-semibold text-xl text-cafe-charcoal mb-2">Export Orders</h2>
 
       {/* Error banner */}
       <AnimatePresence>
@@ -198,7 +198,7 @@ export default function DashboardSection() {
 
       {/* Date range inputs */}
       <div className="mb-6">
-        <label className="block text-sm font-manrope font-semibold text-delo-navy/70 mb-2">
+        <label className="block text-sm font-sans font-semibold text-cafe-charcoal/70 mb-2">
           Date Range (optional)
         </label>
         <div className="flex gap-4 items-center">
@@ -206,16 +206,16 @@ export default function DashboardSection() {
             <input
               ref={startDateRef}
               type="date"
-              className="w-full px-4 py-3 border border-delo-navy/20 rounded-lg font-manrope text-base focus:outline-none focus:ring-2 focus:ring-delo-maroon/30 focus:border-delo-maroon date-input"
+              className="w-full px-4 py-3 border border-cafe-charcoal/20 rounded-lg font-sans text-base focus:outline-none focus:ring-2 focus:ring-cafe-coffee/30 focus:border-cafe-coffee date-input"
               aria-label="Start date"
             />
           </div>
-          <span className="text-delo-navy/40 font-manrope">to</span>
+          <span className="text-cafe-charcoal/40 font-sans">to</span>
           <div className="flex-1">
             <input
               ref={endDateRef}
               type="date"
-              className="w-full px-4 py-3 border border-delo-navy/20 rounded-lg font-manrope text-base focus:outline-none focus:ring-2 focus:ring-delo-maroon/30 focus:border-delo-maroon date-input"
+              className="w-full px-4 py-3 border border-cafe-charcoal/20 rounded-lg font-sans text-base focus:outline-none focus:ring-2 focus:ring-cafe-coffee/30 focus:border-cafe-coffee date-input"
               aria-label="End date"
             />
           </div>
@@ -226,7 +226,7 @@ export default function DashboardSection() {
       <button
         onClick={handleDownload}
         disabled={isLoading}
-        className="px-6 py-3 min-h-[44px] font-manrope font-semibold text-delo-cream bg-delo-maroon hover:bg-delo-maroon/90 disabled:bg-delo-maroon/50 disabled:cursor-not-allowed rounded-lg transition-colors"
+        className="px-6 py-3 min-h-[44px] font-sans font-semibold text-cafe-cream bg-cafe-coffee hover:bg-cafe-coffee/90 disabled:bg-cafe-coffee/50 disabled:cursor-not-allowed rounded-lg transition-colors"
       >
         {isLoading ? 'Downloading...' : 'Download CSV'}
       </button>
@@ -240,25 +240,25 @@ export default function DashboardSection() {
 /** Stats card showing order counts with status breakdown */
 function StatsCard({ title, counts }: { title: string; counts: OrderCounts }) {
   return (
-    <div className="bg-white rounded-xl p-6 border border-delo-navy/10">
-      <h3 className="font-bricolage font-semibold text-sm uppercase tracking-wider text-delo-navy/60 mb-1">
+    <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10">
+      <h3 className="font-sans font-semibold text-sm uppercase tracking-wider text-cafe-charcoal/60 mb-1">
         {title}
       </h3>
-      <p className="font-bricolage font-bold text-4xl text-delo-maroon mb-3">
+      <p className="font-sans font-bold text-4xl text-cafe-coffee mb-3">
         {counts.total}
-        <span className="text-lg font-semibold text-delo-navy/40 ml-2">orders</span>
+        <span className="text-lg font-semibold text-cafe-charcoal/40 ml-2">orders</span>
       </p>
-      <div className="flex gap-4 text-sm font-manrope">
-        <span className="text-delo-navy/70">
+      <div className="flex gap-4 text-sm font-sans">
+        <span className="text-cafe-charcoal/70">
           <span className="font-semibold text-[#C85A2E]">{counts.placed}</span> placed
         </span>
-        <span className="text-delo-navy/70">
+        <span className="text-cafe-charcoal/70">
           <span className="font-semibold text-amber-600">{counts.in_progress}</span> making
         </span>
-        <span className="text-delo-navy/70">
+        <span className="text-cafe-charcoal/70">
           <span className="font-semibold text-green-600">{counts.completed}</span> completed
         </span>
-        <span className="text-delo-navy/70">
+        <span className="text-cafe-charcoal/70">
           <span className="font-semibold text-red-500">{counts.canceled}</span> canceled
         </span>
       </div>
@@ -269,8 +269,8 @@ function StatsCard({ title, counts }: { title: string; counts: OrderCounts }) {
 /** Scrollable list of top drinks */
 function PopularDrinksList({ drinks }: { drinks: DrinkCount[] }) {
   return (
-    <div className="bg-white rounded-xl p-6 border border-delo-navy/10">
-      <h3 className="font-bricolage font-semibold text-sm uppercase tracking-wider text-delo-navy/60 mb-4">
+    <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10">
+      <h3 className="font-sans font-semibold text-sm uppercase tracking-wider text-cafe-charcoal/60 mb-4">
         Popular Drinks
       </h3>
       {drinks.length === 0 ? (
@@ -279,11 +279,11 @@ function PopularDrinksList({ drinks }: { drinks: DrinkCount[] }) {
         <div className="max-h-[200px] overflow-y-auto space-y-2 pr-2">
           {drinks.map((drink, index) => (
             <div key={drink.name} className="flex items-center justify-between">
-              <span className="font-manrope text-delo-navy">
-                <span className="text-delo-navy/40 w-6 inline-block">{index + 1}.</span>
+              <span className="font-sans text-cafe-charcoal">
+                <span className="text-cafe-charcoal/40 w-6 inline-block">{index + 1}.</span>
                 {drink.name}
               </span>
-              <span className="font-manrope font-semibold text-delo-maroon">{drink.count}</span>
+              <span className="font-sans font-semibold text-cafe-coffee">{drink.count}</span>
             </div>
           ))}
         </div>
@@ -302,8 +302,8 @@ function ModifierPreferences({
 
   if (categories.length === 0) {
     return (
-      <div className="bg-white rounded-xl p-6 border border-delo-navy/10">
-        <h3 className="font-bricolage font-semibold text-sm uppercase tracking-wider text-delo-navy/60 mb-4">
+      <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10">
+        <h3 className="font-sans font-semibold text-sm uppercase tracking-wider text-cafe-charcoal/60 mb-4">
           Modifier Preferences
         </h3>
         <p className="text-description text-sm">No data yet</p>
@@ -312,27 +312,27 @@ function ModifierPreferences({
   }
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-delo-navy/10">
-      <h3 className="font-bricolage font-semibold text-sm uppercase tracking-wider text-delo-navy/60 mb-4">
+    <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10">
+      <h3 className="font-sans font-semibold text-sm uppercase tracking-wider text-cafe-charcoal/60 mb-4">
         Modifier Preferences
       </h3>
       <div className="space-y-5">
         {categories.map(([category, options]) => (
           <div key={category}>
-            <p className="font-cooper text-sm text-delo-navy/70 mb-2 capitalize">{category}</p>
+            <p className="font-sans text-sm text-cafe-charcoal/70 mb-2 capitalize">{category}</p>
             <div className="space-y-2">
               {options.map((option) => (
                 <div key={option.option} className="flex items-center gap-3">
-                  <div className="flex-1 bg-delo-navy/10 rounded-full h-3">
+                  <div className="flex-1 bg-cafe-charcoal/10 rounded-full h-3">
                     <div
-                      className="bg-delo-maroon rounded-full h-3 transition-all duration-500"
+                      className="bg-cafe-coffee rounded-full h-3 transition-all duration-500"
                       style={{ width: `${option.percentage}%` }}
                     />
                   </div>
-                  <span className="font-manrope font-semibold text-sm text-delo-navy w-10 text-right">
+                  <span className="font-sans font-semibold text-sm text-cafe-charcoal w-10 text-right">
                     {option.percentage}%
                   </span>
-                  <span className="font-manrope text-sm text-delo-navy/70 w-16">
+                  <span className="font-sans text-sm text-cafe-charcoal/70 w-16">
                     {option.option}
                   </span>
                 </div>
@@ -350,12 +350,12 @@ function StatsLoadingSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl p-6 border border-delo-navy/10 h-32" />
-        <div className="bg-white rounded-xl p-6 border border-delo-navy/10 h-32" />
+        <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10 h-32" />
+        <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10 h-32" />
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl p-6 border border-delo-navy/10 h-48" />
-        <div className="bg-white rounded-xl p-6 border border-delo-navy/10 h-48" />
+        <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10 h-48" />
+        <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10 h-48" />
       </div>
     </div>
   )

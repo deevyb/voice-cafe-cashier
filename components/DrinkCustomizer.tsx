@@ -52,7 +52,7 @@ export default function DrinkCustomizer({
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
       {/* Drink name and description */}
-      <h1 className="font-bricolage font-bold text-4xl text-delo-maroon pr-12">{drink.name}</h1>
+      <h1 className="font-sans font-bold text-4xl text-cafe-coffee pr-12">{drink.name}</h1>
       {drink.description && (
         <p className="text-description mt-2 mb-8 pr-12">{drink.description}</p>
       )}

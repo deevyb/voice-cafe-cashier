@@ -35,17 +35,17 @@ export default function CartItemRow({ item, index }: { item: CartEntry; index: n
   const lineTotal = item.price ? item.price * item.quantity : undefined
 
   return (
-    <div className="rounded-lg border border-delo-navy/10 bg-white px-3 py-2">
-      <p className="font-semibold text-delo-navy">
+    <div className="rounded-lg border border-cafe-charcoal/10 bg-white px-3 py-2">
+      <p className="font-semibold text-cafe-charcoal">
         {item.name}{item.quantity > 1 ? ` x${item.quantity}` : ''}
       </p>
       {detailParts.length > 0 && (
-        <p className="text-sm text-delo-navy/70">{detailParts.join(' • ')}</p>
+        <p className="text-sm text-cafe-charcoal/70">{detailParts.join(' • ')}</p>
       )}
       {extras.length > 0 && (
-        <p className="text-sm text-delo-navy/70">{extras.join(', ')}</p>
+        <p className="text-sm text-cafe-charcoal/70">{extras.join(', ')}</p>
       )}
-      {lineTotal !== undefined && <p className="text-sm text-delo-navy/80">{formatMoney(lineTotal)}</p>}
+      {lineTotal !== undefined && <p className="text-sm text-cafe-charcoal/80">{formatMoney(lineTotal)}</p>}
     </div>
   )
 }

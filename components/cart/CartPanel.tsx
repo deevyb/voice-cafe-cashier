@@ -30,31 +30,31 @@ export default function CartPanel({ cart, onPlaceOrder, orderFinalized, isSubmit
   const showButton = cart.length > 0 && !orderFinalized && onPlaceOrder && !isSubmitting
 
   return (
-    <aside className="rounded-xl border border-delo-navy/10 bg-delo-cream/60 p-4">
-      <h2 className="mb-3 border-b border-delo-navy/10 pb-2 font-bricolage text-xl text-delo-navy">
+    <aside className="rounded-xl border border-cafe-charcoal/10 bg-cafe-cream/60 p-4">
+      <h2 className="mb-3 border-b border-cafe-charcoal/10 pb-2 font-sans text-xl text-cafe-charcoal">
         Your Order
       </h2>
       <div className="space-y-2 overflow-y-auto pr-1">
         {cart.length === 0 ? (
-          <p className="text-delo-navy/60">Cart is empty.</p>
+          <p className="text-cafe-charcoal/60">Cart is empty.</p>
         ) : (
           cart.map((item, index) => <CartItemRow key={`${item.name}-${index}`} item={item} index={index} />)
         )}
       </div>
-      <div className="mt-4 border-t border-delo-navy/10 pt-3 font-semibold text-delo-navy">
+      <div className="mt-4 border-t border-cafe-charcoal/10 pt-3 font-semibold text-cafe-charcoal">
         Total: ${total.toFixed(2)}
       </div>
 
       {/* Submitting indicator */}
       {isSubmitting && (
-        <div className="mt-3 text-center text-sm text-delo-navy/60">Placing your order...</div>
+        <div className="mt-3 text-center text-sm text-cafe-charcoal/60">Placing your order...</div>
       )}
 
       {/* Place Order button + inline name input */}
       {showButton && !showNameInput && (
         <button
           onClick={() => setShowNameInput(true)}
-          className="mt-3 w-full rounded-lg bg-delo-maroon px-4 py-2.5 text-sm font-medium text-delo-cream transition-colors hover:bg-delo-maroon/90"
+          className="mt-3 w-full rounded-lg bg-cafe-coffee px-4 py-2.5 text-sm font-medium text-cafe-cream transition-colors hover:bg-cafe-coffee/90"
         >
           Place Order
         </button>
@@ -62,7 +62,7 @@ export default function CartPanel({ cart, onPlaceOrder, orderFinalized, isSubmit
 
       {showButton && showNameInput && (
         <div className="mt-3 space-y-2">
-          <label className="block text-sm text-delo-navy/70">Name for the order</label>
+          <label className="block text-sm text-cafe-charcoal/70">Name for the order</label>
           <input
             type="text"
             value={customerName}
@@ -70,18 +70,18 @@ export default function CartPanel({ cart, onPlaceOrder, orderFinalized, isSubmit
             onKeyDown={(e) => e.key === 'Enter' && handlePlaceOrder()}
             placeholder="Guest"
             autoFocus
-            className="w-full rounded-lg border border-delo-navy/20 px-3 py-2 text-sm text-delo-navy placeholder:text-delo-navy/40 focus:border-delo-maroon/40 focus:outline-none"
+            className="w-full rounded-lg border border-cafe-charcoal/20 px-3 py-2 text-sm text-cafe-charcoal placeholder:text-cafe-charcoal/40 focus:border-cafe-coffee/40 focus:outline-none"
           />
           <div className="flex gap-2">
             <button
               onClick={handlePlaceOrder}
-              className="flex-1 rounded-lg bg-delo-maroon px-4 py-2 text-sm font-medium text-delo-cream transition-colors hover:bg-delo-maroon/90"
+              className="flex-1 rounded-lg bg-cafe-coffee px-4 py-2 text-sm font-medium text-cafe-cream transition-colors hover:bg-cafe-coffee/90"
             >
               Confirm
             </button>
             <button
               onClick={() => { setShowNameInput(false); setCustomerName('') }}
-              className="rounded-lg border border-delo-navy/20 px-4 py-2 text-sm text-delo-navy transition-colors hover:bg-delo-navy/5"
+              className="rounded-lg border border-cafe-charcoal/20 px-4 py-2 text-sm text-cafe-charcoal transition-colors hover:bg-cafe-charcoal/5"
             >
               Cancel
             </button>

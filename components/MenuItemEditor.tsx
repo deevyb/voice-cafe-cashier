@@ -83,7 +83,7 @@ export default function MenuItemEditor({
       </fieldset>
 
       {categories.length === 0 && (
-        <p className="text-delo-navy/40 text-sm">No modifier categories have been created yet.</p>
+        <p className="text-cafe-charcoal/40 text-sm">No modifier categories have been created yet.</p>
       )}
 
       {/* Actions */}
@@ -102,7 +102,7 @@ export default function MenuItemEditor({
       </div>
 
       {/* Remove from Menu */}
-      <div className="mt-6 pt-6 border-t border-delo-navy/10">
+      <div className="mt-6 pt-6 border-t border-cafe-charcoal/10">
         <AnimatePresence mode="wait">
           {!confirmingRemove ? (
             <motion.button
@@ -110,7 +110,7 @@ export default function MenuItemEditor({
               onClick={() => setConfirmingRemove(true)}
               initial={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="w-full h-10 rounded-lg font-manrope font-semibold text-sm text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors"
+              className="w-full h-10 rounded-lg font-sans font-semibold text-sm text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors"
             >
               Archive from Menu
             </motion.button>
@@ -122,7 +122,7 @@ export default function MenuItemEditor({
               exit={{ opacity: 0 }}
               className="text-center"
             >
-              <p className="font-manrope text-sm text-delo-navy/70 mb-3">
+              <p className="font-sans text-sm text-cafe-charcoal/70 mb-3">
                 Archive <span className="font-semibold">{item.name}</span> from the menu?
               </p>
               <div className="flex gap-3">
@@ -135,7 +135,7 @@ export default function MenuItemEditor({
                 <motion.button
                   onClick={onRemove}
                   whileTap={{ scale: 0.97 }}
-                  className="flex-1 h-12 rounded-xl font-manrope font-semibold text-sm text-white bg-red-500 hover:bg-red-600 transition-colors"
+                  className="flex-1 h-12 rounded-xl font-sans font-semibold text-sm text-white bg-red-500 hover:bg-red-600 transition-colors"
                 >
                   Yes, Archive
                 </motion.button>

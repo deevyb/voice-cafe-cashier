@@ -204,14 +204,14 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
   }, [error])
 
   return (
-    <div className="min-h-screen bg-delo-cream">
+    <div className="min-h-screen bg-cafe-cream">
       {/* Connection status banner */}
       <ConnectionStatus isConnected={isConnected} />
 
       {/* Header */}
       <header className="px-8 pt-8 pb-4">
         <div className="flex items-center justify-between max-w-4xl mx-auto">
-          <h1 className="font-yatra text-4xl text-delo-maroon">Delo Barista Bar</h1>
+          <h1 className="font-serif text-4xl text-cafe-coffee">Coffee Rooom Kitchen</h1>
           <NavMenu />
         </div>
       </header>
@@ -236,7 +236,7 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
           >
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg font-manrope text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg font-sans text-sm">
               {error}
             </div>
           </motion.div>
@@ -247,7 +247,7 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
       <div className="px-8 py-6 max-w-4xl mx-auto">
         {currentOrders.length === 0 ? (
           <div className="text-center py-16">
-            <p className="font-roboto-mono text-delo-navy/40 text-lg">
+            <p className="font-sans text-cafe-charcoal/40 text-lg">
               {activeTab === 'placed'
                 ? 'No orders waiting'
                 : activeTab === 'in_progress'
@@ -279,7 +279,7 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
           <>
             {/* Backdrop */}
             <motion.div
-              className="fixed inset-0 bg-delo-navy/30 z-40"
+              className="fixed inset-0 bg-cafe-charcoal/30 z-40"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -299,22 +299,22 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
                 exit={{ scale: 0.95, opacity: 0 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
               >
-                <h2 className="font-bricolage font-bold text-2xl text-delo-navy mb-2">
+                <h2 className="font-sans font-bold text-2xl text-cafe-charcoal mb-2">
                   Cancel this order?
                 </h2>
-                <p className="font-manrope text-delo-navy/70 mb-6">
+                <p className="font-sans text-cafe-charcoal/70 mb-6">
                   {confirmCancel.customer_name}&apos;s order
                 </p>
                 <div className="flex gap-3">
                   <button
                     onClick={() => setConfirmCancel(null)}
-                    className="flex-1 py-3 px-4 rounded-lg bg-delo-navy/10 text-delo-navy font-manrope font-semibold transition-colors hover:bg-delo-navy/15"
+                    className="flex-1 py-3 px-4 rounded-lg bg-cafe-charcoal/10 text-cafe-charcoal font-sans font-semibold transition-colors hover:bg-cafe-charcoal/15"
                   >
                     Keep Order
                   </button>
                   <button
                     onClick={() => handleCancel(confirmCancel.id)}
-                    className="flex-1 py-3 px-4 rounded-lg bg-red-600 text-white font-manrope font-semibold transition-colors hover:bg-red-700"
+                    className="flex-1 py-3 px-4 rounded-lg bg-red-600 text-white font-sans font-semibold transition-colors hover:bg-red-700"
                   >
                     Yes, Cancel
                   </button>

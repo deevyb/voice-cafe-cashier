@@ -132,10 +132,10 @@ export default function ModifierForm({
                 key={cat}
                 type="button"
                 onClick={() => setCategory(cat)}
-                className={`flex-1 h-12 rounded-xl font-manrope font-semibold transition-all ${
+                className={`flex-1 h-12 rounded-xl font-sans font-semibold transition-all ${
                   category === cat
-                    ? 'bg-delo-maroon text-delo-cream'
-                    : 'bg-delo-navy/5 text-delo-navy/60 hover:bg-delo-navy/10'
+                    ? 'bg-cafe-coffee text-cafe-cream'
+                    : 'bg-cafe-charcoal/5 text-cafe-charcoal/60 hover:bg-cafe-charcoal/10'
                 }`}
               >
                 {formatCategoryName(cat)}
@@ -149,7 +149,7 @@ export default function ModifierForm({
       {isEditing && (
         <div className="mb-6">
           <label className="label-modifier mb-2 block">Category</label>
-          <span className="inline-block px-4 py-2 bg-delo-navy/5 text-delo-navy/60 font-manrope font-semibold rounded-lg">
+          <span className="inline-block px-4 py-2 bg-cafe-charcoal/5 text-cafe-charcoal/60 font-sans font-semibold rounded-lg">
             {formatCategoryName(modifier!.category)}
           </span>
         </div>

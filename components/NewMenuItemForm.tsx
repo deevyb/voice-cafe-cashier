@@ -139,7 +139,7 @@ export default function NewMenuItemForm({
             ))}
           </select>
           <svg
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-delo-navy/40 pointer-events-none"
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-cafe-charcoal/40 pointer-events-none"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

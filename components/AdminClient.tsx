@@ -50,12 +50,12 @@ export default function AdminClient({
   }
 
   return (
-    <main className="min-h-screen p-8 bg-delo-cream">
+    <main className="min-h-screen p-8 bg-cafe-cream">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h1 className="font-yatra text-4xl text-delo-maroon mb-1">Delo Coffee Admin</h1>
+            <h1 className="font-serif text-4xl text-cafe-coffee mb-1">Coffee Rooom Admin</h1>
             <p className="text-description">Manage your menu and view orders</p>
           </div>
           <NavMenu />

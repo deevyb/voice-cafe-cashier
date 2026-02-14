@@ -3,8 +3,8 @@ import './globals.css'
 import ErrorBoundary from '@/components/ErrorBoundary'
 
 export const metadata: Metadata = {
-  title: 'Delo Coffee',
-  description: 'Where Every Cup Brings People Together',
+  title: 'Coffee Rooom',
+  description: 'Craft coffee, made to order',
 }
 
 export const viewport: Viewport = {
@@ -20,11 +20,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Manrope:wght@400;500;600&family=Roboto+Mono:wght@400;500&family=Yatra+One&display=swap"
+          href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen bg-delo-cream antialiased">
+      <body className="min-h-screen bg-cafe-cream antialiased">
         <ErrorBoundary>{children}</ErrorBoundary>
       </body>
     </html>

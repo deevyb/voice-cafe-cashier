@@ -55,13 +55,13 @@ export default function VoiceIndicator({
       <div className="flex flex-col items-center justify-center gap-4 py-16">
         <motion.button
           onClick={onConnect}
-          className="flex h-28 w-28 items-center justify-center rounded-full bg-delo-maroon text-delo-cream shadow-lg"
+          className="flex h-28 w-28 items-center justify-center rounded-full bg-cafe-coffee text-cafe-cream shadow-lg"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <MicIcon size={48} />
         </motion.button>
-        <p className="text-delo-navy/70 text-sm">Tap to start voice ordering</p>
+        <p className="text-cafe-charcoal/70 text-sm">Tap to start voice ordering</p>
         {error && <p className="max-w-xs text-center text-sm text-red-600">{error}</p>}
       </div>
     )
@@ -73,15 +73,15 @@ export default function VoiceIndicator({
       <div className="flex flex-col items-center justify-center gap-4 py-16">
         <div className="relative flex items-center justify-center">
           <motion.div
-            className="absolute h-28 w-28 rounded-full bg-delo-maroon/20"
+            className="absolute h-28 w-28 rounded-full bg-cafe-coffee/20"
             animate={{ scale: [1, 1.3, 1], opacity: [0.6, 0.1, 0.6] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
           />
-          <div className="flex h-28 w-28 items-center justify-center rounded-full bg-delo-maroon/30">
-            <MicIcon size={48} className="text-delo-maroon" />
+          <div className="flex h-28 w-28 items-center justify-center rounded-full bg-cafe-coffee/30">
+            <MicIcon size={48} className="text-cafe-coffee" />
           </div>
         </div>
-        <p className="text-delo-navy/70 text-sm">Connecting...</p>
+        <p className="text-cafe-charcoal/70 text-sm">Connecting...</p>
       </div>
     )
   }
@@ -100,7 +100,7 @@ export default function VoiceIndicator({
         {micDenied ? (
           <div className="max-w-xs space-y-2 text-center">
             <p className="text-sm font-medium text-red-600">Microphone access was denied</p>
-            <ol className="space-y-1 text-left text-xs text-delo-navy/70">
+            <ol className="space-y-1 text-left text-xs text-cafe-charcoal/70">
               <li>1. Click the lock or camera icon in your browser address bar</li>
               <li>2. Find &quot;Microphone&quot; and change it to &quot;Allow&quot;</li>
               <li>3. Tap &quot;Try Again&quot; below</li>
@@ -111,7 +111,7 @@ export default function VoiceIndicator({
         )}
         <motion.button
           onClick={onConnect}
-          className="rounded-lg bg-delo-maroon px-5 py-2.5 text-sm font-medium text-delo-cream"
+          className="rounded-lg bg-cafe-coffee px-5 py-2.5 text-sm font-medium text-cafe-cream"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -130,14 +130,14 @@ export default function VoiceIndicator({
         ? 'Listening...'
         : 'Ready — speak anytime'
 
-  const ringColor = isSpeaking ? 'bg-delo-maroon/15' : 'bg-blue-500/15'
+  const ringColor = isSpeaking ? 'bg-cafe-coffee/15' : 'bg-blue-500/15'
   const circleColor = isSubmitting
     ? 'bg-green-500'
     : isSpeaking
-      ? 'bg-delo-maroon'
+      ? 'bg-cafe-coffee'
       : isUserSpeaking
         ? 'bg-blue-500'
-        : 'bg-delo-navy/20'
+        : 'bg-cafe-charcoal/20'
   const isActive = isSpeaking || isUserSpeaking || isSubmitting
 
   return (
@@ -165,15 +165,15 @@ export default function VoiceIndicator({
           animate={isActive ? { scale: [1, 1.05, 1] } : { scale: 1 }}
           transition={isActive ? { repeat: Infinity, duration: 1.2, ease: 'easeInOut' } : {}}
         >
-          <MicIcon size={48} className={circleColor === 'bg-delo-navy/20' ? 'text-delo-navy/50' : 'text-white'} />
+          <MicIcon size={48} className={circleColor === 'bg-cafe-charcoal/20' ? 'text-cafe-charcoal/50' : 'text-white'} />
         </motion.div>
       </div>
 
-      <p className="text-sm text-delo-navy/70">{statusText}</p>
+      <p className="text-sm text-cafe-charcoal/70">{statusText}</p>
 
       <button
         onClick={onDisconnect}
-        className="rounded-lg border border-delo-navy/20 px-4 py-2 text-sm text-delo-navy transition-colors hover:bg-delo-navy/5"
+        className="rounded-lg border border-cafe-charcoal/20 px-4 py-2 text-sm text-cafe-charcoal transition-colors hover:bg-cafe-charcoal/5"
       >
         End Session
       </button>

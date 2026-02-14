@@ -20,20 +20,20 @@ export default function ModifierRow({ modifier, onToggle, onEdit }: ModifierRowP
       layout
       className={`flex items-center justify-between p-4 rounded-xl border transition-colors ${
         modifier.is_active
-          ? 'bg-delo-cream/50 border-delo-navy/10'
-          : 'bg-delo-navy/5 border-delo-navy/5'
+          ? 'bg-cafe-cream/50 border-cafe-charcoal/10'
+          : 'bg-cafe-charcoal/5 border-cafe-charcoal/5'
       }`}
     >
       {/* Left: Name and status */}
       <div className="flex-1 min-w-0">
         <h4
-          className={`font-bricolage font-semibold text-lg truncate ${
-            modifier.is_active ? 'text-delo-navy' : 'text-delo-navy/40'
+          className={`font-sans font-semibold text-lg truncate ${
+            modifier.is_active ? 'text-cafe-charcoal' : 'text-cafe-charcoal/40'
           }`}
         >
           {modifier.option}
         </h4>
-        <p className={`text-sm ${modifier.is_active ? 'text-delo-navy/50' : 'text-delo-navy/30'}`}>
+        <p className={`text-sm ${modifier.is_active ? 'text-cafe-charcoal/50' : 'text-cafe-charcoal/30'}`}>
           {modifier.is_active ? 'Active' : 'Inactive'}
         </p>
       </div>
@@ -43,7 +43,7 @@ export default function ModifierRow({ modifier, onToggle, onEdit }: ModifierRowP
         {/* Edit button */}
         <button
           onClick={onEdit}
-          className="px-4 py-2 min-h-[44px] text-sm font-manrope font-semibold text-delo-navy/70 border border-delo-navy/20 hover:bg-delo-navy/5 hover:border-delo-maroon hover:text-delo-maroon rounded-lg transition-all duration-150"
+          className="px-4 py-2 min-h-[44px] text-sm font-sans font-semibold text-cafe-charcoal/70 border border-cafe-charcoal/20 hover:bg-cafe-charcoal/5 hover:border-cafe-coffee hover:text-cafe-coffee rounded-lg transition-all duration-150"
         >
           Edit
         </button>
@@ -52,7 +52,7 @@ export default function ModifierRow({ modifier, onToggle, onEdit }: ModifierRowP
         <button
           onClick={onToggle}
           className={`relative w-11 h-6 rounded-full transition-colors ${
-            modifier.is_active ? 'bg-delo-maroon' : 'bg-delo-navy/20'
+            modifier.is_active ? 'bg-cafe-coffee' : 'bg-cafe-charcoal/20'
           }`}
           aria-label={modifier.is_active ? 'Turn off' : 'Turn on'}
         >

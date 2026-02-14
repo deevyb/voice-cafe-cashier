@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 14, 2026 (night session)
+> Last Updated: February 14, 2026 (late night session)
 
 ## Current State
 
@@ -11,23 +11,36 @@
 | Step 2: Database Schema | complete | Orders now use `items` JSONB + statuses (`placed`,`in_progress`,`completed`,`canceled`) |
 | Step 3: Text Mode (Responses API) | complete | Added `/api/chat` + new `VoiceCashierClient` text/cart flow with tool-call handling |
 | Step 4: Voice Mode (Realtime API) | complete | M1 (WebRTC + voice), M2 (tool calls + cart), M3 (finalize polish, error handling, Place Order button) all complete. |
-| Step 5: Rebrand (NYC theme) | pending | |
+| Step 5: Rebrand (NYC theme) | complete | Full rebrand from Delo to "Coffee Rooom" — new palette, fonts, landing page, all 36 files updated |
 | Step 6: Kitchen View Update | complete | Kitchen supports Queue/Making/Done, multi-item rendering, and new status flow |
 | Step 7: Owner Dashboard | pending | |
-| Step 8: Deliverables + Polish | pending | |
+| Step 8: Deliverables + Polish | pending | Includes syncing VOICE_INSTRUCTIONS with updated stored prompt |
 | Step 9: Edge Case Testing | pending | |
 
 ## What's Next
 
-1. Step 5: Rebrand UI from Delo to NYC cafe visual system
+1. **Sync VOICE_INSTRUCTIONS with updated stored prompt**: User updated the text prompt on OpenAI Platform. Need to pull the new content and apply voice-specific adjustments to `lib/realtime-config.ts`. User needs to paste the prompt text (can't be fetched programmatically).
 2. Step 7: Upgrade owner dashboard visualizations and metrics depth
 3. Step 8: Deliverables + Polish
 
 ## Blockers
 
-- None currently
+- **Prompt sync pending**: User updated the stored prompt on OpenAI Platform but the updated text hasn't been pulled into `VOICE_INSTRUCTIONS` yet. The OpenAI API doesn't expose a public endpoint to read stored prompt content. User needs to paste the updated prompt text so `lib/realtime-config.ts` and `OPENAI_PROMPT.md` can be updated.
 
-## Completed This Session (Feb 14 night — latest)
+## Completed This Session (Feb 14 late night — latest)
+
+- **Step 5: Full rebrand from Delo to Coffee Rooom** (36 files, 363+ replacements):
+  - **New color palette** (`tailwind.config.ts`): Replaced 6 `delo-*` tokens with `cafe-*` — `cafe-coffee` (#6F4E37), `cafe-cream` (#FAF9F6), `cafe-charcoal` (#2D2D2D), `cafe-espresso` (#3C2415), `cafe-latte` (#D4A574), `cafe-steam` (#9B9590)
+  - **New font pairing** (`tailwind.config.ts`, `layout.tsx`): Replaced 5 Delo fonts (Yatra One, Bricolage Grotesque, Manrope, Roboto Mono, Cooper) with 2 — DM Serif Display (headings) + Inter (body/UI)
+  - **Global styles** (`globals.css`): Removed Cooper font-face declarations, updated all shared component classes (`btn-primary`, `btn-secondary`, `modal-title`, `input-form`, etc.) to new palette and fonts, updated `::selection` and `.date-input` hardcoded hex values
+  - **Color/font token rename**: Mechanical find-replace of `delo-maroon`→`cafe-coffee`, `delo-cream`→`cafe-cream`, `delo-navy`→`cafe-charcoal`, plus all font class renames across 28 component files
+  - **Brand text strings**: "Delo Coffee"→"Coffee Rooom", "Delo Coffee Admin"→"Coffee Rooom Admin", "Delo Barista Bar"→"Coffee Rooom Kitchen" across all pages
+  - **Landing page redesign** (`app/page.tsx`): New kiosk-style welcome screen with coffee cup SVG icon, large serif brand name, tagline "Craft coffee, made to order", prominent "Start Your Order" CTA with arrow and hover animation, subtle secondary links for Kitchen/Admin
+  - **Package rename**: `delo-kiosk`→`voice-cafe-cashier` in package.json and package-lock.json
+  - **Metadata**: Title "Coffee Rooom", description "Craft coffee, made to order"
+  - **Verified**: Dev server compiled all pages with zero errors. Only runtime failures were expected Supabase connection errors (worktree lacks `.env.local`)
+
+## Completed Earlier (Feb 14 night)
 
 - **Chat mode side-by-side layout**: Changed text/chat mode from vertical stack (cart on top, chat below) to side-by-side grid matching voice mode — ChatPanel on left, CartPanel on right. Uses same `grid grid-cols-1 md:grid-cols-2` responsive layout.
 - **Voice mode default**: `/order` page now starts directly in voice mode instead of showing a mode selector screen. Removed the mode selector entirely.

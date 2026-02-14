@@ -21,8 +21,8 @@ const sizeClasses = {
  * Modal - Shared modal wrapper component
  *
  * Provides consistent styling across all form modals:
- * - Backdrop: bg-delo-navy/40 with click-to-close
- * - Panel: bg-delo-cream rounded-xl shadow-2xl p-8
+ * - Backdrop: bg-cafe-charcoal/40 with click-to-close
+ * - Panel: bg-cafe-cream rounded-xl shadow-2xl p-8
  * - Animation: Spring physics (stiffness 400, damping 30)
  * - Close button: X in top-right corner
  *
@@ -49,7 +49,7 @@ export default function Modal({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="fixed inset-0 bg-delo-navy/40 z-40"
+            className="fixed inset-0 bg-cafe-charcoal/40 z-40"
             aria-label="Close modal"
           />
 
@@ -68,7 +68,7 @@ export default function Modal({
           >
             {/* Panel */}
             <div
-              className={`bg-delo-cream rounded-xl shadow-2xl p-8 w-full ${sizeClasses[size]} relative max-h-[90vh] overflow-y-auto`}
+              className={`bg-cafe-cream rounded-xl shadow-2xl p-8 w-full ${sizeClasses[size]} relative max-h-[90vh] overflow-y-auto`}
               onClick={(e) => e.stopPropagation()}
             >
               {/* X close button */}
@@ -76,15 +76,15 @@ export default function Modal({
                 onClick={onClose}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-delo-navy/5 hover:bg-delo-navy/10 transition-colors"
+                className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-cafe-charcoal/5 hover:bg-cafe-charcoal/10 transition-colors"
                 aria-label="Close"
               >
-                <span className="text-delo-navy/60 text-xl leading-none">×</span>
+                <span className="text-cafe-charcoal/60 text-xl leading-none">×</span>
               </motion.button>
 
               {/* Optional title */}
               {title && (
-                <h2 className="font-bricolage font-bold text-4xl text-delo-maroon pr-12 mb-6">
+                <h2 className="font-sans font-bold text-4xl text-cafe-coffee pr-12 mb-6">
                   {title}
                 </h2>
               )}

@@ -22,13 +22,13 @@ export default function AdminTabs({ activeTab, onTabChange }: AdminTabsProps) {
   ]
 
   return (
-    <div className="flex gap-1 bg-delo-navy/5 p-1 rounded-xl">
+    <div className="flex gap-1 bg-cafe-charcoal/5 p-1 rounded-xl">
       {tabs.map((tab) => (
         <button
           key={tab.id}
           onClick={() => onTabChange(tab.id)}
-          className={`relative flex-1 py-3 px-6 rounded-lg font-manrope font-semibold text-base transition-colors min-h-[52px] ${
-            activeTab === tab.id ? 'text-delo-maroon' : 'text-delo-navy/50 hover:text-delo-navy/70'
+          className={`relative flex-1 py-3 px-6 rounded-lg font-sans font-semibold text-base transition-colors min-h-[52px] ${
+            activeTab === tab.id ? 'text-cafe-coffee' : 'text-cafe-charcoal/50 hover:text-cafe-charcoal/70'
           }`}
         >
           {/* Active tab background - animates between tabs */}
