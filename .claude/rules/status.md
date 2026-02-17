@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 16, 2026 (session 7)
+> Last Updated: February 16, 2026 (session 8)
 
 ## Current State
 
@@ -19,11 +19,24 @@
 
 ## What's Next
 
-All steps complete. Repo is cleaned up and ready for submission. Commit + push the cleanup, then submit.
+All steps complete. Landing page redesigned. Ready for final submission.
 
 ## Blockers
 
 - None
+
+## Completed This Session (Feb 16, session 8)
+
+### Landing Page Redesign — "Editorial Warmth"
+- **Background**: Replaced flat `bg-cafe-cream` with warm radial gradient (`#FAF9F6` → `#F5F0EA` → `#EDE6DC`) + grain texture overlay (inline SVG `feTurbulence` at 3.5% opacity via `::after` pseudo-element)
+- **Typography**: Oversized serif title using `clamp(3.75rem, 10vw, 8.5rem)` — scales from ~60px mobile to ~136px desktop. The three "o"s in "Rooom" rendered in `cafe-latte` color for playful brand detail. Tighter tracking (`-0.03em`)
+- **Steam animation**: Three CSS-animated wispy lines above the coffee cup (`@keyframes steam-rise`, staggered delays 0s/0.5s/1s, 3s infinite loop, low opacity)
+- **Framer-motion entrances**: Staggered fade-in + slide-up animations on mount — cup (0s), title (0.15s), tagline (0.3s), CTA (0.5s), divider (0.65s), footer (0.7s)
+- **CTA shimmer**: Diagonal gradient sweep on hover via `::after` pseudo-element (`background-position` transition, 0.8s ease)
+- **Layout**: Decorative divider (lines + dot) between CTA and footer links, softer/wider top accent bar, more vertical breathing room
+- **Responsive**: `clamp()` font sizing, `p-4 sm:p-8` padding, tested at 375px and 1280px
+- **Files changed**: `app/page.tsx` (full rewrite), `app/globals.css` (+grain, +steam, +shimmer CSS, +global overflow-x-hidden), `components/VoiceCashierClient.tsx` (responsive padding + overflow fix)
+- **Build verified**: `npm run build` passes clean
 
 ## Completed This Session (Feb 16, session 7)
 

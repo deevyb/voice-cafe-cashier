@@ -176,11 +176,11 @@ export default function VoiceCashierClient() {
   if (mode === 'voice') {
     return (
       <>
-        <main className="min-h-screen bg-cafe-cream p-8">
-          <div className="mx-auto mb-4 flex max-w-6xl items-center justify-between">
-            <h1 className="font-serif text-3xl text-cafe-coffee">Coffee Rooom</h1>
+        <main className="min-h-screen bg-cafe-cream p-4 sm:p-8 overflow-x-hidden">
+          <div className="mx-auto mb-4 flex max-w-6xl items-center justify-between gap-3">
+            <h1 className="font-serif text-3xl text-cafe-coffee shrink-0">Coffee Rooom</h1>
             <button
-              className="inline-flex items-center gap-1.5 rounded-lg border border-cafe-charcoal/20 px-3 py-2 text-sm font-medium"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-cafe-charcoal/20 px-3 py-2 text-sm font-medium shrink-0"
               onClick={() => handleModeChange('text')}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -301,10 +301,10 @@ export default function VoiceCashierClient() {
   // Text mode
   return (
     <>
-      <main className="min-h-screen bg-cafe-cream p-8">
-        <div className="mx-auto mb-4 flex max-w-6xl items-center justify-between">
-          <h1 className="font-serif text-3xl text-cafe-coffee">Coffee Rooom</h1>
-          <button className="inline-flex items-center gap-1.5 rounded-lg border border-cafe-charcoal/20 px-3 py-2 text-sm font-medium" onClick={() => handleModeChange('voice')}>
+      <main className="min-h-screen bg-cafe-cream p-4 sm:p-8 overflow-x-hidden">
+        <div className="mx-auto mb-4 flex max-w-6xl items-center justify-between gap-3">
+          <h1 className="font-serif text-3xl text-cafe-coffee shrink-0">Coffee Rooom</h1>
+          <button className="inline-flex items-center gap-1.5 rounded-lg border border-cafe-charcoal/20 px-3 py-2 text-sm font-medium shrink-0" onClick={() => handleModeChange('voice')}>
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 1a3 3 0 00-3 3v7a3 3 0 006 0V4a3 3 0 00-3-3z" />
             </svg>

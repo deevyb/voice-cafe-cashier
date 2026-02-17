@@ -7,6 +7,8 @@ html,
 body {
   @apply bg-cafe-cream text-cafe-charcoal;
   font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* Prevent overscroll/bounce on iPad */
@@ -211,4 +213,90 @@ html {
 
 .cafe-calendar .rdp-disabled .rdp-day_button {
   opacity: 0.3;
+}
+
+/* ============================================
+   Landing Page — Editorial Warmth
+   ============================================ */
+
+/* Grain texture overlay via inline SVG noise */
+.grain-overlay::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Steam wisps — three staggered lines */
+@keyframes steam-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0) translateX(0) scaleX(1);
+  }
+  15% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.15;
+    transform: translateY(-18px) translateX(3px) scaleX(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-36px) translateX(-2px) scaleX(0.8);
+  }
+}
+
+.steam-line {
+  position: absolute;
+  width: 2px;
+  height: 14px;
+  background: currentColor;
+  border-radius: 1px;
+  opacity: 0;
+  animation: steam-rise 3s ease-out infinite;
+}
+
+.steam-line:nth-child(1) {
+  left: 35%;
+  animation-delay: 0s;
+}
+
+.steam-line:nth-child(2) {
+  left: 50%;
+  animation-delay: 0.5s;
+}
+
+.steam-line:nth-child(3) {
+  left: 65%;
+  animation-delay: 1s;
+}
+
+/* Shimmer sweep on CTA button */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 75%
+  );
+  background-size: 200% 100%;
+  background-position: 200% 0;
+  transition: background-position 0.8s ease;
+}
+
+.btn-shimmer:hover::after {
+  background-position: -200% 0;
 }
