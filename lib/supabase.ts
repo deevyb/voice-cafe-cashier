@@ -72,9 +72,20 @@ export interface ModifierOption {
   percentage: number
 }
 
+export interface TimeSeriesPoint {
+  label: string
+  orders: number
+  revenue: number
+}
+
 export interface DashboardStats {
   today: OrderCounts
   allTime: OrderCounts
   popularDrinks: DrinkCount[]
   modifierBreakdown: Record<string, ModifierOption[]>
+  avgOrderValue: number | null
+  avgFulfillmentTime: number | null
+  timeSeries: TimeSeriesPoint[]
+  targetDate: string
+  isToday: boolean
 }

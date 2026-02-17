@@ -167,6 +167,33 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
   }, [])
 
   /**
+   * Move an in-progress order back to placed (queue)
+   */
+  const handleBackToQueue = useCallback(async (orderId: string) => {
+    setUpdatingOrderId(orderId)
+    setError(null)
+
+    try {
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'placed' }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update')
+      }
+
+      const updatedOrder = await response.json()
+      setOrders((prev) => prev.map((o) => (o.id === updatedOrder.id ? updatedOrder : o)))
+    } catch {
+      setError("Couldn't move order back to queue. Please try again.")
+    } finally {
+      setUpdatingOrderId(null)
+    }
+  }, [])
+
+  /**
    * Cancel an order (after confirmation)
    */
   const handleCancel = useCallback(async (orderId: string) => {
@@ -209,8 +236,8 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
       <ConnectionStatus isConnected={isConnected} />
 
       {/* Header */}
-      <header className="px-8 pt-8 pb-4">
-        <div className="flex items-center justify-between max-w-4xl mx-auto">
+      <header className="pt-8 pb-4">
+        <div className="flex items-center justify-between max-w-4xl mx-auto px-8">
           <h1 className="font-serif text-4xl text-cafe-coffee">Coffee Rooom Kitchen</h1>
           <NavMenu />
         </div>
@@ -264,6 +291,7 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
                   order={order}
                   onStartMaking={handleStartMaking}
                   onDone={handleDone}
+                  onBackToQueue={handleBackToQueue}
                   onCancelClick={() => setConfirmCancel(order)}
                   isUpdating={updatingOrderId === order.id}
                 />

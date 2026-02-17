@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 14, 2026 (late night session)
+> Last Updated: February 16, 2026
 
 ## Current State
 
@@ -12,131 +12,52 @@
 | Step 3: Text Mode (Responses API) | complete | Added `/api/chat` + new `VoiceCashierClient` text/cart flow with tool-call handling |
 | Step 4: Voice Mode (Realtime API) | complete | M1 (WebRTC + voice), M2 (tool calls + cart), M3 (finalize polish, error handling, Place Order button) all complete. |
 | Step 5: Rebrand (NYC theme) | complete | Full rebrand from Delo to "Coffee Rooom" — new palette, fonts, landing page, all 36 files updated |
-| Step 6: Kitchen View Update | complete | Kitchen supports Queue/Making/Done, multi-item rendering, and new status flow |
-| Step 7: Owner Dashboard | pending | |
+| Step 6: Kitchen View Update | complete | Kitchen supports Queue/In Progress/Done, redesigned order cards, overflow menu on in-progress orders |
+| Step 7: Owner Dashboard | complete | Analytics dashboard with date picker, recharts line chart, avg order value, avg fulfillment time, timezone fix |
 | Step 8: Deliverables + Polish | pending | |
 | Step 9: Edge Case Testing | pending | |
 
 ## What's Next
 
-1. Step 7: Upgrade owner dashboard visualizations and metrics depth
-2. Step 8: Deliverables + Polish
-3. Step 9: Edge Case Testing
+1. Step 8: Deliverables + Polish
+2. Step 9: Edge Case Testing
 
 ## Blockers
 
 - None currently
 
-## Completed This Session (Feb 14 late night — latest)
+## Completed This Session (Feb 16)
 
-- **Step 5: Full rebrand from Delo to Coffee Rooom** (36 files, 363+ replacements):
-  - **New color palette** (`tailwind.config.ts`): Replaced 6 `delo-*` tokens with `cafe-*` — `cafe-coffee` (#6F4E37), `cafe-cream` (#FAF9F6), `cafe-charcoal` (#2D2D2D), `cafe-espresso` (#3C2415), `cafe-latte` (#D4A574), `cafe-steam` (#9B9590)
-  - **New font pairing** (`tailwind.config.ts`, `layout.tsx`): Replaced 5 Delo fonts (Yatra One, Bricolage Grotesque, Manrope, Roboto Mono, Cooper) with 2 — DM Serif Display (headings) + Inter (body/UI)
-  - **Global styles** (`globals.css`): Removed Cooper font-face declarations, updated all shared component classes (`btn-primary`, `btn-secondary`, `modal-title`, `input-form`, etc.) to new palette and fonts, updated `::selection` and `.date-input` hardcoded hex values
-  - **Color/font token rename**: Mechanical find-replace of `delo-maroon`→`cafe-coffee`, `delo-cream`→`cafe-cream`, `delo-navy`→`cafe-charcoal`, plus all font class renames across 28 component files
-  - **Brand text strings**: "Delo Coffee"→"Coffee Rooom", "Delo Coffee Admin"→"Coffee Rooom Admin", "Delo Barista Bar"→"Coffee Rooom Kitchen" across all pages
-  - **Landing page redesign** (`app/page.tsx`): New kiosk-style welcome screen with coffee cup SVG icon, large serif brand name, tagline "Craft coffee, made to order", prominent "Start Your Order" CTA with arrow and hover animation, subtle secondary links for Kitchen/Admin
-  - **Package rename**: `delo-kiosk`→`voice-cafe-cashier` in package.json and package-lock.json
-  - **Metadata**: Title "Coffee Rooom", description "Craft coffee, made to order"
-- **Stored prompt v4 sync**: Pulled updated stored prompt (`pmpt_698e574a...` v4) from OpenAI platform via Responses API. Updated `VOICE_INSTRUCTIONS` in `lib/realtime-config.ts` and documented prompt in `OPENAI_PROMPT.md`. Changes from v3→v4:
-  - Renamed "Important rules" → "Important menu rules"
-  - Removed standalone off-menu item rule (now in Behavior & Guardrails)
-  - Added new "Ordering flow" section (6-step flow: greet → name → items → acknowledge → confirm → goodbye)
-  - Added new "Behavior & Guardrails" section (menu-only answers, off-topic deflection, clarifying questions, item explanations, nearest-option suggestions)
-  - Added `---` section dividers
-  - Voice-specific `[VOICE-ONLY]` overrides preserved (immediate defaults, multi-item tool-call batching)
-  - Added `[VOICE-ONLY] Voice behavior` block: filler words for naturalness, pause after questions, "Still there?" silence prompt, warm/neighborly tone
-  - Menu and prices unchanged; `lib/menu.ts` unmodified
+### Step 7: Owner Dashboard (new)
+- **Rewrote `/api/admin/stats`**: Timezone-aware date filtering (`timezone` + `date` query params), `updated_at` selected for fulfillment time, new metrics: `avgOrderValue` (from `calculatePrice()`), `avgFulfillmentTime` (completed orders), `timeSeries` (hourly buckets). Popular items and modifiers scoped to target date.
+- **Extended `DashboardStats` type** (`lib/supabase.ts`): Added `TimeSeriesPoint`, `avgOrderValue`, `avgFulfillmentTime`, `timeSeries`, `targetDate`, `isToday`
+- **Created 7 dashboard components** (`components/dashboard/`):
+  - `OwnerDashboard.tsx` — Main container with header, NavMenu, date picker, fetch logic, loading skeleton, error state
+  - `StatsCards.tsx` — Two cards (target date + cumulative) with status breakdown
+  - `SummaryMetrics.tsx` — Avg order value + avg fulfillment time
+  - `OrdersChart.tsx` — Recharts `LineChart`, orders by hour, `cafe-coffee` color
+  - `PopularItems.tsx` — Top items list (renamed from "Drinks" to "Items")
+  - `ModifierPreferences.tsx` — Progress bar breakdown by category
+  - `DatePicker.tsx` — Calendar dropdown with `react-day-picker`, future dates disabled, reset button
+- **Rewrote `app/admin/page.tsx`**: Replaced broken `menu_items`/`modifiers` fetch with `<OwnerDashboard />`
+- **Added calendar CSS** (`app/globals.css`): `.cafe-calendar` styles for react-day-picker with brand colors
+- **Deleted 16 dead files**: AdminClient, AdminTabs, 4 menu CRUD components, 3 modifier CRUD components, DashboardSection, OrderClient, DrinkCard, DrinkCustomizer, ModifierSelector, 2 dead API routes + empty directories
+- **Installed dependencies**: `recharts`, `react-day-picker`
 
-## Completed Earlier (Feb 14 night)
+### Kitchen Page Improvements
+- **Tab label**: "Making" → "In Progress"
+- **Button label**: "Start Making" → "In Progress"
+- **Item formatting redesign** (Option C): Single-line with bold name + colon + dot-separated modifiers (e.g. `Latte: 12oz · Whole Milk · Hot`), extras on second line without "extras:" prefix
+- **Food item filtering**: Added `isFoodItem()` to `lib/menu.ts` — derives pastry status from `BASE_PRICES` (items where small === large). Used in both `OrderCard` and `CartItem` to skip size/milk/temp for pastries.
+- **Quantity badge**: Pill-style `2x` badge before item name (consistent across OrderCard, CartItem, confirmation overlay)
+- **In-progress overflow menu**: Three-dot button on in-progress order cards with "Back to Queue" (sets status back to `placed`) and "Cancel Order" options
+- **`handleBackToQueue` handler** in KitchenClient: PATCH order status to `placed`
+- **Nav bar consistency**: Admin dashboard now uses same `NavMenu` component (nine-dot grid icon) as kitchen page
+- **Header alignment fix**: Both `/admin` and `/kitchen` headers now use consistent padding pattern so title/nav align with content below
 
-- **Chat mode side-by-side layout**: Changed text/chat mode from vertical stack (cart on top, chat below) to side-by-side grid matching voice mode — ChatPanel on left, CartPanel on right. Uses same `grid grid-cols-1 md:grid-cols-2` responsive layout.
-- **Voice mode default**: `/order` page now starts directly in voice mode instead of showing a mode selector screen. Removed the mode selector entirely.
-- **Direct mode toggle**: Replaced "Change Mode" button (which went back to selector) with direct toggle buttons — "Switch to Chat" in voice mode, "Switch to Voice" in text mode.
-- **Confirmation overlay reset to voice**: After order confirmation, dismiss/auto-dismiss now resets to voice mode (not the removed selector screen).
-- All changes in `components/VoiceCashierClient.tsx` only (13 insertions, 41 deletions — net simplification).
-
-## Completed Earlier (Feb 14 late evening)
-
-- **Order confirmation receipt card**: Replaced the simple comma-separated item list on the confirmation overlay with a styled receipt card showing item name, size, milk, quantity, per-item price, and total. Clean white card with dividers inside the existing animated overlay.
-- **Manual dismiss instead of auto-redirect**: Removed the 3.5s auto-redirect to `/order`. Added a "Done" button that resets state in-app (no full page reload) and returns to the mode selector. Added 30s auto-dismiss fallback if untouched.
-- **Fixed `resetOrderState` initialization order**: Moved `useEffect` that references `resetOrderState` to after the `useCallback` definition to fix `ReferenceError: Cannot access before initialization`.
-
-## Completed Earlier (Feb 14 evening)
-
-- **Full-screen order confirmation**: Replaced inline `ReceiptView` with a full-screen animated confirmation overlay (checkmark icon, "On it!", customer name, item list) using framer-motion spring animation. Auto-redirects to `/order` after 3.5 seconds. Works in both text and voice modes.
-- **Kitchen queue bug fix**: Orders were not appearing in `/kitchen` because Next.js 14 was caching the Supabase fetch response. Added `unstable_noStore()` from `next/cache` to the kitchen server component to opt out of fetch caching.
-
-## Completed Earlier (Feb 14)
-
-- **Step 4 M3 complete**: Voice order finalization, error handling, and polish:
-  - **Manual "Place Order" button**: Added to `CartPanel` (both text + voice modes) with inline name input. Users can finalize orders without relying on the AI.
-  - **Async finalize with AI feedback**: `handleToolCall` now awaits `onFinalize` and sends real `{ success: true/false }` to the AI. On failure, the AI can naturally inform the customer.
-  - **Submitting state**: Added `isSubmitting` state — shows "Placing your order..." in both VoiceIndicator and CartPanel during order submission.
-  - **Mic denial UX**: Exposed `micDenied` state from hook. VoiceIndicator shows mic-off icon + step-by-step instructions when mic access is denied.
-  - **WebRTC disconnect detection**: Added `iceconnectionstatechange` listener + data channel error/close handlers. Distinguishes intentional disconnect from unexpected drops. Auto-reconnects once on connection loss, then shows manual "Reconnect" error.
-  - **Mode switch reset**: Cart, receipt, `orderFinalized`, and messages all reset when switching modes.
-  - **Empty cart guard**: `finalize_order` on empty cart is rejected in both `cart-utils.ts` and the voice hook.
-
-- **Instrumentation cleanup complete**: Removed temporary debug `fetch(.../ingest/...)` logging from `hooks/useRealtimeSession.ts`, `lib/cart-utils.ts`, and `app/api/chat/route.ts` after user-confirmed fix verification. Kept functional behavior changes intact.
-- **Fixed missing prices on cart items**: Created `lib/menu.ts` with deterministic price calculator (`calculatePrice()`) based on menu lookup. Prices are now computed from item properties (name, size, milk, extras) instead of relying on the AI model to supply them. Applied in `lib/cart-utils.ts` for both `add_item` and `modify_item`. Removed `price` from tool schemas.
-- **Fixed multi-item voice ordering UX**: Updated `VOICE_INSTRUCTIONS` in `lib/realtime-config.ts` to instruct the model to add items one at a time with brief acknowledgments, instead of batching all items after repeating the full order. This is a voice-specific change — the text mode dashboard prompt keeps "add all of them" behavior which is correct for chat UX.
-- **Fixed off-menu items being accepted (e.g. Hot Chocolate)**: Added `enum` constraint to the `name` field in the `add_item` tool schema, restricting it to valid menu item names. Also added client-side validation in `applyToolCall` via `isValidMenuItem()` as a fallback.
-- **New file**: `lib/menu.ts` — canonical menu data (item names, base prices, add-on costs) used for validation and pricing.
-- **Prompt divergence established**: `VOICE_INSTRUCTIONS` and the stored dashboard prompt now intentionally differ on multi-item handling. Comment added to `lib/realtime-config.ts` documenting this.
-
-## Completed Earlier (Feb 13)
-
-- **Switched voice model from preview to GA**: Changed from `gpt-4o-realtime-preview` to `gpt-realtime-mini` (generally available) in both `app/api/realtime/token/route.ts` and `hooks/useRealtimeSession.ts`
-  - Preview models couldn't combine audio output with tool calls; GA model supports both
-  - Removed problematic `output_modalities: ['text', 'audio']` from token endpoint that caused session creation failures
-- **Fixed GA model event name difference**: Added `response.output_audio.delta` case (GA format) alongside `response.audio.delta` (preview format) for `isSpeaking` state tracking
-- **Fixed `modify_item` tool failures**: AI model sent `modify_item` without the `changes` field because the schema was too vague (`{ type: 'object' }` with no properties)
-  - Added explicit properties to `changes` schema in `lib/realtime-config.ts`: `name`, `size`, `milk`, `temperature`, `extras`, `quantity`, `price`
-  - Added defensive fallback in `lib/cart-utils.ts`: if `changes` is missing, top-level non-`cart_index` fields are treated as the changes
-- Added `response.output_audio_transcript.done` case in event handler (no-op, prevents default logging noise)
-- Cleaned up all debug instrumentation after verification
-
-## Completed Earlier (Feb 13)
-
-- Implemented Voice Mode Milestone 2 (Step 4 M2):
-  - Extracted shared `applyToolCall` utility to `lib/cart-utils.ts` — deduplicates cart mutation logic between text and voice modes
-  - Rewrote `handleToolCall` in `hooks/useRealtimeSession.ts`: parses tool-call arguments from JSON, applies cart mutations (`add_item`, `modify_item`, `remove_item`), calls `onCartUpdate` to update UI, sends enriched function output (with cart) back to OpenAI, handles `finalize_order` via `onFinalize` callback
-  - Added `cartRef` inside the hook to track cart state across sequential tool calls (e.g., multi-item orders)
-  - Updated `app/api/chat/route.ts` to import from shared `lib/cart-utils.ts` instead of local function
-  - Cart resets on voice session disconnect
-  - No changes needed to `VoiceCashierClient.tsx` — existing wiring (`onCartUpdate: setCart`, `onFinalize: handleVoiceFinalize`) now works end-to-end
-
-- Implemented Voice Mode Milestone 1 (Step 4 M1):
-  - New `/api/realtime/token/route.ts`: ephemeral token endpoint for WebRTC auth with OpenAI
-  - New `hooks/useRealtimeSession.ts`: WebRTC hook managing peer connection, data channel, mic access, audio playback, session lifecycle
-  - New `components/voice/VoiceIndicator.tsx`: animated voice UI with connection states (idle/connecting/listening/AI speaking/error)
-  - Integrated voice mode into `VoiceCashierClient.tsx` with two-column layout (voice indicator + cart panel)
-  - Refactored component to call hooks unconditionally (React rules compliance)
-  - Added mode switching with proper voice session disconnect cleanup
-- Debugged and fixed voice session issues:
-  - Fixed stale Next.js build cache error (deleted `.next`, restarted dev server)
-  - Fixed "Missing required parameter: session.type" error on disconnect (added `type`/`model` to `session.update`, clear error state on disconnect)
-  - **Root cause fix**: Stored prompt (`gpt-5.2`) incompatible with Realtime API (`gpt-4o-mini-realtime-preview`) due to model mismatch. Resolved by passing prompt instructions inline via `VOICE_INSTRUCTIONS` constant in `lib/realtime-config.ts`
-  - Voice now auto-greets, knows the full menu, and responds in the cafe cashier personality
-- Added `VOICE_INSTRUCTIONS` constant to `lib/realtime-config.ts` — identical prompt content to the stored dashboard prompt, delivered inline for voice mode (text mode still uses stored prompt ID)
-- Cleaned up all debug instrumentation after verification
-- Added dependency: `framer-motion` for voice indicator animations
-
-## Completed Earlier (Feb 13)
-
-- Implemented server-side iterative tool-call loop in `app/api/chat/route.ts`
-- Chat UX polish: markdown rendering, autoscroll, input focus, cart display improvements
-- Mode selector button renamed from "Text" to "Chat"
-
-## Completed Earlier (Feb 12)
-
-- Deduplicated prompt management, stored prompt as single source of truth
-- Synced upstream delo-kiosk kitchen commits
-- Created Supabase project, applied migrations, Vercel deployment
-- Implemented Steps 2 + 3 (schema + text mode)
-- Cross-tool workflow formalized, `OPENAI_PROMPT.md` added
-- Removed admin passcode gating
+### Cross-cutting
+- **Shared `isFoodItem()` utility** (`lib/menu.ts`): Automatically detects food items from price data (small === large), used in kitchen OrderCard and cart CartItem
+- **Consistent quantity badge**: `[2x]` pill badge used in OrderCard, CartItem, and both confirmation overlay sections in VoiceCashierClient
 
 ## Architecture Note: Voice vs Text Prompt Delivery
 

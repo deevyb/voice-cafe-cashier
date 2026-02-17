@@ -164,3 +164,51 @@ html {
 .date-input::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
+
+/* ============================================
+   Calendar (react-day-picker) Brand Styles
+   ============================================ */
+
+.cafe-calendar .rdp-root {
+  --rdp-accent-color: #6F4E37;
+  --rdp-accent-background-color: #6F4E37;
+  --rdp-day_button-height: 36px;
+  --rdp-day_button-width: 36px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+}
+
+.cafe-calendar .rdp-selected .rdp-day_button {
+  background-color: #6F4E37;
+  color: #FAF9F6;
+  border-radius: 8px;
+}
+
+.cafe-calendar .rdp-today:not(.rdp-selected) .rdp-day_button {
+  font-weight: 700;
+  color: #6F4E37;
+}
+
+.cafe-calendar .rdp-day_button:hover:not(.rdp-selected .rdp-day_button) {
+  background-color: rgba(111, 78, 55, 0.1);
+  border-radius: 8px;
+}
+
+.cafe-calendar .rdp-chevron {
+  fill: #6F4E37;
+}
+
+.cafe-calendar .rdp-month_caption {
+  font-weight: 600;
+  color: #2D2D2D;
+}
+
+.cafe-calendar .rdp-weekday {
+  color: #9B9590;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.cafe-calendar .rdp-disabled .rdp-day_button {
+  opacity: 0.3;
+}

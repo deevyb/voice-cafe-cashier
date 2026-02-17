@@ -19,7 +19,7 @@ export default function KitchenTabs({
 }: KitchenTabsProps) {
   const tabs = [
     { id: 'placed' as const, label: 'Queue', count: placedCount },
-    { id: 'in_progress' as const, label: 'Making', count: inProgressCount },
+    { id: 'in_progress' as const, label: 'In Progress', count: inProgressCount },
     { id: 'completed' as const, label: 'Done', count: completedCount },
   ]
 

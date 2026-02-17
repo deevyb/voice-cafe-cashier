@@ -1,13 +1,15 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Order } from '@/lib/supabase'
+import { isFoodItem } from '@/lib/menu'
 
 interface OrderCardProps {
   order: Order
   onStartMaking: (orderId: string) => void
   onDone: (orderId: string) => void
+  onBackToQueue: (orderId: string) => void
   onCancelClick: () => void
   isUpdating: boolean
 }
@@ -24,6 +26,12 @@ function getRelativeTime(timestamp: string, now: number): string {
   return `${minutes} min`
 }
 
+function isVisible(value: string | undefined): value is string {
+  if (!value) return false
+  const normalized = value.trim().toLowerCase()
+  return normalized !== 'n/a' && normalized !== 'na' && normalized !== ''
+}
+
 /**
  * ANIMATION CONFIGURATION
  * Spring physics for snappy, responsive feel
@@ -34,16 +42,30 @@ export default function OrderCard({
   order,
   onStartMaking,
   onDone,
+  onBackToQueue,
   onCancelClick,
   isUpdating,
 }: OrderCardProps) {
   // Track current time for relative time display (updates every minute)
   const [now, setNow] = useState(Date.now())
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const interval = setInterval(() => setNow(Date.now()), 60000)
     return () => clearInterval(interval)
   }, [])
+
+  // Close overflow menu on outside click
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    if (menuOpen) document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [menuOpen])
 
   const isPlaced = order.status === 'placed'
   const isInProgress = order.status === 'in_progress'
@@ -69,14 +91,31 @@ export default function OrderCard({
       {/* Items */}
       <div className="mt-3 space-y-1">
         {order.items?.map((item, index) => {
-          const details = [item.size, item.milk, item.temperature]
-          if (item.extras?.length) details.push(`extras: ${item.extras.join(', ')}`)
+          const isFood = isFoodItem(item.name)
+          const detailParts = isFood ? [] : [item.size, item.milk, item.temperature].filter(isVisible)
+          const extras = item.extras?.length ? item.extras : []
           return (
-            <p key={`${item.name}-${index}`} className="font-sans text-base text-cafe-charcoal/80">
-              {index + 1}. {item.name}
-              {item.quantity > 1 ? ` x${item.quantity}` : ''}
-              {details.filter(Boolean).length ? ` — ${details.filter(Boolean).join(', ')}` : ''}
-            </p>
+            <div key={`${item.name}-${index}`}>
+              <p className="font-sans text-base text-cafe-charcoal">
+                {item.quantity > 1 && (
+                  <span className="mr-1.5 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold rounded bg-cafe-charcoal/10 text-cafe-charcoal/70 align-middle">
+                    {item.quantity}x
+                  </span>
+                )}
+                <span className="font-semibold">{item.name}</span>
+                {detailParts.length > 0 && (
+                  <>
+                    <span className="font-semibold">:</span>
+                    <span className="text-cafe-charcoal/60"> {detailParts.join(' · ')}</span>
+                  </>
+                )}
+              </p>
+              {extras.length > 0 && (
+                <p className="font-sans text-base text-cafe-charcoal/60 pl-2">
+                  {extras.join(', ')}
+                </p>
+              )}
+            </div>
           )
         })}
       </div>
@@ -90,7 +129,7 @@ export default function OrderCard({
             disabled={isUpdating}
             className="flex-1 py-3 px-4 rounded-lg bg-cafe-coffee text-cafe-cream font-sans font-semibold transition-colors hover:bg-cafe-coffee/90 disabled:opacity-50 disabled:cursor-not-allowed min-h-[52px]"
           >
-            {isUpdating ? 'Updating...' : 'Start Making'}
+            {isUpdating ? 'Updating...' : 'In Progress'}
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.97 }}
@@ -105,7 +144,7 @@ export default function OrderCard({
 
       {/* Actions for in-progress orders */}
       {isInProgress && (
-        <div className="flex gap-3 mt-5">
+        <div className="flex gap-3 mt-5 items-center">
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={() => onDone(order.id)}
@@ -114,6 +153,56 @@ export default function OrderCard({
           >
             {isUpdating ? 'Updating...' : 'Done'}
           </motion.button>
+
+          {/* Overflow menu */}
+          <div className="relative" ref={menuRef}>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-3 rounded-lg bg-cafe-charcoal/10 hover:bg-cafe-charcoal/15 transition-colors min-h-[52px]"
+              aria-label="More actions"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-cafe-charcoal/70">
+                <circle cx="10" cy="4" r="1.5" fill="currentColor" />
+                <circle cx="10" cy="10" r="1.5" fill="currentColor" />
+                <circle cx="10" cy="16" r="1.5" fill="currentColor" />
+              </svg>
+            </motion.button>
+
+            <AnimatePresence>
+              {menuOpen && (
+                <motion.div
+                  className="absolute right-0 bottom-full mb-2 bg-white rounded-xl shadow-lg border border-cafe-charcoal/10 overflow-hidden min-w-[180px] z-50"
+                  initial={{ opacity: 0, scale: 0.95, y: 5 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 5 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                >
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false)
+                      onBackToQueue(order.id)
+                    }}
+                    disabled={isUpdating}
+                    className="w-full text-left px-4 py-3 font-sans text-sm text-cafe-charcoal/70 hover:bg-cafe-charcoal/5 hover:text-cafe-charcoal transition-colors disabled:opacity-50"
+                  >
+                    Back to Queue
+                  </button>
+                  <div className="border-t border-cafe-charcoal/10" />
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false)
+                      onCancelClick()
+                    }}
+                    disabled={isUpdating}
+                    className="w-full text-left px-4 py-3 font-sans text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                  >
+                    Cancel Order
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       )}
 

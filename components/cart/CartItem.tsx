@@ -1,6 +1,7 @@
 'use client'
 
 import type { CartItem as CartEntry } from '@/lib/supabase'
+import { isFoodItem } from '@/lib/menu'
 
 function formatMoney(value: number) {
   return `$${value.toFixed(2)}`
@@ -29,7 +30,8 @@ function consolidateExtras(extras: string[]): string[] {
 }
 
 export default function CartItemRow({ item, index }: { item: CartEntry; index: number }) {
-  const detailParts = [item.size, item.milk, item.temperature].filter(isVisible)
+  const isFood = isFoodItem(item.name)
+  const detailParts = isFood ? [] : [item.size, item.milk, item.temperature].filter(isVisible)
   const extras = item.extras?.length ? consolidateExtras(item.extras) : []
 
   const lineTotal = item.price ? item.price * item.quantity : undefined
@@ -37,7 +39,12 @@ export default function CartItemRow({ item, index }: { item: CartEntry; index: n
   return (
     <div className="rounded-lg border border-cafe-charcoal/10 bg-white px-3 py-2">
       <p className="font-semibold text-cafe-charcoal">
-        {item.name}{item.quantity > 1 ? ` x${item.quantity}` : ''}
+        {item.quantity > 1 && (
+          <span className="mr-1.5 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold rounded bg-cafe-charcoal/10 text-cafe-charcoal/70 align-middle">
+            {item.quantity}x
+          </span>
+        )}
+        {item.name}
       </p>
       {detailParts.length > 0 && (
         <p className="text-sm text-cafe-charcoal/70">{detailParts.join(' • ')}</p>

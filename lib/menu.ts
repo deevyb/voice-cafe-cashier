@@ -32,6 +32,17 @@ export function isValidMenuItem(name: string): boolean {
   )
 }
 
+/**
+ * Returns true for food items (pastries, baked goods) that don't have drink
+ * modifiers like size/milk/temperature. Derived from BASE_PRICES — items with
+ * identical small and large prices are food, not drinks.
+ */
+export function isFoodItem(name: string): boolean {
+  const prices = BASE_PRICES[name.trim().toLowerCase()]
+  if (!prices) return false
+  return prices.small === prices.large
+}
+
 // ---------------------------------------------------------------------------
 // Base prices: keyed by lowercase item name → { small, large }
 // Pastries have a single flat price (small === large).

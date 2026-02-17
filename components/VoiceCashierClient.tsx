@@ -251,7 +251,12 @@ export default function VoiceCashierClient() {
                         <li key={i}>
                           <div className="flex items-start justify-between">
                             <span className="font-medium text-cafe-charcoal">
-                              {item.name}{item.quantity > 1 ? ` ×${item.quantity}` : ''}
+                              {item.quantity > 1 && (
+                                <span className="mr-1.5 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold rounded bg-cafe-charcoal/10 text-cafe-charcoal/70 align-middle">
+                                  {item.quantity}x
+                                </span>
+                              )}
+                              {item.name}
                             </span>
                             {lineTotal !== undefined && (
                               <span className="ml-2 whitespace-nowrap text-sm text-cafe-charcoal/80">
