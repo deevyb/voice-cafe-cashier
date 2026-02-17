@@ -26,6 +26,18 @@ function getRelativeTime(timestamp: string, now: number): string {
   return `${minutes} min`
 }
 
+/**
+ * Format fulfillment duration (placed → completed)
+ */
+function getFulfillmentTime(createdAt: string, updatedAt: string): string {
+  const diff = new Date(updatedAt).getTime() - new Date(createdAt).getTime()
+  const minutes = Math.floor(diff / 60000)
+
+  if (minutes < 1) return '<1 min'
+  if (minutes === 1) return '1 min'
+  return `${minutes} min`
+}
+
 function isVisible(value: string | undefined): value is string {
   if (!value) return false
   const normalized = value.trim().toLowerCase()
@@ -69,7 +81,11 @@ export default function OrderCard({
 
   const isPlaced = order.status === 'placed'
   const isInProgress = order.status === 'in_progress'
+  const isCompleted = order.status === 'completed'
+  const isCanceled = order.status === 'canceled'
+  const isDone = isCompleted || isCanceled
   const timeAgo = getRelativeTime(order.created_at, now)
+  const fulfillmentTime = isCompleted ? getFulfillmentTime(order.created_at, order.updated_at) : null
 
   return (
     <motion.div
@@ -83,9 +99,20 @@ export default function OrderCard({
       {/* Top row: Customer and time */}
       <div className="flex items-start justify-between mb-1">
         <h3 className="font-sans font-bold text-2xl text-cafe-charcoal">{order.customer_name}</h3>
-        <span className="font-sans text-sm text-cafe-charcoal/50 bg-cafe-charcoal/5 px-2 py-1 rounded flex-shrink-0 ml-2">
-          {timeAgo}
-        </span>
+        {/* Completed: clock icon + fulfillment duration. Canceled: hidden. Others: relative time. */}
+        {isCompleted ? (
+          <span className="font-sans text-sm font-medium text-cafe-charcoal/50 bg-cafe-charcoal/5 px-2 py-1 rounded flex-shrink-0 ml-2 inline-flex items-center gap-1">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" />
+              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth={2} fill="none" />
+            </svg>
+            {fulfillmentTime}
+          </span>
+        ) : !isCanceled ? (
+          <span className="font-sans text-sm font-medium text-cafe-charcoal/50 bg-cafe-charcoal/5 px-2 py-1 rounded flex-shrink-0 ml-2">
+            {timeAgo}
+          </span>
+        ) : null}
       </div>
 
       {/* Items */}
@@ -184,7 +211,7 @@ export default function OrderCard({
                       onBackToQueue(order.id)
                     }}
                     disabled={isUpdating}
-                    className="w-full text-left px-4 py-3 font-sans text-sm text-cafe-charcoal/70 hover:bg-cafe-charcoal/5 hover:text-cafe-charcoal transition-colors disabled:opacity-50"
+                    className="w-full text-left px-4 py-3 font-sans text-sm font-medium text-cafe-charcoal/70 hover:bg-cafe-charcoal/5 hover:text-cafe-charcoal transition-colors disabled:opacity-50"
                   >
                     Back to Queue
                   </button>
@@ -195,7 +222,7 @@ export default function OrderCard({
                       onCancelClick()
                     }}
                     disabled={isUpdating}
-                    className="w-full text-left px-4 py-3 font-sans text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                    className="w-full text-left px-4 py-3 font-sans text-sm font-medium text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
                   >
                     Cancel Order
                   </button>
@@ -206,38 +233,101 @@ export default function OrderCard({
         </div>
       )}
 
-      {/* Completed badge */}
-      {order.status === 'completed' && (
-        <div className="mt-auto pt-5">
-          <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-3 py-1.5 rounded-lg">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2.5}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-            <span className="font-sans font-semibold text-sm">Completed</span>
-          </div>
-        </div>
-      )}
+      {/* Completed/Canceled: status badge + overflow menu */}
+      {isDone && (
+        <div className="flex items-center gap-3 mt-auto pt-5">
+          {/* Status badge */}
+          {isCompleted ? (
+            <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-3 py-1.5 rounded-lg">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="font-sans font-semibold text-sm">Completed</span>
+            </div>
+          ) : (
+            <div className="inline-flex items-center gap-2 bg-red-50 text-red-600 px-3 py-1.5 rounded-lg">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              <span className="font-sans font-semibold text-sm">Canceled</span>
+            </div>
+          )}
 
-      {/* Canceled badge */}
-      {order.status === 'canceled' && (
-        <div className="mt-auto pt-5">
-          <div className="inline-flex items-center gap-2 bg-red-50 text-red-600 px-3 py-1.5 rounded-lg">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2.5}
+          <div className="flex-1" />
+
+          {/* Overflow menu */}
+          <div className="relative" ref={menuRef}>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-2.5 rounded-lg bg-cafe-charcoal/10 hover:bg-cafe-charcoal/15 transition-colors"
+              aria-label="More actions"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            <span className="font-sans font-semibold text-sm">Canceled</span>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-cafe-charcoal/70">
+                <circle cx="10" cy="4" r="1.5" fill="currentColor" />
+                <circle cx="10" cy="10" r="1.5" fill="currentColor" />
+                <circle cx="10" cy="16" r="1.5" fill="currentColor" />
+              </svg>
+            </motion.button>
+
+            <AnimatePresence>
+              {menuOpen && (
+                <motion.div
+                  className="absolute right-0 bottom-full mb-2 bg-white rounded-xl shadow-lg border border-cafe-charcoal/10 overflow-hidden min-w-[180px] z-50"
+                  initial={{ opacity: 0, scale: 0.95, y: 5 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 5 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                >
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false)
+                      onBackToQueue(order.id)
+                    }}
+                    disabled={isUpdating}
+                    className="w-full text-left px-4 py-3 font-sans text-sm font-medium text-cafe-charcoal/70 hover:bg-cafe-charcoal/5 hover:text-cafe-charcoal transition-colors disabled:opacity-50"
+                  >
+                    Back to Queue
+                  </button>
+                  <div className="border-t border-cafe-charcoal/10" />
+                  {isCompleted ? (
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false)
+                        onCancelClick()
+                      }}
+                      disabled={isUpdating}
+                      className="w-full text-left px-4 py-3 font-sans text-sm font-medium text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                    >
+                      Cancel Order
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false)
+                        onDone(order.id)
+                      }}
+                      disabled={isUpdating}
+                      className="w-full text-left px-4 py-3 font-sans text-sm font-medium text-green-700 hover:bg-green-50 transition-colors disabled:opacity-50"
+                    >
+                      Mark as Completed
+                    </button>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       )}

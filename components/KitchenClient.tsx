@@ -200,8 +200,8 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
         throw new Error('Failed to cancel')
       }
 
-      // Remove from local state immediately instead of waiting for realtime
-      setOrders((prev) => prev.filter((o) => o.id !== orderId))
+      const updatedOrder = await response.json()
+      setOrders((prev) => prev.map((o) => (o.id === updatedOrder.id ? updatedOrder : o)))
     } catch {
       setError("Couldn't cancel order. Please try again.")
     } finally {

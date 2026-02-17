@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 16, 2026 (session 4)
+> Last Updated: February 16, 2026 (session 5)
 
 ## Current State
 
@@ -24,6 +24,17 @@
 ## Blockers
 
 - None currently
+
+## Completed This Session (Feb 16, session 5)
+
+### Kitchen Done Tab Polish
+- **Fulfillment time badge**: Completed order cards now show clock icon + fulfillment duration (e.g. `🕐 4 min`) in top-right, computed from `created_at → updated_at`. Canceled orders hide the time badge entirely.
+- **Overflow menu on Done tab**: Both completed and canceled cards now have three-dot overflow menu:
+  - Completed: "Back to Queue" + "Cancel Order"
+  - Canceled: "Back to Queue" + "Mark as Completed"
+- **Font weight bump**: Time badge and overflow menu text bumped to `font-medium` (500) across both in-progress and done tabs
+- **Cancel handler fix**: `handleCancel` in KitchenClient now updates order in local state (was removing it), so canceled orders appear in Done tab immediately
+- **Helper function**: Added `getFulfillmentTime()` to compute duration between `created_at` and `updated_at`
 
 ## Completed This Session (Feb 16, session 4)
 

@@ -18,9 +18,9 @@ This is the **single source of truth** for project status, shared between Cursor
 
 ## Save-Status Snapshot (Mirror)
 
-- Last Updated: February 16, 2026 (session 4)
+- Last Updated: February 16, 2026 (session 5)
 - Current phase: Steps 0–8 complete, Step 9 pending
-- Latest change: Step 8 deliverables (seed script, CSV, README) + kitchen/dashboard polish (timezone, chart range, card layout, canceled orders, RLS fixes)
+- Latest change: Kitchen Done tab polish — fulfillment time badge (clock icon + duration), overflow menu on completed/canceled cards, font weight bump, cancel handler fix
 - Immediate next actions:
  1. Step 9: Edge Case Testing
 - Blockers: none
