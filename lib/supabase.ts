@@ -18,31 +18,6 @@ export interface CartItem {
   price?: number
 }
 
-export interface MenuItem {
-  id: string
-  name: string
-  description: string | null
-  image_url: string | null
-  category: string
-  is_active: boolean
-  is_archived: boolean
-  display_order: number
-  // Dynamic modifier config - keys are modifier categories (e.g., "milk", "temperature")
-  modifier_config: Record<string, boolean>
-  default_modifiers: Record<string, string | null>
-  created_at: string
-  updated_at: string
-}
-
-export interface Modifier {
-  id: string
-  category: string // Dynamic - could be "milk", "temperature", or any future category
-  option: string
-  is_active: boolean
-  display_order: number
-  created_at: string
-}
-
 export interface Order {
   id: string
   customer_name: string

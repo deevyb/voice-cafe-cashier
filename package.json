@@ -1,6 +1,7 @@
 {
   "name": "voice-cafe-cashier",
   "version": "0.1.0",
+  "description": "AI voice and text cashier for a NYC coffee shop",
   "private": true,
   "scripts": {
     "dev": "next dev",

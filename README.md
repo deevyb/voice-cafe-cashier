@@ -122,6 +122,7 @@ lib/
   realtime-config.ts      # Voice mode session config
 scripts/
   seed-orders.ts          # Seed realistic order data
+  test-edge-cases.ts      # Automated edge case tests
 ```
 
 ---
@@ -133,3 +134,5 @@ scripts/
 | `TECHNICAL.md` | Architecture, schema, API details |
 | `PLAN.md` | Implementation plan (Steps 0–9) |
 | `CLAUDE.md` | Project guide for AI assistants |
+| `OPENAI_PROMPT.md` | Prompt engineering documentation |
+| `EDGE_CASE_TESTS.md` | 49 edge case tests + results |

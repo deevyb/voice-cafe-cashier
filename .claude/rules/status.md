@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 16, 2026 (session 6)
+> Last Updated: February 16, 2026 (session 7)
 
 ## Current State
 
@@ -19,11 +19,22 @@
 
 ## What's Next
 
-All steps complete. Project is ready for submission.
+All steps complete. Repo is cleaned up and ready for submission. Commit + push the cleanup, then submit.
 
 ## Blockers
 
-- None currently
+- None
+
+## Completed This Session (Feb 16, session 7)
+
+### Pre-Submission Cleanup
+- **Deleted 5 dead files**: `components/Modal.tsx` (unused), `public/fonts/CooperMdBT*.ttf` (fork artifacts), `PM Interview Vibe Coding Project - Instructions.md` (original prompt), `edge-case-results.json` (redundant with EDGE_CASE_TESTS.md)
+- **Removed `.cursor/` from git**: Added to `.gitignore`, untracked 3 files
+- **Fixed TECHNICAL.md**: Removed `[NEW]`/`[MODIFY]` tags, removed "Files to Delete" section, expanded file tree with dashboard components + scripts, fixed env var names, added edge case testing section
+- **Fixed README.md**: Added `OPENAI_PROMPT.md` and `EDGE_CASE_TESTS.md` to docs table, added `test-edge-cases.ts` to project structure
+- **Removed dead types** from `lib/supabase.ts`: Deleted `MenuItem` and `Modifier` interfaces (Delo fork leftovers)
+- **Added `package.json` description**: "AI voice and text cashier for a NYC coffee shop"
+- **Build verified**: `npm run build` passes clean
 
 ## Completed This Session (Feb 16, session 6)
 

@@ -27,45 +27,50 @@ app/
   kitchen/page.tsx                # Barista display (realtime)
   admin/page.tsx                  # Owner dashboard
   api/
-    chat/route.ts                 # [NEW] Responses API — text mode
-    realtime/token/route.ts       # [NEW] Ephemeral token — voice mode
+    chat/route.ts                 # Responses API — text mode
+    realtime/token/route.ts       # Ephemeral token — voice mode
     orders/route.ts               # POST: create order (multi-item)
     orders/[id]/route.ts          # PATCH: update order status
     admin/
       stats/route.ts              # GET: dashboard analytics
       orders/route.ts             # GET: CSV export
 components/
-  VoiceCashierClient.tsx          # [NEW] Main ordering container
-  chat/                           # [NEW] Text mode UI
+  VoiceCashierClient.tsx          # Main ordering container
+  chat/                           # Text mode UI
     ChatPanel.tsx                 #   Conversation display
     AIMessage.tsx                 #   AI message bubble
     UserMessage.tsx               #   Customer message bubble
     TextInput.tsx                 #   Input bar + send
-  voice/                          # [NEW] Voice mode UI
+  voice/                          # Voice mode UI
     VoiceIndicator.tsx            #   Mic animation + status
-  cart/                           # [NEW] Shared cart UI
+  cart/                           # Shared cart UI
     CartPanel.tsx                 #   Live cart display
     CartItem.tsx                  #   Individual item row
     ReceiptView.tsx               #   Post-order receipt
-  KitchenClient.tsx               # [MODIFY] Multi-item, new statuses
-  KitchenTabs.tsx                 # [MODIFY] 3 tabs: Queue/Making/Done
-  OrderCard.tsx                   # [MODIFY] Render items array
-  OwnerDashboardClient.tsx        # [NEW] Analytics dashboard
-  NavMenu.tsx                     # Existing — reused
-  Modal.tsx                       # Existing — reused
-  ErrorBoundary.tsx               # Existing — reused
+  KitchenClient.tsx               # Kitchen display logic
+  KitchenTabs.tsx                 # 3 tabs: Queue/In Progress/Done
+  OrderCard.tsx                   # Render items array
+  dashboard/                      # Owner dashboard
+    OwnerDashboard.tsx            #   Main container + fetch logic
+    StatsCards.tsx                #   Order count cards
+    SummaryMetrics.tsx            #   AOV + fulfillment time
+    OrdersChart.tsx               #   Orders by hour (Recharts)
+    PopularItems.tsx              #   Top items list
+    ModifierPreferences.tsx       #   Modifier breakdowns
+    AddOnBreakdown.tsx            #   Add-on categories + attach rates
+    DatePicker.tsx                #   Date selection
+  NavMenu.tsx                     # Navigation menu
+  ErrorBoundary.tsx               # Error boundary
 hooks/
-  useRealtimeSession.ts           # [NEW] WebRTC + Realtime API lifecycle
+  useRealtimeSession.ts           # WebRTC + Realtime API lifecycle
 lib/
-  supabase.ts                     # DB client + types (updated)
-  realtime-config.ts              # [NEW] Stored prompt ID + session config
+  supabase.ts                     # DB client + types
+  menu.ts                         # Price calculation + menu data
+  realtime-config.ts              # Voice mode session config
+scripts/
+  seed-orders.ts                  # Seed realistic order data
+  test-edge-cases.ts              # Automated edge case tests
 ```
-
-### Files to Delete (from Delo)
-
-OrderClient, DrinkCard, DrinkCustomizer, ModifierSelector, AdminClient, AdminTabs, MenuItemsSection, ModifiersSection, NewMenuItemForm, MenuItemEditor, ModifierForm, ModifierRow, MenuItemCard.
-
-Also: `app/api/admin/menu-items/`, `app/api/admin/modifiers/` (menu now lives in the stored prompt, not DB).
 
 ### Data Flow
 
@@ -304,7 +309,7 @@ OPENAI_STORED_PROMPT_ID=pmpt_...
 - [x] Run schema migration (orders table)
 - [x] Enable Realtime on orders table
 - [x] Connect Vercel to voice-cafe-cashier repo
-- [x] Set env vars in Vercel (OPENAI_API_KEY, OPENAI_STORED_PROMPT_ID, SUPABASE_URL, SUPABASE_ANON_KEY, OPENAI_TEXT_MODEL)
+- [x] Set env vars in Vercel (OPENAI_API_KEY, OPENAI_STORED_PROMPT_ID, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
 - [x] Verify deploy
 
 ---
@@ -344,3 +349,15 @@ Analytics at `/admin` with:
 - **Date picker**: `react-day-picker` — defaults to "All Time", pick any date to narrow all widgets
 
 All metrics are timezone-aware (`America/New_York`) and scoped to the selected date or all-time.
+
+## Edge Case Testing (Step 9)
+
+Automated test suite at `scripts/test-edge-cases.ts` — 49 test cases across 11 categories:
+
+```bash
+npx tsx scripts/test-edge-cases.ts
+```
+
+Categories: menu defaults, iced-only drinks, extra shots, milk/tea constraints, pastry constraints, multi-item orders, cart modifications, off-menu guardrails, menu inquiry, adversarial prompts, ordering flow/finalization.
+
+Results: 90% pass, 0 true failures. Full analysis in [`EDGE_CASE_TESTS.md`](./EDGE_CASE_TESTS.md).
