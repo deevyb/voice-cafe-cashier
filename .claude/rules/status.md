@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 16, 2026 (session 8)
+> Last Updated: February 16, 2026 (session 9)
 
 ## Current State
 
@@ -19,11 +19,18 @@
 
 ## What's Next
 
-All steps complete. Landing page redesigned. Ready for final submission.
+All steps complete. Domain updated to `coffee-rooom.vercel.app`. Ready for final submission.
 
 ## Blockers
 
 - None
+
+## Completed This Session (Feb 16, session 9)
+
+### Domain Change
+- **Changed Vercel domain** from `voice-cafe-cashier.vercel.app` → `coffee-rooom.vercel.app`
+- Added alias via Vercel CLI, set as default domain in Vercel dashboard
+- Updated domain references in `README.md`, `TECHNICAL.md`, `.claude/rules/status.md`
 
 ## Completed This Session (Feb 16, session 8)
 
@@ -160,6 +167,6 @@ All steps complete. Landing page redesigned. Ready for final submission.
 
 - GitHub: https://github.com/deevyb/voice-cafe-cashier
 - Upstream: `deevyb/delo-kiosk` (configured as `upstream` remote)
-- Vercel: deployed (`voice-cafe-cashier.vercel.app`)
+- Vercel: deployed (`coffee-rooom.vercel.app`)
 - Supabase: `voice-cafe-cashier` (`kvlkuoeemroveoodqbtv`) created in `us-west-1`
 - OpenAI Stored Prompt ID: `pmpt_698e574a7cfc8194b478c8c014958954084a49f38f0029bb`

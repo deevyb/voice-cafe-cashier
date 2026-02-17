@@ -12,7 +12,7 @@
 
 ## Live Demo
 
-[voice-cafe-cashier.vercel.app](https://voice-cafe-cashier.vercel.app)
+[coffee-rooom.vercel.app](https://coffee-rooom.vercel.app)
 
 ---
 

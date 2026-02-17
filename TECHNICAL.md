@@ -300,7 +300,7 @@ OPENAI_STORED_PROMPT_ID=pmpt_...
 ### Infrastructure (Current)
 
 - **GitHub:** https://github.com/deevyb/voice-cafe-cashier
-- **Vercel:** `voice-cafe-cashier.vercel.app` (production connected)
+- **Vercel:** `coffee-rooom.vercel.app` (production connected)
 - **Supabase:** `voice-cafe-cashier` (`kvlkuoeemroveoodqbtv`, `us-west-1`)
 
 ### Setup Checklist
