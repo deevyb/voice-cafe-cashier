@@ -48,6 +48,11 @@ export async function GET(request: NextRequest) {
       return new Date(o.created_at).getTime() <= dayEnd.getTime()
     })
 
+    // When a specific date is requested, scope all metrics to that date.
+    // When no date (all-time mode), use cumulative orders.
+    const hasDateFilter = searchParams.has('date')
+    const scopedOrders = hasDateFilter ? targetOrders : cumulativeOrders
+
     // Count orders by status
     const countByStatus = (orderList: typeof allOrders) => {
       return orderList.reduce(
@@ -63,9 +68,9 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Popular items — scoped to target date
+    // Popular items — scoped to date filter or all time
     const itemCounts: Record<string, number> = {}
-    for (const order of targetOrders) {
+    for (const order of scopedOrders) {
       const orderItems = Array.isArray(order.items) ? order.items : []
       for (const item of orderItems) {
         if (!item?.name) continue
@@ -79,9 +84,9 @@ export async function GET(request: NextRequest) {
       .sort((a, b) => b.count - a.count)
       .slice(0, 20)
 
-    // Modifier breakdown — scoped to target date
+    // Modifier breakdown
     const modifierCounts: Record<string, Record<string, number>> = {}
-    for (const order of targetOrders) {
+    for (const order of scopedOrders) {
       const orderItems = Array.isArray(order.items) ? order.items : []
       for (const item of orderItems) {
         const pairs: Array<[string, string | undefined]> = [
@@ -113,8 +118,72 @@ export async function GET(request: NextRequest) {
         .sort((a, b) => b.count - a.count)
     }
 
-    // Avg order value — from completed target-date orders
-    const completedTarget = targetOrders.filter((o) => o.status === 'completed')
+    // Add-on breakdown — categorize extras from item.extras[]
+    const ADDON_CATEGORIES: { name: string; pattern: RegExp }[] = [
+      { name: 'shots', pattern: /espresso shot|matcha shot/i },
+      { name: 'syrups', pattern: /syrup|caramel|hazelnut/i },
+      { name: 'sweetness', pattern: /sugar/i },
+      { name: 'ice', pattern: /ice/i },
+    ]
+
+    const categorizeExtra = (extra: string): string | null => {
+      for (const cat of ADDON_CATEGORIES) {
+        if (cat.pattern.test(extra)) return cat.name
+      }
+      return null
+    }
+
+    // Normalize syrup names: strip pump counts ("2 Pumps Caramel Syrup" → "Caramel Syrup")
+    const normalizeExtra = (extra: string, category: string): string => {
+      if (category === 'syrups') {
+        return extra.replace(/^\d+\s*pumps?\s*/i, '').trim()
+      }
+      return extra.trim()
+    }
+
+    const addOnCounts: Record<string, Record<string, number>> = {}
+    const addOnOrderSets: Record<string, Set<number>> = {} // track which orders have each category
+
+    let orderIdx = 0
+    for (const order of scopedOrders) {
+      const orderItems = Array.isArray(order.items) ? order.items : []
+      for (const item of orderItems) {
+        if (!Array.isArray(item.extras)) continue
+        for (const extra of item.extras) {
+          const category = categorizeExtra(extra)
+          if (!category) continue
+          const normalized = normalizeExtra(extra, category)
+          if (!addOnCounts[category]) addOnCounts[category] = {}
+          addOnCounts[category][normalized] = (addOnCounts[category][normalized] || 0) + 1
+          if (!addOnOrderSets[category]) addOnOrderSets[category] = new Set()
+          addOnOrderSets[category].add(orderIdx)
+        }
+      }
+      orderIdx++
+    }
+
+    const addOnBreakdown: Record<string, { option: string; count: number; percentage: number }[]> = {}
+    for (const [category, options] of Object.entries(addOnCounts)) {
+      const total = Object.values(options).reduce((a, b) => a + b, 0)
+      addOnBreakdown[category] = Object.entries(options)
+        .map(([option, count]) => ({
+          option,
+          count,
+          percentage: Math.round((count / total) * 100),
+        }))
+        .sort((a, b) => b.count - a.count)
+    }
+
+    const totalScopedOrders = scopedOrders.length
+    const addOnAttachRate: Record<string, number> = {}
+    for (const [category, orderSet] of Object.entries(addOnOrderSets)) {
+      addOnAttachRate[category] = totalScopedOrders > 0
+        ? Math.round((orderSet.size / totalScopedOrders) * 100)
+        : 0
+    }
+
+    // Avg order value
+    const completedTarget = scopedOrders.filter((o) => o.status === 'completed')
     let avgOrderValue: number | null = null
     if (completedTarget.length > 0) {
       let totalRevenue = 0
@@ -129,7 +198,7 @@ export async function GET(request: NextRequest) {
       avgOrderValue = Math.round((totalRevenue / completedTarget.length) * 100) / 100
     }
 
-    // Avg fulfillment time — completed target-date orders with updated_at
+    // Avg fulfillment time
     let avgFulfillmentTime: number | null = null
     const withFulfillment = completedTarget.filter((o) => o.updated_at && o.created_at)
     if (withFulfillment.length > 0) {
@@ -145,7 +214,7 @@ export async function GET(request: NextRequest) {
     // Time series — hourly buckets for target date
     const hourBuckets: { label: string; orders: number; revenue: number }[] = []
     for (let h = 0; h < 24; h++) {
-      const label = `${h.toString().padStart(2, '0')}:00`
+      const label = h === 0 ? '12am' : h < 12 ? `${h}am` : h === 12 ? '12pm' : `${h - 12}pm`
       const hourOrders = targetOrders.filter((o) => {
         const d = new Date(o.created_at)
         // Convert to local hour in owner's timezone
@@ -177,6 +246,8 @@ export async function GET(request: NextRequest) {
       allTime: countByStatus(cumulativeOrders),
       popularDrinks,
       modifierBreakdown,
+      addOnBreakdown,
+      addOnAttachRate,
       avgOrderValue,
       avgFulfillmentTime,
       timeSeries: hourBuckets,

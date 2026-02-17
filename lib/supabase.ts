@@ -83,6 +83,8 @@ export interface DashboardStats {
   allTime: OrderCounts
   popularDrinks: DrinkCount[]
   modifierBreakdown: Record<string, ModifierOption[]>
+  addOnBreakdown: Record<string, ModifierOption[]>
+  addOnAttachRate: Record<string, number>
   avgOrderValue: number | null
   avgFulfillmentTime: number | null
   timeSeries: TimeSeriesPoint[]

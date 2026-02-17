@@ -18,13 +18,13 @@ export default function StatsCards({
 
   return (
     <div className="grid grid-cols-2 gap-4">
-      <StatsCard title={dateLabel} counts={today} />
+      <StatsCard title={dateLabel} counts={today} showInProgress />
       <StatsCard title={cumulativeLabel} counts={allTime} />
     </div>
   )
 }
 
-function StatsCard({ title, counts }: { title: string; counts: OrderCounts }) {
+function StatsCard({ title, counts, showInProgress }: { title: string; counts: OrderCounts; showInProgress?: boolean }) {
   return (
     <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10">
       <h3 className="font-sans font-semibold text-sm uppercase tracking-wider text-cafe-charcoal/60 mb-1">
@@ -38,9 +38,11 @@ function StatsCard({ title, counts }: { title: string; counts: OrderCounts }) {
         <span className="text-cafe-charcoal/70">
           <span className="font-semibold text-[#C85A2E]">{counts.placed}</span> placed
         </span>
-        <span className="text-cafe-charcoal/70">
-          <span className="font-semibold text-amber-600">{counts.in_progress}</span> making
-        </span>
+        {showInProgress && (
+          <span className="text-cafe-charcoal/70">
+            <span className="font-semibold text-amber-600">{counts.in_progress}</span> in progress
+          </span>
+        )}
         <span className="text-cafe-charcoal/70">
           <span className="font-semibold text-green-600">{counts.completed}</span> done
         </span>

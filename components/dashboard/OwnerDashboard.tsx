@@ -7,6 +7,7 @@ import SummaryMetrics from './SummaryMetrics'
 import OrdersChart from './OrdersChart'
 import PopularItems from './PopularItems'
 import ModifierPreferences from './ModifierPreferences'
+import AddOnBreakdown from './AddOnBreakdown'
 import DatePicker from './DatePicker'
 import NavMenu from '../NavMenu'
 
@@ -14,20 +15,16 @@ export default function OwnerDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedDate, setSelectedDate] = useState(() => {
-    const now = new Date()
-    const y = now.getFullYear()
-    const m = String(now.getMonth() + 1).padStart(2, '0')
-    const d = String(now.getDate()).padStart(2, '0')
-    return `${y}-${m}-${d}`
-  })
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
 
-  const fetchStats = useCallback(async (date: string) => {
+  const fetchStats = useCallback(async (date: string | null) => {
     setIsLoading(true)
     setError(null)
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
-      const response = await fetch(`/api/admin/stats?timezone=${encodeURIComponent(tz)}&date=${date}`)
+      const params = new URLSearchParams({ timezone: tz })
+      if (date) params.set('date', date)
+      const response = await fetch(`/api/admin/stats?${params}`)
       if (!response.ok) throw new Error('Failed to fetch stats')
       const data = await response.json()
       setStats(data)
@@ -44,7 +41,7 @@ export default function OwnerDashboard() {
     fetchStats(selectedDate)
   }, [selectedDate, fetchStats])
 
-  const handleDateChange = (date: string) => {
+  const handleDateChange = (date: string | null) => {
     setSelectedDate(date)
   }
 
@@ -89,16 +86,29 @@ export default function OwnerDashboard() {
               avgOrderValue={stats.avgOrderValue}
               avgFulfillmentTime={stats.avgFulfillmentTime}
             />
-            <OrdersChart data={stats.timeSeries} />
+            <OrdersChart
+              data={stats.timeSeries}
+              dateLabel={stats.isToday ? 'Today' : formatDateLabel(stats.targetDate)}
+            />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <PopularItems items={stats.popularDrinks} />
               <ModifierPreferences breakdown={stats.modifierBreakdown} />
             </div>
+            <AddOnBreakdown
+              breakdown={stats.addOnBreakdown}
+              attachRate={stats.addOnAttachRate}
+            />
           </div>
         ) : null}
       </main>
     </div>
   )
+}
+
+function formatDateLabel(dateStr: string): string {
+  const [year, month, day] = dateStr.split('-').map(Number)
+  const date = new Date(year, month - 1, day)
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
 function LoadingSkeleton() {

@@ -8,19 +8,21 @@ export default function DatePicker({
   selectedDate,
   onDateChange,
 }: {
-  selectedDate: string // YYYY-MM-DD
-  onDateChange: (date: string) => void
+  selectedDate: string | null // YYYY-MM-DD or null for "all time"
+  onDateChange: (date: string | null) => void
 }) {
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   const today = new Date()
-  const todayStr = formatYMD(today)
-  const isToday = selectedDate === todayStr
 
   // Parse selected date for DayPicker (create in local time to avoid off-by-one)
-  const [y, m, d] = selectedDate.split('-').map(Number)
-  const selected = new Date(y, m - 1, d)
+  const selected = selectedDate
+    ? (() => {
+        const [y, m, d] = selectedDate.split('-').map(Number)
+        return new Date(y, m - 1, d)
+      })()
+    : undefined
 
   // Close on outside click
   useEffect(() => {
@@ -39,28 +41,40 @@ export default function DatePicker({
     setOpen(false)
   }
 
-  const displayLabel = isToday
-    ? 'Today'
-    : selected.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  const displayLabel = selectedDate
+    ? selected!.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    : 'All Time'
 
   return (
     <div className="relative" ref={containerRef}>
       <div className="flex items-center gap-2">
         <button
           onClick={() => setOpen(!open)}
-          className="px-4 py-2 rounded-lg font-sans text-sm font-semibold bg-white border border-cafe-charcoal/15 hover:border-cafe-coffee/40 transition-colors text-cafe-charcoal"
+          className={`px-4 py-2 rounded-lg font-sans text-sm font-semibold border transition-colors ${
+            selectedDate
+              ? 'bg-white border-cafe-charcoal/15 hover:border-cafe-coffee/40 text-cafe-charcoal'
+              : 'bg-cafe-coffee/8 border-cafe-coffee/20 hover:border-cafe-coffee/40 text-cafe-coffee'
+          }`}
         >
+          <svg className="inline-block w-3.5 h-3.5 mr-1.5 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
           {displayLabel}
-          <span className="ml-2 text-cafe-charcoal/40">&#9662;</span>
+          {selectedDate ? (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onDateChange(null)
+              }}
+              className="ml-2 text-cafe-charcoal/40 hover:text-cafe-charcoal/70 transition-colors"
+              aria-label="Clear date filter"
+            >
+              &#x2715;
+            </button>
+          ) : (
+            <span className="ml-2 text-cafe-coffee/50">&#9662;</span>
+          )}
         </button>
-        {!isToday && (
-          <button
-            onClick={() => onDateChange(todayStr)}
-            className="px-3 py-2 rounded-lg font-sans text-xs font-semibold text-cafe-coffee hover:bg-cafe-coffee/10 transition-colors"
-          >
-            Reset
-          </button>
-        )}
       </div>
 
       {open && (
@@ -70,7 +84,7 @@ export default function DatePicker({
             selected={selected}
             onSelect={handleSelect}
             disabled={{ after: today }}
-            defaultMonth={selected}
+            defaultMonth={selected || today}
           />
         </div>
       )}

@@ -3,7 +3,7 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { TimeSeriesPoint } from '@/lib/supabase'
 
-export default function OrdersChart({ data }: { data: TimeSeriesPoint[] }) {
+export default function OrdersChart({ data, dateLabel }: { data: TimeSeriesPoint[]; dateLabel: string }) {
   // Only show hours that have data, plus one hour before/after for context
   // If no data at all, show business hours (7am-7pm)
   const hasAnyOrders = data.some((d) => d.orders > 0)
@@ -22,7 +22,7 @@ export default function OrdersChart({ data }: { data: TimeSeriesPoint[] }) {
   return (
     <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10">
       <h3 className="font-sans font-semibold text-sm uppercase tracking-wider text-cafe-charcoal/60 mb-4">
-        Orders by Hour
+        Orders by Hour – {dateLabel}
       </h3>
       {!hasAnyOrders ? (
         <p className="text-description text-sm">No orders yet</p>
@@ -32,7 +32,7 @@ export default function OrdersChart({ data }: { data: TimeSeriesPoint[] }) {
             <LineChart data={displayData}>
               <XAxis
                 dataKey="label"
-                tick={{ fontSize: 12, fill: '#9B9590' }}
+                tick={{ fontSize: 14, fill: '#9B9590' }}
                 tickLine={false}
                 axisLine={{ stroke: '#E5E5E5' }}
               />

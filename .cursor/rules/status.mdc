@@ -18,9 +18,9 @@ This is the **single source of truth** for project status, shared between Cursor
 
 ## Save-Status Snapshot (Mirror)
 
-- Last Updated: February 16, 2026
+- Last Updated: February 16, 2026 (session 2)
 - Current phase: Steps 0–7 complete, Steps 8–9 pending
-- Latest change: Step 7 Owner Dashboard + Kitchen page improvements (item formatting, overflow menu, nav consistency, quantity badges)
+- Latest change: Dashboard polish (all-time default, metric scoping fix, add-on breakdown widget, chart labels, date picker UX)
 - Immediate next actions:
  1. Step 8: Deliverables + Polish
  2. Step 9: Edge Case Testing

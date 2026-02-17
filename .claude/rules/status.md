@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 16, 2026
+> Last Updated: February 16, 2026 (session 2)
 
 ## Current State
 
@@ -13,7 +13,7 @@
 | Step 4: Voice Mode (Realtime API) | complete | M1 (WebRTC + voice), M2 (tool calls + cart), M3 (finalize polish, error handling, Place Order button) all complete. |
 | Step 5: Rebrand (NYC theme) | complete | Full rebrand from Delo to "Coffee Rooom" — new palette, fonts, landing page, all 36 files updated |
 | Step 6: Kitchen View Update | complete | Kitchen supports Queue/In Progress/Done, redesigned order cards, overflow menu on in-progress orders |
-| Step 7: Owner Dashboard | complete | Analytics dashboard with date picker, recharts line chart, avg order value, avg fulfillment time, timezone fix |
+| Step 7: Owner Dashboard | complete | Analytics dashboard with date picker, recharts line chart, avg order value, avg fulfillment time, add-on breakdown, timezone fix |
 | Step 8: Deliverables + Polish | pending | |
 | Step 9: Edge Case Testing | pending | |
 
@@ -26,7 +26,23 @@
 
 - None currently
 
-## Completed This Session (Feb 16)
+## Completed This Session (Feb 16, session 2)
+
+### Dashboard Polish & Bug Fixes
+- **Chart x-axis**: Changed time labels from `14:00` → `2pm` format, bumped font size from 12px → 14px
+- **Chart title**: Now includes date context ("Orders by Hour – Today" / "Orders by Hour – Feb 12")
+- **Metric scoping fix**: AOV, fulfillment time, popular items, modifiers were all scoped to target date only — fixed so they use `scopedOrders` (cumulative when no date, target date when date selected)
+- **All-time default mode**: DatePicker now defaults to `null` (shows "All Time" pill with calendar icon). When no date selected, all metrics show all-time data except "Today" card and hourly chart. Picking a date narrows ALL widgets to that date.
+- **StatsCards**: Removed "making" from all-time card, renamed "making" → "in progress" on today/date card
+- **DatePicker UX**: Calendar icon always visible (was disappearing when date selected), X button to clear date back to "All Time"
+
+### New Widget: Add-On Breakdown
+- **API** (`/api/admin/stats`): Categorizes `item.extras[]` into shots/syrups/sweetness/ice via regex. Normalizes syrup names (strips pump counts). Computes percentage breakdown per category + attach rate (% of orders with each add-on type).
+- **New `addOnBreakdown` + `addOnAttachRate`** fields added to `DashboardStats` type
+- **`AddOnBreakdown.tsx`** component: Mirrors ModifierPreferences layout (grouped categories, progress bars). Each category header has a pill badge showing attach rate (e.g. "38% of orders").
+- Renders full-width below Popular Items / Modifier Preferences row
+
+## Completed Previous Session (Feb 16, session 1)
 
 ### Step 7: Owner Dashboard (new)
 - **Rewrote `/api/admin/stats`**: Timezone-aware date filtering (`timezone` + `date` query params), `updated_at` selected for fulfillment time, new metrics: `avgOrderValue` (from `calculatePrice()`), `avgFulfillmentTime` (completed orders), `timeSeries` (hourly buckets). Popular items and modifiers scoped to target date.
