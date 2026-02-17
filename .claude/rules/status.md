@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 16, 2026 (session 9)
+> Last Updated: February 16, 2026 (session 10)
 
 ## Current State
 
@@ -24,6 +24,15 @@ All steps complete. Domain updated to `coffee-rooom.vercel.app`. Ready for final
 ## Blockers
 
 - None
+
+## Completed This Session (Feb 16, session 10)
+
+### Menu Panel on Ordering Page
+- **New component** `components/menu/MenuPanel.tsx`: Read-only menu reference panel with 4 sections (Coffee, Tea, Pastry, Add-ons & Extras). Prices pulled from `BASE_PRICES` — drinks show `$sm / $lg`, pastries show flat price. Add-ons use same row layout (bold name left, price/options right-aligned). Includes free milks, combined espresso/matcha shot line, sweetness/ice options.
+- **Exported `BASE_PRICES`** from `lib/menu.ts` (was private) so MenuPanel reads prices without duplication
+- **Integrated into `VoiceCashierClient.tsx`**: MenuPanel renders below CartPanel in both voice and text modes. Added `menuRef` + `IntersectionObserver` for mobile scroll pill. Sticky "Menu ↓" pill (`fixed bottom-4 right-4`, `md:hidden`) auto-hides when menu scrolls into viewport.
+- **Voice mode layout fix**: Added `md:items-start` to voice grid so the voice indicator card stays its natural height instead of stretching to match the right column
+- **Size label**: Coffee category header shows right-aligned `sm (12oz) / lg (16oz)` to clarify the two price columns (shown once, not repeated on Tea)
 
 ## Completed This Session (Feb 16, session 9)
 

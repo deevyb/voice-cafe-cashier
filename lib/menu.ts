@@ -50,7 +50,7 @@ export function isFoodItem(name: string): boolean {
 
 type SizePrices = { small: number; large: number }
 
-const BASE_PRICES: Record<string, SizePrices> = {
+export const BASE_PRICES: Record<string, SizePrices> = {
   americano:            { small: 3.00, large: 4.00 },
   latte:                { small: 4.00, large: 5.00 },
   'cold brew':          { small: 4.00, large: 5.00 },

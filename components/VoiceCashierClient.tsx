@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { CartItem } from '@/lib/supabase'
 import ChatPanel, { type ChatMessage } from '@/components/chat/ChatPanel'
 import CartPanel from '@/components/cart/CartPanel'
 import VoiceIndicator from '@/components/voice/VoiceIndicator'
 import { useRealtimeSession } from '@/hooks/useRealtimeSession'
+import MenuPanel from '@/components/menu/MenuPanel'
 
 type AppMode = 'voice' | 'text'
 
@@ -34,6 +35,21 @@ export default function VoiceCashierClient() {
     customerName: string
     items: CartItem[]
   } | null>(null)
+
+  // Menu scroll target + visibility tracking for mobile pill
+  const menuRef = useRef<HTMLDivElement>(null)
+  const [menuVisible, setMenuVisible] = useState(false)
+
+  useEffect(() => {
+    const el = menuRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setMenuVisible(entry.isIntersecting),
+      { threshold: 0.1 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   // Shared order submission — used by AI-driven finalize (both modes) and manual Place Order button
   const submitOrder = async (customerName: string, cartItems: CartItem[]) => {
@@ -190,7 +206,7 @@ export default function VoiceCashierClient() {
             </button>
           </div>
 
-          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2 md:items-start">
             <div className="rounded-xl border border-cafe-charcoal/10 bg-white p-6">
               <VoiceIndicator
                 connectionState={voice.connectionState}
@@ -210,8 +226,19 @@ export default function VoiceCashierClient() {
                 orderFinalized={orderFinalized}
                 isSubmitting={isSubmitting}
               />
+              <MenuPanel ref={menuRef} />
             </div>
           </div>
+
+          {/* Mobile "Menu" pill — hidden once menu is in viewport */}
+          {!menuVisible && (
+            <button
+              className="fixed bottom-4 right-4 z-40 rounded-full bg-cafe-coffee px-4 py-2 text-sm font-medium text-cafe-cream shadow-lg md:hidden"
+              onClick={() => menuRef.current?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Menu &darr;
+            </button>
+          )}
         </main>
 
         {/* Full-screen confirmation overlay */}
@@ -321,8 +348,19 @@ export default function VoiceCashierClient() {
               orderFinalized={orderFinalized}
               isSubmitting={isSubmitting}
             />
+            <MenuPanel ref={menuRef} />
           </div>
         </div>
+
+        {/* Mobile "Menu" pill — hidden once menu is in viewport */}
+        {!menuVisible && (
+          <button
+            className="fixed bottom-4 right-4 z-40 rounded-full bg-cafe-coffee px-4 py-2 text-sm font-medium text-cafe-cream shadow-lg md:hidden"
+            onClick={() => menuRef.current?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            Menu &darr;
+          </button>
+        )}
       </main>
 
       {/* Full-screen confirmation overlay */}
