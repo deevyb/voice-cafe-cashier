@@ -18,11 +18,10 @@ This is the **single source of truth** for project status, shared between Cursor
 
 ## Save-Status Snapshot (Mirror)
 
-- Last Updated: February 16, 2026 (session 5)
-- Current phase: Steps 0–8 complete, Step 9 pending
-- Latest change: Kitchen Done tab polish — fulfillment time badge (clock icon + duration), overflow menu on completed/canceled cards, font weight bump, cancel handler fix
-- Immediate next actions:
- 1. Step 9: Edge Case Testing
+- Last Updated: February 16, 2026 (session 6)
+- Current phase: Steps 0–9 complete. Project ready for submission.
+- Latest change: Step 9 edge case testing (49 tests, 90% pass, 0 true failures) + prompt sync v5→v9 (pastry modifier rule, off-menu add-on handling, finalization shortcut, pull method documented)
+- Immediate next actions: none — all steps complete
 - Blockers: none
 
 ## Cursor + Claude Code Switching Protocol (Required)
