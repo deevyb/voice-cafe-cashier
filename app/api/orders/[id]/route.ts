@@ -8,9 +8,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const nextStatus = body.status === 'ready' ? 'completed' : body.status
 
     // Validate status
-    if (!nextStatus || !['in_progress', 'completed', 'canceled'].includes(nextStatus)) {
+    if (!nextStatus || !['placed', 'in_progress', 'completed', 'canceled'].includes(nextStatus)) {
       return NextResponse.json(
-        { error: 'Invalid status. Must be "in_progress", "completed", or "canceled"' },
+        { error: 'Invalid status. Must be "placed", "in_progress", "completed", or "canceled"' },
         { status: 400 }
       )
     }

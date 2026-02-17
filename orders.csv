@@ -1,0 +1,87 @@
+order_id,customer_name,status,item_count,total_price,items_summary,created_at
+1167de39-efb1-4f50-b579-9486759477f0,Sofia,completed,1,3.50,Plain Croissant,2026-02-09T13:14:13+00:00
+418c9350-e5c0-46b7-97d6-4303660ac328,Fatima,completed,2,10.00,"Mocha (Small, Whole Milk, Iced, Extra Ice); Mocha (Large, Skim Milk, Hot)",2026-02-09T13:22:00+00:00
+6b33e0b8-1436-4365-9f0f-adcd144554fd,Camila,completed,2,9.00,"Latte (Large, Whole Milk, Hot); Chocolate Croissant",2026-02-09T13:56:59+00:00
+76ca0d2e-02fe-4b80-8663-9a780d0608ab,Zara,completed,3,15.00,"Matcha Latte (Large, Almond Milk, Hot, 2 Pumps Caramel Syrup); Cold Brew (Small, Iced); Americano (Small, Hot, 2 Pumps Caramel Syrup)",2026-02-09T14:34:22+00:00
+09e9aa6a-9304-4eb6-ba42-82b45cf273f7,Fatima,completed,1,4.00,"Latte (Small, Skim Milk, Hot)",2026-02-09T15:55:34+00:00
+c9641135-26a4-4e37-81e3-49b1aadd6bfa,Tanya,completed,2,11.00,"Latte (Large, Oat Milk, Iced, Extra Espresso Shot); Americano (Large, Iced, No Sugar, Extra Ice)",2026-02-09T16:48:36+00:00
+bdb424c1-b795-4c27-a099-b25d2b61d99a,Kevin,completed,1,6.50,"Cold Brew (Large, Iced, Caramel Syrup)",2026-02-09T19:45:58+00:00
+c57894c2-8c06-4079-9ec7-834311e5b6d9,Sofia,canceled,2,7.50,"Matcha Latte (Small, Whole Milk, Hot); Americano (Small, Iced)",2026-02-09T20:01:07+00:00
+7d66c542-71a5-443a-b997-91753a183638,Maya,completed,3,13.75,"Black Tea (Small, Hot); Matcha Latte (Small, Almond Milk, Iced, Extra Matcha Shot); Latte (Small, Skim Milk, Hot)",2026-02-09T21:03:33+00:00
+f3a27422-25ee-49ef-9eab-fb44809a4ba2,Sam,completed,1,5.75,"Lemon Green Tea (Large, Iced, 3 Pumps Hazelnut Syrup, Less Sugar)",2026-02-10T13:07:57+00:00
+452c4ad5-8dc0-4638-adf9-4be45cdbf9d8,Grace,completed,1,2.50,Chocolate Chip Cookie,2026-02-10T13:10:55+00:00
+a0cfade4-f2df-4e66-ab55-7addb10a9612,Rachel,completed,1,3.50,Plain Croissant,2026-02-10T13:29:11+00:00
+c31e659a-46ef-47f9-b1fa-837253639a1a,Noah,completed,2,7.00,"Americano (Small, Hot, No Sugar); Cold Brew (Small, Iced)",2026-02-10T14:18:03+00:00
+eecd8281-e4d8-4772-8224-f755822f6d70,Jenny,completed,1,6.50,"Cold Brew (Large, Iced, Hazelnut Syrup, No Sugar)",2026-02-10T14:36:24+00:00
+01a6c666-ba09-493f-921e-cd37a80258d8,Zara,completed,1,3.75,"Black Tea (Large, Hot)",2026-02-10T15:33:38+00:00
+82bf16dc-d9b2-46ba-9ec0-a75bab6dadc4,Devi,completed,2,8.00,"Matcha Latte (Small, Skim Milk, Hot); Plain Croissant",2026-02-10T18:10:23+00:00
+575cb6d1-aad8-4568-af11-7a67b1662cc3,Zara,completed,1,6.00,"Mocha (Small, Whole Milk, Hot, Extra Espresso Shot)",2026-02-10T18:13:56+00:00
+aa5d7feb-7b9b-4d0b-86b5-90c0d205e627,Jordan,completed,2,9.50,"Cold Brew (Small, Iced); Mocha (Small, Skim Milk, Iced, Caramel Syrup)",2026-02-10T19:24:44+00:00
+9a58f4bd-5f16-4277-ade6-cf85714f9da5,Sofia,completed,1,4.00,"Latte (Small, Whole Milk, Iced)",2026-02-10T20:40:55+00:00
+4df4e4b0-3070-4493-a77a-4a1ac7431fbf,Daniel,completed,2,8.50,"Americano (Small, Iced, Extra Sugar); Latte (Large, Oat Milk, Iced, Extra Ice)",2026-02-11T13:06:11+00:00
+854a012f-3e62-46a9-9bee-74e65db6cb9a,Devi,completed,1,2.50,Chocolate Chip Cookie,2026-02-11T13:36:36+00:00
+4cb8d624-9356-4849-a58c-8a4731a6df47,Ravi,completed,1,4.00,"Americano (Small, Iced, Hazelnut Syrup, Less Ice)",2026-02-11T13:37:00+00:00
+47ccb7e3-3360-40ec-8e58-13134f7eff33,Olivia,completed,1,4.00,"Americano (Large, Hot)",2026-02-11T14:07:42+00:00
+9794a37a-282f-43ba-a5e5-2f92ddb58395,Fatima,completed,4,17.00,"Americano (Large, Hot, Hazelnut Syrup); Chocolate Croissant; Cold Brew (Large, Iced, No Ice); Chocolate Chip Cookie",2026-02-11T14:33:16+00:00
+e622b502-df05-411e-a76b-069ab38ceb6d,Julia,completed,2,13.50,"Latte (Large, Whole Milk, Hot, Extra Espresso Shot); Mocha (Large, Whole Milk, Hot, Caramel Syrup)",2026-02-11T15:25:50+00:00
+85e59efc-0b82-482e-af42-86c1400db762,Noah,canceled,4,18.25,"Matcha Latte (Large, Whole Milk, Hot); Chocolate Croissant; Latte (Large, Whole Milk, Hot); Americano (Small, Hot, Caramel Syrup)",2026-02-11T17:05:00+00:00
+4a85a2fc-fc5a-46dd-b084-7d14edba307f,Ethan,completed,1,4.50,"Latte (Small, Oat Milk, Hot)",2026-02-11T17:30:22+00:00
+3e0682f3-4795-4301-961c-a1c0ad4f82f1,Zara,completed,1,6.00,"Matcha Latte (Small, Oat Milk, Hot, Hazelnut Syrup)",2026-02-11T17:58:06+00:00
+7a11cda7-a2d2-4218-9aa1-543541cb8f9e,Sarah,completed,1,5.00,"Cold Brew (Large, Iced)",2026-02-11T19:55:36+00:00
+faf27484-c8c2-420d-9656-e2f9f41a3e14,Omar,completed,1,4.00,Chocolate Croissant,2026-02-11T20:54:36+00:00
+4d2e5075-5333-4aa1-a844-8f4a9c815307,Leo,completed,2,9.75,"Americano (Small, Hot); Matcha Latte (Large, Whole Milk, Iced, Caramel Syrup)",2026-02-12T13:21:12+00:00
+34ee68d3-da3a-4910-b2c3-6b78f543ef77,Rachel,completed,2,6.00,"Americano (Small, Hot); Banana Bread",2026-02-12T14:14:34+00:00
+58d45f70-11e3-49bd-b384-7c327ab88ebc,Lucas,completed,2,11.00,"Chocolate Croissant; Mocha (Large, Skim Milk, Hot, Extra Espresso Shot)",2026-02-12T14:23:32+00:00
+8eba8961-9f0c-40c1-9a7e-963f733e6a53,Grace,completed,3,12.00,"Americano (Large, Hot); Latte (Small, Oat Milk, Iced, No Ice); Plain Croissant",2026-02-12T14:35:31+00:00
+7a6c5bda-7ff1-4be0-99db-8f7de2c69fa3,Isaac,completed,1,2.50,Chocolate Chip Cookie,2026-02-12T14:36:13+00:00
+74aa2ad6-1788-47ae-8073-473ec55da6d8,Marcus,completed,1,5.00,"Latte (Large, Whole Milk, Hot)",2026-02-12T15:02:30+00:00
+f2500097-97a8-481f-b1e9-e6ef8536cecb,Nadia,completed,1,4.50,"Americano (Small, Hot, Extra Espresso Shot, Less Sugar)",2026-02-12T15:43:27+00:00
+6f8065b5-5ba6-4fd6-9e89-466d6d591667,Jenny,completed,2,10.50,"Americano (Large, Iced, Extra Espresso Shot); Matcha Latte (Small, Oat Milk, Iced)",2026-02-12T18:03:02+00:00
+bddea763-110c-46a5-9062-eccfc9133152,Tanya,completed,2,12.00,"Latte (Large, Skim Milk, Iced, Extra Espresso Shot); Latte (Large, Oat Milk, Hot)",2026-02-12T18:08:32+00:00
+8f4e1380-f144-453b-9a15-2b4a8cbba6ec,Priya,completed,2,10.25,"Cold Brew (Large, Iced, Extra Espresso Shot); Black Tea (Large, Hot)",2026-02-12T19:03:30+00:00
+da0d6194-f086-40a0-ad75-8cfeec363888,Hana,completed,1,4.50,"Americano (Small, Hot, Extra Espresso Shot)",2026-02-12T19:58:32+00:00
+c59c82e4-6ece-4a41-90d8-12a1376e029f,Olivia,completed,1,4.00,Chocolate Croissant,2026-02-12T20:23:28+00:00
+9355912b-2853-4430-9047-53640740b5b0,Omar,canceled,1,3.00,"Black Tea (Small, Hot)",2026-02-13T13:29:50+00:00
+3f52977f-ccae-41d5-93f2-abb70a19d62a,Tanya,completed,2,10.00,"Cold Brew (Large, Iced, Extra Espresso Shot); Plain Croissant",2026-02-13T13:56:12+00:00
+50cf43a9-8001-4c49-b7f0-030909203fab,Noah,completed,2,10.00,"Latte (Large, Whole Milk, Hot, Less Sugar); Cold Brew (Small, Iced, Caramel Syrup)",2026-02-13T14:38:33+00:00
+a080ecbd-1826-4467-90a6-926340e59fe3,Olivia,completed,2,10.00,"Cold Brew (Large, Iced, Caramel Syrup); Plain Croissant",2026-02-13T14:43:12+00:00
+466873e3-0b38-4899-80a3-fb6a438120e1,Ben,completed,4,22.50,"Latte (Large, Whole Milk, Hot, Extra Espresso Shot); Mocha (Large, Oat Milk, Iced); Americano (Large, Iced, Extra Espresso Shot, Caramel Syrup); Jasmine Tea (Small, Hot)",2026-02-13T14:55:24+00:00
+c1892360-95c0-4e76-8e16-ed43b193f998,Emily,completed,3,12.50,"Americano (Small, Iced, Less Ice); Matcha Latte (Small, Whole Milk, Hot, Extra Matcha Shot); Plain Croissant",2026-02-13T15:32:37+00:00
+04da64d1-d482-4485-9bec-be2118c5095e,Devi,completed,2,7.25,"Lemon Green Tea (Large, Hot); Banana Bread",2026-02-13T16:58:46+00:00
+8c2a9666-20d0-4bc3-a637-4c078b1c847d,Mina,completed,1,3.75,"Jasmine Tea (Large, Hot)",2026-02-13T17:03:48+00:00
+1b826870-de13-4e60-9d6f-fdebb2c4fa7b,Zara,completed,2,8.00,"Americano (Small, Hot, Extra Espresso Shot); Plain Croissant",2026-02-13T17:27:58+00:00
+31f00853-c103-4d04-8f26-3daf437cd46e,Fatima,completed,2,10.50,"Cold Brew (Large, Iced, Extra Sugar, No Ice); Cold Brew (Small, Iced, Extra Espresso Shot)",2026-02-13T17:34:26+00:00
+80e82be9-977b-455e-9174-07a840e02367,Emily,completed,3,11.50,"Americano (Large, Hot, Hazelnut Syrup); Americano (Small, Hot); Americano (Small, Hot)",2026-02-13T17:40:44+00:00
+eda4e0e4-cfe1-46d0-890c-5cf35a10cd76,Jenny,completed,2,11.00,"Americano (Small, Hot, Hazelnut Syrup); Mocha (Large, Skim Milk, Iced, Extra Espresso Shot)",2026-02-13T21:25:54+00:00
+493b0093-9ff1-4f93-9201-b1574964a9c2,Carlos,completed,1,6.25,"Latte (Small, Almond Milk, Hot, 3 Pumps Hazelnut Syrup, No Sugar)",2026-02-13T21:33:29+00:00
+009e8f99-bf5c-4bc8-8c4e-3cbedd6df88e,Hana,completed,3,15.25,"Coffee Frappuccino (Large, Oat Milk, Iced); Plain Croissant; Black Tea (Large, Hot, Caramel Syrup)",2026-02-14T14:52:04+00:00
+9909e7e1-d244-4c04-8dbf-857bcf1642de,Priya,completed,1,5.00,"Latte (Small, Skim Milk, Iced, 2 Pumps Caramel Syrup)",2026-02-14T15:11:49+00:00
+5060dc9b-f65b-45f2-9a57-fa9cc62969d0,Lucas,completed,1,4.50,"Mocha (Small, Whole Milk, Hot)",2026-02-14T15:42:47+00:00
+cb5ad931-6229-411a-bb7a-230ac394e540,Rachel,completed,4,15.50,"Americano (Small, Iced, Extra Ice); Latte (Small, Oat Milk, Iced); Banana Bread; Latte (Large, Whole Milk, Hot)",2026-02-14T16:18:41+00:00
+e0eb222d-dc65-4049-85b4-6aed68820a47,Luna,completed,2,8.50,"Plain Croissant; Latte (Small, Whole Milk, Iced, Hazelnut Syrup)",2026-02-14T16:38:44+00:00
+4d330616-ffc2-493d-b338-4f7d21393a09,Isaac,completed,2,13.50,"Mocha (Small, Oat Milk, Hot); Latte (Large, Oat Milk, Hot, Extra Espresso Shot, Hazelnut Syrup, Extra Sugar)",2026-02-14T16:40:08+00:00
+58c6dc6c-3e21-4dfa-9c37-df7e0ef22b63,Diego,completed,1,4.00,Chocolate Croissant,2026-02-14T17:01:36+00:00
+addda3ca-a472-4314-a971-07c3a9e8ef97,Michael,completed,3,15.00,"Mocha (Large, Skim Milk, Hot, Extra Espresso Shot); Chocolate Croissant; Latte (Small, Whole Milk, Hot)",2026-02-14T17:48:40+00:00
+9fbb8c16-28e6-462f-951a-14b1601c6381,Lucas,completed,2,7.00,"Mocha (Small, Whole Milk, Hot); Chocolate Chip Cookie",2026-02-14T17:53:45+00:00
+59e1e40f-e01f-4c28-a9e7-55ed680694ae,Suki,completed,1,6.50,"Latte (Large, Whole Milk, Hot, Extra Espresso Shot)",2026-02-14T18:15:30+00:00
+c76f08fb-3864-4b48-84f5-f72cd475a9a8,Marcus,completed,2,7.00,"Latte (Small, Whole Milk, Iced); Black Tea (Small, Iced)",2026-02-14T18:26:11+00:00
+8266237f-844d-4f22-90aa-a056669c8c24,Grace,completed,3,13.00,"Mocha (Large, Whole Milk, Hot, Caramel Syrup); Chocolate Chip Cookie; Lemon Green Tea (Small, Hot, Less Sugar)",2026-02-14T20:15:36+00:00
+56ba7ed7-3c24-4ea8-bac2-2bbd969681e7,Michael,completed,2,8.50,"Americano (Small, Iced); Latte (Large, Oat Milk, Iced)",2026-02-14T20:49:50+00:00
+426c400d-0bac-4a37-9533-74bab6dd0ed3,Noah,completed,2,10.50,"Americano (Small, Hot); Coffee Frappuccino (Large, Whole Milk, Iced, Extra Espresso Shot)",2026-02-14T21:29:20+00:00
+83ae69ef-7259-4da7-afb0-2c0446667e29,Rachel,completed,3,14.00,"Chocolate Croissant; Cold Brew (Small, Iced, No Sugar); Mocha (Small, Oat Milk, Hot, Caramel Syrup)",2026-02-15T14:08:51+00:00
+e16ba5ef-b83a-4a0e-8f13-cd0c06e9eee7,Noah,placed,1,5.50,"Latte (Small, Whole Milk, Hot, Extra Espresso Shot, Less Sugar)",2026-02-15T14:39:49+00:00
+8914d9a2-4f06-4176-a40d-fdb515338576,Grace,completed,1,5.75,"Matcha Latte (Large, Oat Milk, Hot)",2026-02-15T14:59:25+00:00
+d44d0be5-ec18-4172-a87e-ca24969e3a35,Tanya,completed,2,10.75,"Latte (Large, Almond Milk, Hot); Latte (Large, Skim Milk, Hot, Extra Sugar)",2026-02-15T15:17:16+00:00
+d3174e8e-ee5a-4bea-a452-055beee19f6f,Lily,completed,1,2.50,Chocolate Chip Cookie,2026-02-15T15:22:39+00:00
+6e8957c9-40b7-4543-bd0e-d2a1383f8afa,Tanya,completed,2,8.25,"Jasmine Tea (Large, Hot, Less Sugar); Americano (Small, Hot, Extra Espresso Shot)",2026-02-15T15:27:39+00:00
+ef35a94b-69b9-488d-9358-b3771b4b1642,Rachel,placed,1,5.00,"Matcha Latte (Small, Oat Milk, Iced)",2026-02-15T15:37:53+00:00
+ef3f0352-be73-4831-8d14-0ed102c47f54,Marcus,completed,2,10.50,"Plain Croissant; Latte (Large, Oat Milk, Hot, Extra Espresso Shot, No Sugar)",2026-02-15T16:30:32+00:00
+ac4c8fff-7016-4233-ad08-5cb8082cd377,Sarah,completed,2,7.50,"Plain Croissant; Americano (Large, Hot)",2026-02-15T17:03:36+00:00
+074fffbf-7905-4db8-bed5-4dd22490b4de,Julia,completed,1,3.50,Plain Croissant,2026-02-15T18:14:23+00:00
+7b6b49af-f400-493e-aed8-15537a2a9c36,Zara,completed,1,2.50,Chocolate Chip Cookie,2026-02-15T20:01:21+00:00
+ab497fa5-a1c7-4511-a924-5b176dbebc8b,Alex,placed,1,6.50,"Latte (Large, Whole Milk, Hot, Caramel Syrup)",2026-02-16T13:52:29+00:00
+383d5c01-13f9-412a-a8fd-60e16a431542,Ben,placed,2,12.50,"Matcha Latte (Small, Whole Milk, Hot, Hazelnut Syrup); Latte (Large, Oat Milk, Iced, Extra Espresso Shot)",2026-02-16T14:17:15+00:00
+7664605b-ee3e-4878-8020-ceca143e0088,Grace,completed,1,4.00,Chocolate Croissant,2026-02-16T15:18:51+00:00
+7b8cb671-05a7-442a-af72-507b8cd2f9e7,Michael,completed,2,6.00,"Banana Bread; Black Tea (Small, Hot)",2026-02-16T16:23:49+00:00
+dcc67d54-4620-45f0-b75a-c2d2117ead97,Kevin,completed,2,9.50,"Coffee Frappuccino (Large, Oat Milk, Iced, Less Ice); Banana Bread",2026-02-16T16:57:32+00:00
+f475c1b8-ab15-496f-8029-9f0fbe864fda,Emily,completed,1,4.50,"Latte (Small, Oat Milk, Hot)",2026-02-16T17:09:55+00:00

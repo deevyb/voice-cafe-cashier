@@ -1,6 +1,6 @@
 # Technical Documentation
 
-> Last updated: February 12, 2026
+> Last updated: February 16, 2026
 
 ---
 
@@ -323,12 +323,24 @@ Using Framer Motion:
 
 ---
 
-## Design (Pending — Step 5)
+## Design
 
-The Delo brand (colors, fonts, CSS classes) is still in the codebase from the fork. Step 5 will rebrand to a NYC coffee shop aesthetic:
+Rebranded from Delo to **Coffee Rooom** (Step 5):
 
-- **Palette:** charcoal, off-white, warm caramel, espresso brown (replacing delo-maroon, delo-cream, etc.)
-- **Font:** Inter (replacing Yatra One, Bricolage, Cooper, Manrope, Roboto Mono)
-- **CSS classes:** All `.delo-*` references will be replaced
+- **Palette:** charcoal (`#2C2C2C`), off-white (`#FAF9F6`), warm caramel (`#C8956C`), espresso brown
+- **Font:** Inter (clean, modern)
+- **CSS classes:** All `.delo-*` references replaced with `cafe-*` Tailwind tokens
 
-Until Step 5, existing Delo styles remain functional.
+## Owner Dashboard (Step 7)
+
+Analytics at `/admin` with:
+
+- **Stats cards**: Today/all-time order counts by status
+- **Summary metrics**: Average order value, average fulfillment time
+- **Orders chart**: Recharts line chart — orders by hour with `2pm` format labels
+- **Popular items**: Top items list ranked by order count
+- **Modifier preferences**: Size, milk, temperature breakdowns with progress bars
+- **Add-on breakdown**: Shots, syrups, sweetness, ice categories with attach rates
+- **Date picker**: `react-day-picker` — defaults to "All Time", pick any date to narrow all widgets
+
+All metrics are timezone-aware (`America/New_York`) and scoped to the selected date or all-time.

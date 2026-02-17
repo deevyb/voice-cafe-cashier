@@ -18,12 +18,11 @@ This is the **single source of truth** for project status, shared between Cursor
 
 ## Save-Status Snapshot (Mirror)
 
-- Last Updated: February 16, 2026 (session 2)
-- Current phase: Steps 0–7 complete, Steps 8–9 pending
-- Latest change: Dashboard polish (all-time default, metric scoping fix, add-on breakdown widget, chart labels, date picker UX)
+- Last Updated: February 16, 2026 (session 4)
+- Current phase: Steps 0–8 complete, Step 9 pending
+- Latest change: Step 8 deliverables (seed script, CSV, README) + kitchen/dashboard polish (timezone, chart range, card layout, canceled orders, RLS fixes)
 - Immediate next actions:
- 1. Step 8: Deliverables + Polish
- 2. Step 9: Edge Case Testing
+ 1. Step 9: Edge Case Testing
 - Blockers: none
 
 ## Cursor + Claude Code Switching Protocol (Required)

@@ -78,7 +78,7 @@ export default function OrderCard({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, x: -100, scale: 0.95, transition: { duration: 0.15, ease: 'easeIn' } }}
       transition={{ type: 'spring', ...springConfig }}
-      className="bg-white rounded-xl p-6 shadow-sm border border-cafe-charcoal/5"
+      className="bg-white rounded-xl p-6 shadow-sm border border-cafe-charcoal/5 flex flex-col"
     >
       {/* Top row: Customer and time */}
       <div className="flex items-start justify-between mb-1">
@@ -122,7 +122,7 @@ export default function OrderCard({
 
       {/* Actions for placed orders */}
       {isPlaced && (
-        <div className="flex gap-3 mt-5">
+        <div className="flex gap-3 mt-auto pt-5">
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={() => onStartMaking(order.id)}
@@ -144,7 +144,7 @@ export default function OrderCard({
 
       {/* Actions for in-progress orders */}
       {isInProgress && (
-        <div className="flex gap-3 mt-5 items-center">
+        <div className="flex gap-3 mt-auto pt-5 items-center">
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={() => onDone(order.id)}
@@ -208,17 +208,37 @@ export default function OrderCard({
 
       {/* Completed badge */}
       {order.status === 'completed' && (
-        <div className="mt-4 inline-flex items-center gap-2 bg-green-50 text-green-700 px-3 py-1.5 rounded-lg">
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2.5}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-          <span className="font-sans font-semibold text-sm">Completed</span>
+        <div className="mt-auto pt-5">
+          <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-3 py-1.5 rounded-lg">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            <span className="font-sans font-semibold text-sm">Completed</span>
+          </div>
+        </div>
+      )}
+
+      {/* Canceled badge */}
+      {order.status === 'canceled' && (
+        <div className="mt-auto pt-5">
+          <div className="inline-flex items-center gap-2 bg-red-50 text-red-600 px-3 py-1.5 rounded-lg">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <span className="font-sans font-semibold text-sm">Canceled</span>
+          </div>
         </div>
       )}
     </motion.div>

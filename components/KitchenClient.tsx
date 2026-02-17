@@ -46,14 +46,14 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
     () =>
       orders
         .filter((o) => o.status === 'in_progress')
-        .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()),
+        .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()),
     [orders]
   )
 
   const completedOrders = useMemo(
     () =>
       orders
-        .filter((o) => o.status === 'completed')
+        .filter((o) => o.status === 'completed' || o.status === 'canceled')
         .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()),
     [orders]
   )
@@ -81,22 +81,10 @@ export default function KitchenClient({ initialOrders }: KitchenClientProps) {
         if (payload.eventType === 'INSERT') {
           const newOrder = payload.new as Order
           // Only add if it's an active kitchen status
-          if (
-            newOrder.status === 'placed' ||
-            newOrder.status === 'in_progress' ||
-            newOrder.status === 'completed'
-          ) {
-            setOrders((prev) => [...prev, newOrder])
-          }
+          setOrders((prev) => [...prev, newOrder])
         } else if (payload.eventType === 'UPDATE') {
           const updatedOrder = payload.new as Order
-          if (updatedOrder.status === 'canceled') {
-            // Remove canceled orders from view
-            setOrders((prev) => prev.filter((o) => o.id !== updatedOrder.id))
-          } else {
-            // Update the order in place
-            setOrders((prev) => prev.map((o) => (o.id === updatedOrder.id ? updatedOrder : o)))
-          }
+          setOrders((prev) => prev.map((o) => (o.id === updatedOrder.id ? updatedOrder : o)))
         } else if (payload.eventType === 'DELETE') {
           const deletedId = payload.old.id as string
           setOrders((prev) => prev.filter((o) => o.id !== deletedId))

@@ -12,7 +12,7 @@ async function getOrders() {
   const { data: orders, error } = await supabase
     .from('orders')
     .select('*')
-    .in('status', ['placed', 'in_progress', 'completed'])
+    .in('status', ['placed', 'in_progress', 'completed', 'canceled'])
     .order('created_at', { ascending: true })
 
   if (error) {

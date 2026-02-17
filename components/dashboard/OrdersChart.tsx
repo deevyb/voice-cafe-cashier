@@ -4,20 +4,9 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { TimeSeriesPoint } from '@/lib/supabase'
 
 export default function OrdersChart({ data, dateLabel }: { data: TimeSeriesPoint[]; dateLabel: string }) {
-  // Only show hours that have data, plus one hour before/after for context
-  // If no data at all, show business hours (7am-7pm)
+  // Always show shop hours: 8am (index 8) through 4pm (index 16)
   const hasAnyOrders = data.some((d) => d.orders > 0)
-
-  let displayData = data
-  if (hasAnyOrders) {
-    const firstIdx = data.findIndex((d) => d.orders > 0)
-    const lastIdx = data.length - 1 - [...data].reverse().findIndex((d) => d.orders > 0)
-    const start = Math.max(0, firstIdx - 1)
-    const end = Math.min(data.length - 1, lastIdx + 1)
-    displayData = data.slice(start, end + 1)
-  } else {
-    displayData = data.slice(7, 20) // 7am-7pm
-  }
+  const displayData = data.slice(8, 17) // 8am–4pm
 
   return (
     <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10">

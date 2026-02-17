@@ -1,6 +1,6 @@
 # Project Status
 
-> Last Updated: February 16, 2026 (session 2)
+> Last Updated: February 16, 2026 (session 4)
 
 ## Current State
 
@@ -14,17 +14,39 @@
 | Step 5: Rebrand (NYC theme) | complete | Full rebrand from Delo to "Coffee Rooom" — new palette, fonts, landing page, all 36 files updated |
 | Step 6: Kitchen View Update | complete | Kitchen supports Queue/In Progress/Done, redesigned order cards, overflow menu on in-progress orders |
 | Step 7: Owner Dashboard | complete | Analytics dashboard with date picker, recharts line chart, avg order value, avg fulfillment time, add-on breakdown, timezone fix |
-| Step 8: Deliverables + Polish | pending | |
+| Step 8: Deliverables + Polish | complete | Seed script (86 orders, 8am-4pm ET), orders.csv, README rewrite, TECHNICAL.md update, kitchen/dashboard polish |
 | Step 9: Edge Case Testing | pending | |
 
 ## What's Next
 
-1. Step 8: Deliverables + Polish
-2. Step 9: Edge Case Testing
+1. Step 9: Edge Case Testing
 
 ## Blockers
 
 - None currently
+
+## Completed This Session (Feb 16, session 4)
+
+### Step 8 continued: Polish + Bug Fixes
+- **Seed script improvements**: Shop hours 8am-4pm (was 7am-8pm), 86 total orders (80 + 6 for today), improved delete logic (batch by IDs), Feb 16 added as a day
+- **Dashboard timezone fix**: Hardcoded `America/New_York` (was using browser timezone, showing 3am orders for Pacific users)
+- **Dashboard chart**: Fixed to always show 8am-4pm range (was auto-fitting to data range with ±1hr padding)
+- **Dashboard Popular Items**: Absolute positioning so Modifier Preferences drives row height, scrollable list
+- **Dashboard Add-On order**: Fixed category order to syrups → shots → sweetness → ice
+- **Kitchen "Back to Queue" bug**: PATCH endpoint now accepts `placed` status (was rejecting it)
+- **Kitchen Done tab**: Now includes canceled orders with red badge + X icon
+- **Kitchen card layout**: Flex column with buttons/badges pinned to bottom via `mt-auto`
+- **Kitchen sort order**: In-progress orders now sort oldest-first (was newest-first)
+- **Supabase DELETE RLS policy**: Added missing policy so seed script can delete orders via anon key
+
+## Completed This Session (Feb 16, session 3)
+
+### Step 8: Deliverables + Polish
+- **Seed script** (`scripts/seed-orders.ts`): Standalone Node script inserts 80 realistic orders into Supabase for Feb 9-15, 2026. Weighted random distributions for hourly patterns (weekday vs weekend), item frequency (Latte #1 at 24%), item count per order (51% single-item), modifiers (size, temp, milk, extras), and order statuses (89% completed historical). Loads `.env.local`, prompts before deleting existing orders, batch inserts, and writes CSV.
+- **CSV export** (`orders.csv`): 80 rows with order_id, customer_name, status, item_count, total_price, items_summary, created_at. Human-readable items_summary format.
+- **README.md rewrite**: Replaced Delo Coffee Kiosk README with Coffee Rooom content — architecture, pages, setup, sample data, project structure.
+- **TECHNICAL.md update**: Updated date, replaced "Pending — Step 5" section with Design + Owner Dashboard (Step 7) sections.
+- **Verified**: Dashboard shows 80 orders, $7.35 avg order value, 5.4 min avg fulfillment, Latte on top, realistic modifier/add-on breakdowns.
 
 ## Completed This Session (Feb 16, session 2)
 

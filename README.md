@@ -1,159 +1,135 @@
-# Delo Coffee Kiosk
+# Coffee Rooom — AI Voice Cashier
 
-A minimal iPad ordering system for Delo Coffee pop-up events. Customers place single-drink orders using their name, baristas see orders in real-time, and admins manage the menu.
+> AI-powered ordering experience for a NYC coffee shop.
+> PM interview take-home project.
 
-**Live Demo:** [delo-kiosk.vercel.app](https://delo-kiosk-buwhagfrm-deevys-projects.vercel.app)
+## What It Does
 
----
+- **Two ordering modes**: voice (OpenAI Realtime API) or text chat (Responses API)
+- **Live cart updates** as the AI processes orders
+- **Kitchen display** with real-time order queue
+- **Owner dashboard** with analytics
 
-## Features
+## Live Demo
 
-### Customer Ordering (`/order`)
-
-- Browse menu as a visual grid
-- Select milk type and temperature (where applicable)
-- Enter name and submit order
-- Confirmation with order details
-
-### Kitchen Display (`/kitchen`)
-
-- Real-time order queue (no refresh needed)
-- One-tap to mark orders ready or cancel
-- Order counts and time tracking
-- Separate sections for placed vs. ready orders
-
-### Admin Panel (`/admin`)
-
-- Direct access (no passcode)
-- Toggle menu items on/off
-- Manage modifier options (milk types, temperatures)
-- Export orders as CSV by date range
+[voice-cafe-cashier.vercel.app](https://voice-cafe-cashier.vercel.app)
 
 ---
 
-## Tech Stack
+## Architecture
 
-| Layer      | Technology              |
-| ---------- | ----------------------- |
-| Framework  | Next.js 14 (App Router) |
-| Styling    | Tailwind CSS            |
-| Animations | Framer Motion           |
-| Database   | Supabase (PostgreSQL)   |
-| Real-time  | Supabase Realtime       |
-| Hosting    | Vercel                  |
+| Layer | Tech |
+|-------|------|
+| Framework | Next.js 14, TypeScript, Tailwind CSS |
+| Database | Supabase (Postgres + Realtime) |
+| Text AI | OpenAI Responses API (gpt-5.2) |
+| Voice AI | OpenAI Realtime API via WebRTC |
+| Hosting | Vercel |
+
+## Key Design Decisions
+
+- **Stored prompt**: single prompt ID in OpenAI, shared by both APIs
+- **4 tools**: `add_item`, `modify_item`, `remove_item`, `finalize_order`
+- **Menu lives in the prompt** — no DB menu table
+- **Price calculation** on client (`lib/menu.ts`), not by the AI
+
+## Pages
+
+| Route | Purpose |
+|-------|---------|
+| `/` | Landing — pick voice or text mode |
+| `/order` | AI ordering experience |
+| `/kitchen` | Kitchen display (realtime queue) |
+| `/admin` | Owner dashboard (analytics) |
+
+---
+
+## Setup
+
+### Prerequisites
+
+- Node.js 18+
+- npm
+- A Supabase project
+- OpenAI API key + stored prompt
+
+### Install
+
+```bash
+git clone https://github.com/deevyb/voice-cafe-cashier.git
+cd voice-cafe-cashier
+npm install
+```
+
+### Environment Variables
+
+Create `.env.local`:
+
+```env
+OPENAI_API_KEY=sk-...
+OPENAI_STORED_PROMPT_ID=pmpt_...
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+```
+
+### Run
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Sample Data
+
+`orders.csv` contains 80 sample orders (Feb 9–15, 2026) with realistic item distributions, modifiers, and hourly patterns.
+
+To re-seed:
+
+```bash
+npx tsx scripts/seed-orders.ts
+```
 
 ---
 
 ## Project Structure
 
 ```
-delo-kiosk/
-├── app/
-│   ├── order/        # Customer ordering screen
-│   ├── kitchen/      # Barista display
-│   ├── admin/        # Admin panel
-│   ├── layout.tsx    # Root layout with fonts
-│   └── globals.css   # Tailwind + Delo brand styles
-├── lib/
-│   └── supabase.ts   # Database client + types
-├── components/       # Shared UI components
-├── CLAUDE.md         # Project guide (for AI assistants)
-└── TECHNICAL.md      # Technical documentation
+app/
+  page.tsx              # Landing — mode selector
+  order/page.tsx        # AI ordering (text or voice)
+  kitchen/page.tsx      # Kitchen display (realtime)
+  admin/page.tsx        # Owner dashboard
+  api/
+    chat/route.ts       # Responses API (text mode)
+    realtime/token/     # Ephemeral token (voice mode)
+    orders/             # CRUD
+    admin/              # Stats + admin APIs
+components/
+  VoiceCashierClient.tsx  # Main ordering container
+  chat/                   # Text mode UI
+  voice/                  # Voice mode UI
+  cart/                   # Shared cart components
+  Kitchen*.tsx            # Kitchen display
+  dashboard/              # Owner dashboard
+hooks/
+  useRealtimeSession.ts   # WebRTC + Realtime API
+lib/
+  supabase.ts             # DB client + types
+  menu.ts                 # Price calculation + menu data
+  realtime-config.ts      # Voice mode session config
+scripts/
+  seed-orders.ts          # Seed realistic order data
 ```
 
 ---
 
-## Local Development
+## Documentation
 
-### Prerequisites
-
-- Node.js 18+
-- npm
-- A Supabase project (or use the existing one)
-
-### Setup
-
-1. Clone the repo:
-
-   ```bash
-   git clone https://github.com/deevyb/delo-kiosk.git
-   cd delo-kiosk
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-3. Create `.env.local` with your project credentials:
-
-   ```env
-   OPENAI_API_KEY=sk-...
-   OPENAI_STORED_PROMPT_ID=pmpt_...
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
-   ```
-
-4. Run the development server:
-
-   ```bash
-   npm run dev
-   ```
-
-5. Open [http://localhost:3000](http://localhost:3000)
-
----
-
-## Database Schema
-
-Three tables power the app:
-
-- **menu_items** — Drinks with modifier configuration
-- **modifiers** — Milk types and temperature options
-- **orders** — Customer orders with status tracking
-
-See [TECHNICAL.md](./TECHNICAL.md) for full schema details.
-
----
-
-## Deployment
-
-The app auto-deploys to Vercel when you push to `main`. Environment variables are configured in Vercel dashboard.
-
----
-
-## Cursor + Claude Code Workflow
-
-This project is intentionally developed using both Cursor and Claude Code, with seamless handoff as a requirement.
-
-- **Status source of truth:** `.claude/rules/status.md`
-- **Implementation plan:** `PLAN.md`
-- **Project guide:** `CLAUDE.md`
-
-### Session Handoff Rules
-
-1. Start each session by reading `.claude/rules/status.md` and `PLAN.md`.
-2. Continue from the current in-progress step unless priorities are explicitly changed.
-3. After meaningful progress, update `.claude/rules/status.md` with completed work, in-progress work, and next steps.
-4. Do not create alternate status trackers.
-
-This workflow keeps development consistent regardless of which tool is used next.
-
----
-
-## Design
-
-Delo Coffee's brand is inspired by the _delo_ — a traditional Indian courtyard where strangers become friends. The app uses:
-
-- **Colors:** Maroon (#921C12), Cream (#F9F6EE), Navy (#000024)
-- **Typography:** Yatra One, Bricolage Grotesque, Roboto Mono
-- **Aesthetic:** Warm, generous spacing, large touch targets
-
-See [Delo Coffee Brand Identity.md](./Delo%20Coffee%20Brand%20Identity.md) for full brand guidelines.
-
----
-
-## License
-
-Private project for Delo Coffee.
+| File | Purpose |
+|------|---------|
+| `TECHNICAL.md` | Architecture, schema, API details |
+| `PLAN.md` | Implementation plan (Steps 0–9) |
+| `CLAUDE.md` | Project guide for AI assistants |

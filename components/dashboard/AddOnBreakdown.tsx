@@ -9,7 +9,10 @@ export default function AddOnBreakdown({
   breakdown: Record<string, ModifierOption[]>
   attachRate: Record<string, number>
 }) {
-  const categories = Object.entries(breakdown)
+  const categoryOrder = ['syrups', 'shots', 'sweetness', 'ice']
+  const categories = categoryOrder
+    .filter((key) => breakdown[key])
+    .map((key) => [key, breakdown[key]] as [string, ModifierOption[]])
 
   return (
     <div className="bg-white rounded-xl p-6 border border-cafe-charcoal/10">

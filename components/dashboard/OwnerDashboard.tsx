@@ -21,7 +21,7 @@ export default function OwnerDashboard() {
     setIsLoading(true)
     setError(null)
     try {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
+      const tz = 'America/New_York' // Shop is in NYC
       const params = new URLSearchParams({ timezone: tz })
       if (date) params.set('date', date)
       const response = await fetch(`/api/admin/stats?${params}`)
@@ -91,7 +91,9 @@ export default function OwnerDashboard() {
               dateLabel={stats.isToday ? 'Today' : formatDateLabel(stats.targetDate)}
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <PopularItems items={stats.popularDrinks} />
+              <div className="relative">
+                <PopularItems items={stats.popularDrinks} />
+              </div>
               <ModifierPreferences breakdown={stats.modifierBreakdown} />
             </div>
             <AddOnBreakdown
