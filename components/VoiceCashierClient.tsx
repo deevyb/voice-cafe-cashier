@@ -100,18 +100,16 @@ export default function VoiceCashierClient() {
     setMessages([{ ...INITIAL_GREETING, id: createId() }])
   }, [])
 
-  // Dismiss confirmation overlay and return to voice mode for next customer
+  // Dismiss confirmation overlay and start new order in same mode
   const handleDismissConfirmation = useCallback(() => {
     resetOrderState()
-    setMode('voice')
   }, [resetOrderState])
 
-  // Auto-dismiss confirmation and return to voice mode if untouched
+  // Auto-dismiss confirmation if untouched (stays in same mode)
   useEffect(() => {
     if (!confirmedOrder) return
     const timer = setTimeout(() => {
       resetOrderState()
-      setMode('voice')
     }, CONFIRMATION_AUTO_DISMISS_MS)
     return () => clearTimeout(timer)
   }, [confirmedOrder, resetOrderState])
@@ -182,9 +180,12 @@ export default function VoiceCashierClient() {
           <div className="mx-auto mb-4 flex max-w-6xl items-center justify-between">
             <h1 className="font-serif text-3xl text-cafe-coffee">Coffee Rooom</h1>
             <button
-              className="rounded-lg border border-cafe-charcoal/20 px-3 py-2 text-sm"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-cafe-charcoal/20 px-3 py-2 text-sm font-medium"
               onClick={() => handleModeChange('text')}
             >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
               Switch to Chat
             </button>
           </div>
@@ -303,7 +304,10 @@ export default function VoiceCashierClient() {
       <main className="min-h-screen bg-cafe-cream p-8">
         <div className="mx-auto mb-4 flex max-w-6xl items-center justify-between">
           <h1 className="font-serif text-3xl text-cafe-coffee">Coffee Rooom</h1>
-          <button className="rounded-lg border border-cafe-charcoal/20 px-3 py-2 text-sm" onClick={() => handleModeChange('voice')}>
+          <button className="inline-flex items-center gap-1.5 rounded-lg border border-cafe-charcoal/20 px-3 py-2 text-sm font-medium" onClick={() => handleModeChange('voice')}>
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 1a3 3 0 00-3 3v7a3 3 0 006 0V4a3 3 0 00-3-3z" />
+            </svg>
             Switch to Voice
           </button>
         </div>

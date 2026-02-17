@@ -12,6 +12,7 @@ interface NavMenuProps {
 
 const navItems = [
   { href: '/', label: 'Home' },
+  { href: '/order', label: 'Order' },
   { href: '/kitchen', label: 'Kitchen' },
   { href: '/admin', label: 'Admin' },
 ]
